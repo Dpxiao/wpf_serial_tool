@@ -1,0 +1,16 @@
+﻿<Window x:Class="NoteWindow.MyWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="注释编辑" ResizeMode="NoResize" Height="70 " Width="365"
+        Topmost="True">
+    <StackPanel Orientation="Horizontal">
+        <!-- 文本框 -->
+        <TextBox Name="MyTextBox" KeyDown="TextBox_KeyDown"  MinWidth="200" Height="21" HorizontalAlignment="Center" VerticalAlignment="Center" />
+
+        <!-- 确定按钮 -->
+        <Button Content="确定" Width="65" Margin="5 0" Click="OK_Click" Height="21"/>
+
+        <!-- 取消按钮 -->
+        <Button Content="取消" Width="65" Margin="5 0" Click="Cancel_Click" Height="21"/>
+    </StackPanel>
+</Window>

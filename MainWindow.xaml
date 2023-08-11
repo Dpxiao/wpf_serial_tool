@@ -1,0 +1,1734 @@
+﻿<Window x:Class="WIoTa_Serial_Tool.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WIoTa_Serial_Tool"
+        mc:Ignorable="d"
+        Title="WIoTa Serial Tool V1.00" Height="670" Width="1010"
+        Closing="MainWindow_Closing">
+
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="MyButtonStyle.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            <Style x:Key="DataGridColumnHeaderCenter" TargetType="{x:Type DataGridColumnHeader}">
+                <Setter Property="HorizontalAlignment" Value="Center"/>
+            </Style>
+            <ContextMenu x:Key="MyContextMenu">
+                <MenuItem Header="向上插入一行" Click="Add_Up_One_Row_Click"/>
+                <MenuItem Header="向下插入一行" Click="Add_Dl_One_Row_Click"/>
+                <MenuItem Header="末尾新增一行" Click="Add_End_One_Row_Click"/>
+                <MenuItem Header="末尾新增多行" Click="Add_End_Multi_Row_Click"/>
+                <MenuItem Header="删除选中行"   Click="Del_Sel_One_Row_Click"/>
+                <MenuItem Header="修改当前注释" Click="Modify_Note_Row_Click"/>
+            </ContextMenu>
+        </ResourceDictionary>
+
+    </Window.Resources>
+
+    <Grid x:Name="WindowGrid">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <!--是否应该调整其最后一个子元素的大小，以填充可用空间-->
+        <Grid Grid.Column="0" Width="Auto" >
+            <Menu Background="White">
+                <MenuItem Header="File">
+                    <!--菜单项为MenuItem，文字使用属性 Header-->
+                    <MenuItem Name="menuOpen" Header="Open" ></MenuItem>
+                    <MenuItem Header="Save"></MenuItem>
+                    <MenuItem Header="Delete"></MenuItem>
+                </MenuItem>
+                <MenuItem Header="Edit"></MenuItem>
+                <MenuItem Header="View"></MenuItem>
+                <MenuItem Header="About"></MenuItem>
+            </Menu>
+
+            <!--<ToolBar Grid.Row="0" DockPanel.Dock="Top">
+                <Button Content="Save"></Button>
+                <Separator></Separator>
+                <Button Content="SaveAll"></Button>
+                <Separator></Separator>
+                <Button Content="FileExplorer"></Button>
+                <Separator></Separator>
+                <Button Content="Start"></Button>
+                <Separator></Separator>
+                <Button Content="Test"></Button>
+            </ToolBar>-->
+        </Grid>
+        <!--<DockPanel x:Name="DockMenu" LastChildFill="True">
+            -->
+        <!-- 菜单项 -->
+        <!--
+            <Menu DockPanel.Dock="Top">
+                <MenuItem Header="File">
+                    -->
+        <!--菜单项为MenuItem，文字使用属性 Header-->
+        <!--
+                    <MenuItem Name="menuOpen" Header="Open" ></MenuItem>
+                    <MenuItem Header="Save"></MenuItem>
+                    <MenuItem Header="Delete"></MenuItem>
+                </MenuItem>
+                <MenuItem Header="Edit"></MenuItem>
+                <MenuItem Header="View"></MenuItem>
+                <MenuItem Header="About"></MenuItem>
+
+            </Menu>
+
+            <ToolBar Grid.Row="0" DockPanel.Dock="Top">
+                <Button Content="Save"></Button>
+                <Separator></Separator>
+                <Button Content="SaveAll"></Button>
+                <Separator></Separator>
+                <Button Content="FileExplorer"></Button>
+                <Separator></Separator>
+                <Button Content="Start"></Button>
+                <Separator></Separator>
+                <Button Content="Test"></Button>
+            </ToolBar>
+        </DockPanel>-->
+        <Grid Grid.Row="1" x:Name="MainGrid">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="4*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="3*"/>
+            </Grid.ColumnDefinitions>
+            <Grid Grid.Column="0">
+                <TabControl Name="PortTab" Grid.Row="0" Height="Auto" Width="Auto" Background="White"  SelectionChanged="PortTab_SelectionChanged">
+                    <TabItem Header="端口1">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="2*"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <TextBox Grid.Row="0" x:Name="recvDataRichTextBox1"  MaxLength="1048576"  BorderThickness="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                            </TextBox>
+                            <GridSplitter Grid.Row="1" Height="3" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" ShowsPreview="True"/>
+                            <Grid Grid.Row="2">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+                                <Grid Grid.Row="0">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="30"/>
+                                        <RowDefinition Height="30"/>
+                                        <RowDefinition Height="30"/>
+                                        <RowDefinition Height="30"/>
+                                    </Grid.RowDefinitions>
+
+                                    <Grid Grid.Row="0">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="90"/>
+                                            <ColumnDefinition Width="83"/>
+                                            <ColumnDefinition Width="83"/>
+                                            <ColumnDefinition Width="83"/>
+                                            <ColumnDefinition Width="83"/>
+                                            <ColumnDefinition Width="83"/>
+                                            <ColumnDefinition Width="60"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <Button Style="{StaticResource MyButtonStyle}" Grid.Column="0" Content="更多串口设置" Height="23" Margin="0,0,5,0"></Button>
+                                        <Button Style="{StaticResource MyButtonStyle}" Grid.Column="1" Content="接收期望字符" Height="23" Margin="0,0,5,0" Click="Button_Opinion_Click" ></Button>
+                                        <Button Style="{StaticResource MyButtonStyle}" Grid.Column="2" Content="保存接收数据" Height="23" Margin="0,0,5,0" Click="Button_SaveLog_Click" ></Button>
+                                        <Button Style="{StaticResource MyButtonStyle}" Grid.Column="3" Content="清空发送区" Height="23" Margin="0,0,5,0" Click="Button_Clear_SendEdit_Click"></Button>
+                                        <Button Style="{StaticResource MyButtonStyle}" Grid.Column="4" Content="清空接收区" Height="23" Margin="0,0,5,0" Click="Button_Clear_RecvEdit_Click" ></Button>
+
+                                        <Button Style="{StaticResource MyButtonStyle}" Grid.Column="5" Content="长度查询" Height="23" Margin="0,0,5,0" ></Button>
+                                        <Button Style="{StaticResource MyButtonStyle}" Grid.Column="6" Content="扫频" Height="23" Margin="0,0,5,0" ></Button>
+
+                                    </Grid>
+                                    <Grid Grid.Row="1">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="1*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Grid Grid.Column="0">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="75"/>
+                                                <ColumnDefinition Width="75"/>
+                                                <ColumnDefinition Width="75"/>
+                                                <ColumnDefinition Width="75"/>
+                                                <ColumnDefinition Width="75"/>
+                                                <ColumnDefinition Width="58"/>
+                                                <ColumnDefinition Width="18"/>
+
+                                            </Grid.ColumnDefinitions>
+                                            <CheckBox Grid.Column="0"  Content="HEX接收"  HorizontalAlignment="Left" VerticalAlignment="Center"></CheckBox>
+                                            <CheckBox Name="savefileCheckBox1" Grid.Column="1"  Content="保存接收" HorizontalAlignment="Left" VerticalAlignment="Center" Click="SavefileCheckBox_Checked"></CheckBox>
+                                            <CheckBox Name="stampCheckBox1" Grid.Column="2" IsChecked="True" Content="加时间戳" HorizontalAlignment="Left" VerticalAlignment="Center" Click="StampCheckBox_Checked"></CheckBox>
+                                            <CheckBox Name="enterCheckBox1" Grid.Column="3" IsChecked="True" Content="回车换行" HorizontalAlignment="Left" VerticalAlignment="Center"></CheckBox>
+                                            <CheckBox Name="timerSendCheckBox1" Grid.Column="4"  Content="定时发送" HorizontalAlignment="Left" VerticalAlignment="Center" Click="TimerSendCheckBox_Check" ></CheckBox>
+                                            <TextBox  Name="timerSendTextBox1" Text="1000" Grid.Column="5" Height="24" Width="58" HorizontalAlignment="Left" VerticalAlignment="Center" VerticalContentAlignment="Center"></TextBox>
+                                            <Label    Grid.Column="6" Content="ms" Height="25" HorizontalAlignment="Left" VerticalAlignment="Center"  VerticalContentAlignment="Center" Padding="0" />
+
+                                        </Grid>
+
+                                        <Button   Grid.Column="1" Height="26" Margin="4,0,0,0" Style="{StaticResource MyButtonStyle}" Content="一键启动显示&lt;&lt;" Width="108" Click="Button_Display_Start_Windows_Click" ></Button>
+                                    </Grid>
+
+                                    <Grid Grid.Row="2">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="1*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Grid Grid.Column="0">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="75"/>
+                                                <ColumnDefinition Width="75"/>
+                                                <ColumnDefinition Width="75"/>
+                                                <ColumnDefinition Width="78"/>
+                                                <ColumnDefinition Width="18"/>
+                                                <ColumnDefinition Width="53"/>
+                                                <ColumnDefinition Width="58"/>
+                                                <ColumnDefinition Width="18"/>
+                                            </Grid.ColumnDefinitions>
+                                            <CheckBox Grid.Column="0"  Content="HEX发送"  HorizontalAlignment="Left" VerticalAlignment="Center"></CheckBox>
+                                            <CheckBox Name="blockSendCheck1" Grid.Column="1"  Content="阻塞发送" HorizontalAlignment="Left" VerticalAlignment="Center" Click="BlockSendCheck_Click" ></CheckBox>
+                                            <CheckBox Name="loopSendCheck1" Grid.Column="2"  Content="循环发送" HorizontalAlignment="Left" VerticalAlignment="Center" Click="LoopSendCheck_Checked"></CheckBox>
+                                            <TextBox  Name="loopSendNumTextBox1" Text="10" Grid.Column="3" Height="24" Width="68" HorizontalAlignment="Left" VerticalAlignment="Center" VerticalContentAlignment="Center"></TextBox>
+                                            <Label    Grid.Column="4" Content="次" Height="25" HorizontalAlignment="Left" VerticalAlignment="Center"  VerticalContentAlignment="Center" Padding="0" />
+                                            <Label    Grid.Column="5" Content="发送间隔:" Height="25" HorizontalAlignment="Left" VerticalAlignment="Center"  VerticalContentAlignment="Center" Padding="0" />
+                                            <TextBox  Name="loopSendTimeTextBox1" Text="1000" Grid.Column="6" Height="24" Width="58" HorizontalAlignment="Left" VerticalAlignment="Center" VerticalContentAlignment="Center"></TextBox>
+                                            <Label    Grid.Column="7" Content="ms" Height="25" HorizontalAlignment="Left" VerticalAlignment="Center"  VerticalContentAlignment="Center" Padding="0" />
+                                        </Grid>
+
+                                        <Button Name="AtCmdList_Button1" Grid.Column="1" Height="26" Margin="5,0,0,0" Style="{StaticResource MyButtonStyle}" Content="指令列表隐藏&lt;&lt;" Width="108" Click="Button_Grid_Click" />
+                                    </Grid>
+
+                                    <Grid Grid.Row="4">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="1*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <Grid Grid.Column="0">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="48"/>
+                                                <ColumnDefinition Width="245"/>
+                                                <ColumnDefinition Width="48" />
+                                                <ColumnDefinition Width="108" />
+                                                <ColumnDefinition Width="105" />
+                                            </Grid.ColumnDefinitions>
+                                            <Label Grid.Column="0" Content="端口号:" Height="23" HorizontalAlignment="Left" VerticalAlignment="Center" Padding="1" VerticalContentAlignment="Center"/>
+                                            <ComboBox Name="portsComboBox1" Grid.Column="1" IsReadOnly="True" Height="23" DropDownOpened="MyComboBox_DropDownOpened" SelectionChanged="PortsComboBox_SelectionChanged"></ComboBox>
+                                            <Label Grid.Column="2" Content="波特率:" Height="23" VerticalAlignment="Center"  HorizontalAlignment="Center" Padding="0" VerticalContentAlignment="Center"></Label>
+                                            <ComboBox Name="baudRateComboBox1" Grid.Column="3" Height="23" IsEditable="True"  SelectionChanged="BaudRateComboBox_SelectionChanged" >
+                                                <ComboBoxItem>9600</ComboBoxItem>
+                                                <ComboBoxItem>19200</ComboBoxItem>
+                                                <ComboBoxItem>38400</ComboBoxItem>
+                                                <ComboBoxItem>57600</ComboBoxItem>
+                                                <ComboBoxItem IsSelected="True">115200</ComboBoxItem>
+                                                <ComboBoxItem>460800</ComboBoxItem>
+                                                <ComboBoxItem>512000</ComboBoxItem>
+                                                <ComboBoxItem>921600</ComboBoxItem>
+                                            </ComboBox>
+                                        </Grid>
+
+                                        <Button Name="openButton1" Grid.Column="1"  Height="26" Margin="3,0,0,0" 
+                                    Style="{StaticResource MyButtonStyle}" 
+                                    Content="打开串口" Width="108" 
+                                    Click="Button_Open_Port_Click" >
+
+                                        </Button>
+                                    </Grid>
+
+                                </Grid>
+                                <Grid Grid.Row="1">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBox Name="Send_At_Edit1" Grid.Column="0" Text="AT" TextWrapping="Wrap" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" KeyDown="Send_At_Edit_KeyDown"/>
+                                    <Button Grid.Column="1" Margin="3,0,0,0" Style="{StaticResource MyButtonStyle}"   Content="发送" Width="108" MinHeight="74" Click="Button_Click_Send_AtCmd" />
+                                </Grid>
+
+                            </Grid>
+                        </Grid>
+                    </TabItem>
+                    <TabItem Header="端口2">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="2*"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <TextBox Grid.Row="0" x:Name="recvDataRichTextBox2"  MaxLength="1048576"  BorderThickness="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" >
+                            </TextBox>
+                            <GridSplitter Grid.Row="1" Height="3" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" ShowsPreview="True"/>
+                            <Grid Grid.Row="2">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+                                <Grid Grid.Row="0">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="30"/>
+                                        <RowDefinition Height="30"/>
+                                        <RowDefinition Height="30"/>
+                                        <RowDefinition Height="30"/>
+                                    </Grid.RowDefinitions>
+
+                                    <Grid Grid.Row="0">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="90"/>
+                                            <ColumnDefinition Width="83"/>
+                                            <ColumnDefinition Width="83"/>
+                                            <ColumnDefinition Width="83"/>
+                                            <ColumnDefinition Width="83"/>
+                                            <ColumnDefinition Width="83"/>
+                                            <ColumnDefinition Width="60"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <Button Style="{StaticResource MyButtonStyle}" Grid.Column="0" Content="更多串口设置" Height="23" Margin="0,0,5,0"></Button>
+                                        <Button Style="{StaticResource MyButtonStyle}" Grid.Column="1" Content="接收期望字符" Height="23" Margin="0,0,5,0" Click="Button_Opinion_Click" ></Button>
+                                        <Button Style="{StaticResource MyButtonStyle}" Grid.Column="2" Content="保存接收数据" Height="23" Margin="0,0,5,0" Click="Button_SaveLog_Click" ></Button>
+                                        <Button Style="{StaticResource MyButtonStyle}" Grid.Column="3" Content="清空发送区" Height="23" Margin="0,0,5,0" Click="Button_Clear_SendEdit_Click"></Button>
+                                        <Button Style="{StaticResource MyButtonStyle}" Grid.Column="4" Content="清空接收区" Height="23" Margin="0,0,5,0" Click="Button_Clear_RecvEdit_Click" ></Button>
+
+                                        <Button Style="{StaticResource MyButtonStyle}" Grid.Column="5" Content="长度查询" Height="23" Margin="0,0,5,0" ></Button>
+                                        <Button Style="{StaticResource MyButtonStyle}" Grid.Column="6" Content="扫频" Height="23" Margin="0,0,5,0" ></Button>
+
+                                    </Grid>
+                                    <Grid Grid.Row="1">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="1*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Grid Grid.Column="0">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="75"/>
+                                                <ColumnDefinition Width="75"/>
+                                                <ColumnDefinition Width="75"/>
+                                                <ColumnDefinition Width="75"/>
+                                                <ColumnDefinition Width="75"/>
+                                                <ColumnDefinition Width="58"/>
+                                                <ColumnDefinition Width="18"/>
+
+                                            </Grid.ColumnDefinitions>
+                                            <CheckBox Grid.Column="0"  Content="HEX接收"  HorizontalAlignment="Left" VerticalAlignment="Center"></CheckBox>
+                                            <CheckBox Name="savefileCheckBox2" Grid.Column="1"  Content="保存接收" HorizontalAlignment="Left" VerticalAlignment="Center" Click="SavefileCheckBox_Checked"></CheckBox>
+                                            <CheckBox Name="stampCheckBox2" Grid.Column="2" IsChecked="True" Content="加时间戳" HorizontalAlignment="Left" VerticalAlignment="Center" Click="StampCheckBox_Checked"></CheckBox>
+                                            <CheckBox Name="enterCheckBox2" Grid.Column="3" IsChecked="True" Content="回车换行" HorizontalAlignment="Left" VerticalAlignment="Center"></CheckBox>
+                                            <CheckBox Name="timerSendCheckBox2" Grid.Column="4"  Content="定时发送" HorizontalAlignment="Left" VerticalAlignment="Center" Click="TimerSendCheckBox_Check"></CheckBox>
+                                            <TextBox  Name="timerSendTextBox2" Text="1000" Grid.Column="5" Height="24" Width="58" HorizontalAlignment="Left" VerticalAlignment="Center" VerticalContentAlignment="Center"></TextBox>
+                                            <Label    Grid.Column="6" Content="ms" Height="25" HorizontalAlignment="Left" VerticalAlignment="Center"  VerticalContentAlignment="Center" Padding="0" />
+
+                                        </Grid>
+
+                                        <Button   Grid.Column="1" Height="26" Margin="4,0,0,0" Style="{StaticResource MyButtonStyle}" Content="一键启动显示&lt;&lt;" Width="108" Click="Button_Display_Start_Windows_Click" ></Button>
+                                    </Grid>
+
+                                    <Grid Grid.Row="2">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="1*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Grid Grid.Column="0">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="75"/>
+                                                <ColumnDefinition Width="75"/>
+                                                <ColumnDefinition Width="75"/>
+                                                <ColumnDefinition Width="78"/>
+                                                <ColumnDefinition Width="18"/>
+                                                <ColumnDefinition Width="53"/>
+                                                <ColumnDefinition Width="58"/>
+                                                <ColumnDefinition Width="18"/>
+                                            </Grid.ColumnDefinitions>
+                                            <CheckBox Grid.Column="0"  Content="HEX发送"  HorizontalAlignment="Left" VerticalAlignment="Center"></CheckBox>
+                                            <CheckBox Name="blockSendCheck2" Grid.Column="1"  Content="阻塞发送" HorizontalAlignment="Left" VerticalAlignment="Center" Click="BlockSendCheck_Click" ></CheckBox>
+                                            <CheckBox Name="loopSendCheck2" Grid.Column="2"  Content="循环发送" HorizontalAlignment="Left" VerticalAlignment="Center" Click="LoopSendCheck_Checked"></CheckBox>
+                                            <TextBox  Name="loopSendNumTextBox2" Text="10" Grid.Column="3" Height="24" Width="68" HorizontalAlignment="Left" VerticalAlignment="Center" VerticalContentAlignment="Center"></TextBox>
+                                            <Label    Grid.Column="4" Content="次" Height="25" HorizontalAlignment="Left" VerticalAlignment="Center"  VerticalContentAlignment="Center" Padding="0" />
+                                            <Label    Grid.Column="5" Content="发送间隔:" Height="25" HorizontalAlignment="Left" VerticalAlignment="Center"  VerticalContentAlignment="Center" Padding="0" />
+                                            <TextBox  Name="loopSendTimeTextBox2" Text="1000" Grid.Column="6" Height="24" Width="58" HorizontalAlignment="Left" VerticalAlignment="Center" VerticalContentAlignment="Center"></TextBox>
+                                            <Label    Grid.Column="7" Content="ms" Height="25" HorizontalAlignment="Left" VerticalAlignment="Center"  VerticalContentAlignment="Center" Padding="0" />
+                                        </Grid>
+
+                                        <Button Name="AtCmdList_Button2" Grid.Column="1" Height="26" Margin="5,0,0,0" Style="{StaticResource MyButtonStyle}" Content="指令列表隐藏&lt;&lt;" Width="108" Click="Button_Grid_Click" />
+                                    </Grid>
+
+                                    <Grid Grid.Row="4">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="1*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <Grid Grid.Column="0">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="48"/>
+                                                <ColumnDefinition Width="245"/>
+                                                <ColumnDefinition Width="48" />
+                                                <ColumnDefinition Width="108" />
+                                                <ColumnDefinition Width="105" />
+                                            </Grid.ColumnDefinitions>
+                                            <Label Grid.Column="0" Content="端口号:" Height="23" HorizontalAlignment="Left" VerticalAlignment="Center" Padding="1" VerticalContentAlignment="Center"/>
+                                            <ComboBox Name="portsComboBox2" Grid.Column="1" IsReadOnly="True" Height="23" DropDownOpened="MyComboBox_DropDownOpened" SelectionChanged="PortsComboBox_SelectionChanged"></ComboBox>
+                                            <Label Grid.Column="2" Content="波特率:" Height="23" VerticalAlignment="Center"  HorizontalAlignment="Center" Padding="0" VerticalContentAlignment="Center"></Label>
+                                            <ComboBox Name="baudRateComboBox2" Grid.Column="3" Height="23" IsEditable="True"  SelectionChanged="BaudRateComboBox_SelectionChanged" >
+                                                <ComboBoxItem>9600</ComboBoxItem>
+                                                <ComboBoxItem>19200</ComboBoxItem>
+                                                <ComboBoxItem>38400</ComboBoxItem>
+                                                <ComboBoxItem>57600</ComboBoxItem>
+                                                <ComboBoxItem IsSelected="True">115200</ComboBoxItem>
+                                                <ComboBoxItem>460800</ComboBoxItem>
+                                                <ComboBoxItem>512000</ComboBoxItem>
+                                                <ComboBoxItem>921600</ComboBoxItem>
+                                            </ComboBox>
+                                        </Grid>
+
+                                        <Button Name="openButton2" Grid.Column="1"  Height="26" Margin="3,0,0,0" 
+                                    Style="{StaticResource MyButtonStyle}" 
+                                    Content="打开串口" Width="108" 
+                                    Click="Button_Open_Port_Click" >
+
+                                        </Button>
+                                    </Grid>
+
+                                </Grid>
+                                <Grid Grid.Row="1">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBox Name="Send_At_Edit2" Grid.Column="0" Text="AT" TextWrapping="Wrap" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" KeyDown="Send_At_Edit_KeyDown"/>
+                                    <Button Grid.Column="1" Margin="3,0,0,0" Style="{StaticResource MyButtonStyle}"   Content="发送" Width="108" MinHeight="74" Click="Button_Click_Send_AtCmd" />
+                                </Grid>
+
+                            </Grid>
+                        </Grid>
+                    </TabItem>
+                    <TabItem Header="端口3">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="2*"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <TextBox Grid.Row="0" x:Name="recvDataRichTextBox3"  MaxLength="1048576"  BorderThickness="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                            </TextBox>
+                            <GridSplitter Grid.Row="1" Height="3" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" ShowsPreview="True"/>
+                            <Grid Grid.Row="2">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+                                <Grid Grid.Row="0">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="30"/>
+                                        <RowDefinition Height="30"/>
+                                        <RowDefinition Height="30"/>
+                                        <RowDefinition Height="30"/>
+                                    </Grid.RowDefinitions>
+
+                                    <Grid Grid.Row="0">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="90"/>
+                                            <ColumnDefinition Width="83"/>
+                                            <ColumnDefinition Width="83"/>
+                                            <ColumnDefinition Width="83"/>
+                                            <ColumnDefinition Width="83"/>
+                                            <ColumnDefinition Width="83"/>
+                                            <ColumnDefinition Width="60"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <Button Style="{StaticResource MyButtonStyle}" Grid.Column="0" Content="更多串口设置" Height="23" Margin="0,0,5,0"></Button>
+                                        <Button Style="{StaticResource MyButtonStyle}" Grid.Column="1" Content="接收期望字符" Height="23" Margin="0,0,5,0" Click="Button_Opinion_Click" ></Button>
+                                        <Button Style="{StaticResource MyButtonStyle}" Grid.Column="2" Content="保存接收数据" Height="23" Margin="0,0,5,0" Click="Button_SaveLog_Click" ></Button>
+                                        <Button Style="{StaticResource MyButtonStyle}" Grid.Column="3" Content="清空发送区" Height="23" Margin="0,0,5,0" Click="Button_Clear_SendEdit_Click"></Button>
+                                        <Button Style="{StaticResource MyButtonStyle}" Grid.Column="4" Content="清空接收区" Height="23" Margin="0,0,5,0" Click="Button_Clear_RecvEdit_Click" ></Button>
+
+                                        <Button Style="{StaticResource MyButtonStyle}" Grid.Column="5" Content="长度查询" Height="23" Margin="0,0,5,0" ></Button>
+                                        <Button Style="{StaticResource MyButtonStyle}" Grid.Column="6" Content="扫频" Height="23" Margin="0,0,5,0" ></Button>
+
+                                    </Grid>
+                                    <Grid Grid.Row="1">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="1*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Grid Grid.Column="0">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="75"/>
+                                                <ColumnDefinition Width="75"/>
+                                                <ColumnDefinition Width="75"/>
+                                                <ColumnDefinition Width="75"/>
+                                                <ColumnDefinition Width="75"/>
+                                                <ColumnDefinition Width="58"/>
+                                                <ColumnDefinition Width="18"/>
+
+                                            </Grid.ColumnDefinitions>
+                                            <CheckBox Grid.Column="0"  Content="HEX接收"  HorizontalAlignment="Left" VerticalAlignment="Center"></CheckBox>
+                                            <CheckBox Name="savefileCheckBox3" Grid.Column="1"  Content="保存接收" HorizontalAlignment="Left" VerticalAlignment="Center" Click="SavefileCheckBox_Checked"></CheckBox>
+                                            <CheckBox Name="stampCheckBox3" Grid.Column="2" IsChecked="True" Content="加时间戳" HorizontalAlignment="Left" VerticalAlignment="Center" Click="StampCheckBox_Checked"></CheckBox>
+                                            <CheckBox Name="enterCheckBox3" Grid.Column="3" IsChecked="True" Content="回车换行" HorizontalAlignment="Left" VerticalAlignment="Center"></CheckBox>
+                                            <CheckBox Name="timerSendCheckBox3" Grid.Column="4"  Content="定时发送" HorizontalAlignment="Left" VerticalAlignment="Center" Click="TimerSendCheckBox_Check"></CheckBox>
+                                            <TextBox  Name="timerSendTextBox3" Text="1000" Grid.Column="5" Height="24" Width="58" HorizontalAlignment="Left" VerticalAlignment="Center" VerticalContentAlignment="Center"></TextBox>
+                                            <Label    Grid.Column="6" Content="ms" Height="25" HorizontalAlignment="Left" VerticalAlignment="Center"  VerticalContentAlignment="Center" Padding="0" />
+
+                                        </Grid>
+
+                                        <Button   Grid.Column="1" Height="26" Margin="4,0,0,0" Style="{StaticResource MyButtonStyle}" Content="一键启动显示&lt;&lt;" Width="108" Click="Button_Display_Start_Windows_Click" ></Button>
+                                    </Grid>
+
+                                    <Grid Grid.Row="2">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="1*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Grid Grid.Column="0">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="75"/>
+                                                <ColumnDefinition Width="75"/>
+                                                <ColumnDefinition Width="75"/>
+                                                <ColumnDefinition Width="78"/>
+                                                <ColumnDefinition Width="18"/>
+                                                <ColumnDefinition Width="53"/>
+                                                <ColumnDefinition Width="58"/>
+                                                <ColumnDefinition Width="18"/>
+                                            </Grid.ColumnDefinitions>
+                                            <CheckBox Grid.Column="0"  Content="HEX发送"  HorizontalAlignment="Left" VerticalAlignment="Center"></CheckBox>
+                                            <CheckBox Name="blockSendCheck3" Grid.Column="1"  Content="阻塞发送" HorizontalAlignment="Left" VerticalAlignment="Center" Click="BlockSendCheck_Click" ></CheckBox>
+                                            <CheckBox Name="loopSendCheck3" Grid.Column="2"  Content="循环发送" HorizontalAlignment="Left" VerticalAlignment="Center" Click="LoopSendCheck_Checked"></CheckBox>
+                                            <TextBox  Name="loopSendNumTextBox3" Text="10" Grid.Column="3" Height="24" Width="68" HorizontalAlignment="Left" VerticalAlignment="Center" VerticalContentAlignment="Center"></TextBox>
+                                            <Label    Grid.Column="4" Content="次" Height="25" HorizontalAlignment="Left" VerticalAlignment="Center"  VerticalContentAlignment="Center" Padding="0" />
+                                            <Label    Grid.Column="5" Content="发送间隔:" Height="25" HorizontalAlignment="Left" VerticalAlignment="Center"  VerticalContentAlignment="Center" Padding="0" />
+                                            <TextBox  Name="loopSendTimeTextBox3" Text="1000" Grid.Column="6" Height="24" Width="58" HorizontalAlignment="Left" VerticalAlignment="Center" VerticalContentAlignment="Center"></TextBox>
+                                            <Label    Grid.Column="7" Content="ms" Height="25" HorizontalAlignment="Left" VerticalAlignment="Center"  VerticalContentAlignment="Center" Padding="0" />
+                                        </Grid>
+
+                                        <Button Name="AtCmdList_Button3" Grid.Column="1" Height="26" Margin="5,0,0,0" Style="{StaticResource MyButtonStyle}" Content="指令列表隐藏&lt;&lt;" Width="108" Click="Button_Grid_Click" />
+                                    </Grid>
+
+                                    <Grid Grid.Row="4">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="1*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <Grid Grid.Column="0">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="48"/>
+                                                <ColumnDefinition Width="245"/>
+                                                <ColumnDefinition Width="48" />
+                                                <ColumnDefinition Width="108" />
+                                                <ColumnDefinition Width="105" />
+                                            </Grid.ColumnDefinitions>
+                                            <Label Grid.Column="0" Content="端口号:" Height="23" HorizontalAlignment="Left" VerticalAlignment="Center" Padding="1" VerticalContentAlignment="Center"/>
+                                            <ComboBox Name="portsComboBox3" Grid.Column="1" IsReadOnly="True" Height="23" DropDownOpened="MyComboBox_DropDownOpened" SelectionChanged="PortsComboBox_SelectionChanged"></ComboBox>
+                                            <Label Grid.Column="2" Content="波特率:" Height="23" VerticalAlignment="Center"  HorizontalAlignment="Center" Padding="0" VerticalContentAlignment="Center"></Label>
+                                            <ComboBox Name="baudRateComboBox3" Grid.Column="3" Height="23" IsEditable="True"  SelectionChanged="BaudRateComboBox_SelectionChanged" >
+                                                <ComboBoxItem>9600</ComboBoxItem>
+                                                <ComboBoxItem>19200</ComboBoxItem>
+                                                <ComboBoxItem>38400</ComboBoxItem>
+                                                <ComboBoxItem>57600</ComboBoxItem>
+                                                <ComboBoxItem IsSelected="True">115200</ComboBoxItem>
+                                                <ComboBoxItem>460800</ComboBoxItem>
+                                                <ComboBoxItem>512000</ComboBoxItem>
+                                                <ComboBoxItem>921600</ComboBoxItem>
+                                            </ComboBox>
+                                        </Grid>
+
+                                        <Button Name="openButton3" Grid.Column="1"  Height="26" Margin="3,0,0,0" 
+                                    Style="{StaticResource MyButtonStyle}" 
+                                    Content="打开串口" Width="108" 
+                                    Click="Button_Open_Port_Click" >
+
+                                        </Button>
+                                    </Grid>
+
+                                </Grid>
+                                <Grid Grid.Row="1">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBox Name="Send_At_Edit3" Grid.Column="0" Text="AT" TextWrapping="Wrap" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" KeyDown="Send_At_Edit_KeyDown"/>
+                                    <Button Grid.Column="1" Margin="3,0,0,0" Style="{StaticResource MyButtonStyle}"   Content="发送" Width="108" MinHeight="74" Click="Button_Click_Send_AtCmd" />
+                                </Grid>
+
+                            </Grid>
+                        </Grid>
+                    </TabItem>
+                    <TabItem Header="端口4">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="2*"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <TextBox Grid.Row="0" x:Name="recvDataRichTextBox4"  MaxLength="1048576"  BorderThickness="1" HorizontalScrollBarVisibility="Auto"  VerticalScrollBarVisibility="Auto">
+                            </TextBox>
+                            <GridSplitter Grid.Row="1" Height="3" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" ShowsPreview="True"/>
+                            <Grid Grid.Row="2">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+                                <Grid Grid.Row="0">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="30"/>
+                                        <RowDefinition Height="30"/>
+                                        <RowDefinition Height="30"/>
+                                        <RowDefinition Height="30"/>
+                                    </Grid.RowDefinitions>
+
+                                    <Grid Grid.Row="0">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="90"/>
+                                            <ColumnDefinition Width="83"/>
+                                            <ColumnDefinition Width="83"/>
+                                            <ColumnDefinition Width="83"/>
+                                            <ColumnDefinition Width="83"/>
+                                            <ColumnDefinition Width="83"/>
+                                            <ColumnDefinition Width="60"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <Button Style="{StaticResource MyButtonStyle}" Grid.Column="0" Content="更多串口设置" Height="23" Margin="0,0,5,0"></Button>
+                                        <Button Style="{StaticResource MyButtonStyle}" Grid.Column="1" Content="接收期望字符" Height="23" Margin="0,0,5,0" Click="Button_Opinion_Click" ></Button>
+                                        <Button Style="{StaticResource MyButtonStyle}" Grid.Column="2" Content="保存接收数据" Height="23" Margin="0,0,5,0" Click="Button_SaveLog_Click"></Button>
+                                        <Button Style="{StaticResource MyButtonStyle}" Grid.Column="3" Content="清空发送区" Height="23" Margin="0,0,5,0" Click="Button_Clear_SendEdit_Click"></Button>
+                                        <Button Style="{StaticResource MyButtonStyle}" Grid.Column="4" Content="清空接收区" Height="23" Margin="0,0,5,0" Click="Button_Clear_RecvEdit_Click" ></Button>
+
+                                        <Button Style="{StaticResource MyButtonStyle}" Grid.Column="5" Content="长度查询" Height="23" Margin="0,0,5,0" ></Button>
+                                        <Button Style="{StaticResource MyButtonStyle}" Grid.Column="6" Content="扫频" Height="23" Margin="0,0,5,0" ></Button>
+
+                                    </Grid>
+                                    <Grid Grid.Row="1">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="1*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Grid Grid.Column="0">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="75"/>
+                                                <ColumnDefinition Width="75"/>
+                                                <ColumnDefinition Width="75"/>
+                                                <ColumnDefinition Width="75"/>
+                                                <ColumnDefinition Width="75"/>
+                                                <ColumnDefinition Width="58"/>
+                                                <ColumnDefinition Width="18"/>
+
+                                            </Grid.ColumnDefinitions>
+                                            <CheckBox Grid.Column="0"  Content="HEX接收"  HorizontalAlignment="Left" VerticalAlignment="Center"></CheckBox>
+                                            <CheckBox Name="savefileCheckBox4" Grid.Column="1"  Content="保存接收" HorizontalAlignment="Left" VerticalAlignment="Center" Click="SavefileCheckBox_Checked"></CheckBox>
+                                            <CheckBox Name="stampCheckBox4" Grid.Column="2" IsChecked="True" Content="加时间戳" HorizontalAlignment="Left" VerticalAlignment="Center" Click="StampCheckBox_Checked"></CheckBox>
+                                            <CheckBox Name="enterCheckBox4" Grid.Column="3" IsChecked="True" Content="回车换行" HorizontalAlignment="Left" VerticalAlignment="Center"></CheckBox>
+                                            <CheckBox Name="timerSendCheckBox4" Grid.Column="4"  Content="定时发送" HorizontalAlignment="Left" VerticalAlignment="Center" Click="TimerSendCheckBox_Check"></CheckBox>
+                                            <TextBox  Name="timerSendTextBox4" Text="1000" Grid.Column="5" Height="24" Width="58" HorizontalAlignment="Left" VerticalAlignment="Center" VerticalContentAlignment="Center"></TextBox>
+                                            <Label    Grid.Column="6" Content="ms" Height="25" HorizontalAlignment="Left" VerticalAlignment="Center"  VerticalContentAlignment="Center" Padding="0" />
+
+                                        </Grid>
+
+                                        <Button   Grid.Column="1" Height="26" Margin="4,0,0,0" Style="{StaticResource MyButtonStyle}" Content="一键启动显示&lt;&lt;" Width="108" Click="Button_Display_Start_Windows_Click" ></Button>
+                                    </Grid>
+
+                                    <Grid Grid.Row="2">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="1*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Grid Grid.Column="0">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="75"/>
+                                                <ColumnDefinition Width="75"/>
+                                                <ColumnDefinition Width="75"/>
+                                                <ColumnDefinition Width="78"/>
+                                                <ColumnDefinition Width="18"/>
+                                                <ColumnDefinition Width="53"/>
+                                                <ColumnDefinition Width="58"/>
+                                                <ColumnDefinition Width="18"/>
+                                            </Grid.ColumnDefinitions>
+                                            <CheckBox Grid.Column="0"  Content="HEX发送"  HorizontalAlignment="Left" VerticalAlignment="Center"></CheckBox>
+                                            <CheckBox Name="blockSendCheck4" Grid.Column="1"  Content="阻塞发送" HorizontalAlignment="Left" VerticalAlignment="Center" Click="BlockSendCheck_Click" ></CheckBox>
+                                            <CheckBox Name="loopSendCheck4" Grid.Column="2"  Content="循环发送" HorizontalAlignment="Left" VerticalAlignment="Center" Click="LoopSendCheck_Checked"></CheckBox>
+                                            <TextBox  Name="loopSendNumTextBox4" Text="10" Grid.Column="3" Height="24" Width="68" HorizontalAlignment="Left" VerticalAlignment="Center" VerticalContentAlignment="Center"></TextBox>
+                                            <Label    Grid.Column="4" Content="次" Height="25" HorizontalAlignment="Left" VerticalAlignment="Center"  VerticalContentAlignment="Center" Padding="0" />
+                                            <Label    Grid.Column="5" Content="发送间隔:" Height="25" HorizontalAlignment="Left" VerticalAlignment="Center"  VerticalContentAlignment="Center" Padding="0" />
+                                            <TextBox  Name="loopSendTimeTextBox4" Text="1000" Grid.Column="6" Height="24" Width="58" HorizontalAlignment="Left" VerticalAlignment="Center" VerticalContentAlignment="Center"></TextBox>
+                                            <Label    Grid.Column="7" Content="ms" Height="25" HorizontalAlignment="Left" VerticalAlignment="Center"  VerticalContentAlignment="Center" Padding="0" />
+                                        </Grid>
+
+                                        <Button Name="AtCmdList_Button4" Grid.Column="1" Height="26" Margin="5,0,0,0" Style="{StaticResource MyButtonStyle}" Content="指令列表隐藏&lt;&lt;" Width="108" Click="Button_Grid_Click" />
+                                    </Grid>
+
+                                    <Grid Grid.Row="4">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="1*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <Grid Grid.Column="0">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="48"/>
+                                                <ColumnDefinition Width="245"/>
+                                                <ColumnDefinition Width="48" />
+                                                <ColumnDefinition Width="108" />
+                                                <ColumnDefinition Width="105" />
+                                            </Grid.ColumnDefinitions>
+                                            <Label Grid.Column="0" Content="端口号:" Height="23" HorizontalAlignment="Left" VerticalAlignment="Center" Padding="1" VerticalContentAlignment="Center"/>
+                                            <ComboBox Name="portsComboBox4" Grid.Column="1" IsReadOnly="True" Height="23" DropDownOpened="MyComboBox_DropDownOpened" SelectionChanged="PortsComboBox_SelectionChanged"></ComboBox>
+                                            <Label Grid.Column="2" Content="波特率:" Height="23" VerticalAlignment="Center"  HorizontalAlignment="Center" Padding="0" VerticalContentAlignment="Center"></Label>
+                                            <ComboBox Name="baudRateComboBox4" Grid.Column="3" Height="23" IsEditable="True"  SelectionChanged="BaudRateComboBox_SelectionChanged" >
+                                                <ComboBoxItem>9600</ComboBoxItem>
+                                                <ComboBoxItem>19200</ComboBoxItem>
+                                                <ComboBoxItem>38400</ComboBoxItem>
+                                                <ComboBoxItem>57600</ComboBoxItem>
+                                                <ComboBoxItem IsSelected="True">115200</ComboBoxItem>
+                                                <ComboBoxItem>460800</ComboBoxItem>
+                                                <ComboBoxItem>512000</ComboBoxItem>
+                                                <ComboBoxItem>921600</ComboBoxItem>
+                                            </ComboBox>
+                                        </Grid>
+
+                                        <Button Name="openButton4" Grid.Column="1"  Height="26" Margin="3,0,0,0" 
+                                    Style="{StaticResource MyButtonStyle}" 
+                                    Content="打开串口" Width="108" 
+                                    Click="Button_Open_Port_Click" >
+
+                                        </Button>
+                                    </Grid>
+
+                                </Grid>
+                                <Grid Grid.Row="1">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBox Name="Send_At_Edit4" Grid.Column="0" Text="AT" TextWrapping="Wrap" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" KeyDown="Send_At_Edit_KeyDown"/>
+                                    <Button Grid.Column="1" Margin="3,0,0,0" Style="{StaticResource MyButtonStyle}"   Content="发送" Width="108" MinHeight="74" Click="Button_Click_Send_AtCmd" />
+                                </Grid>
+
+                            </Grid>
+                        </Grid>
+                    </TabItem>
+                    <TabItem Header="端口5">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="2*"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <TextBox Grid.Row="0" x:Name="recvDataRichTextBox5"  MaxLength="1048576"  BorderThickness="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                            </TextBox>
+                            <GridSplitter Grid.Row="1" Height="3" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" ShowsPreview="True"/>
+                            <Grid Grid.Row="2">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+                                <Grid Grid.Row="0">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="30"/>
+                                        <RowDefinition Height="30"/>
+                                        <RowDefinition Height="30"/>
+                                        <RowDefinition Height="30"/>
+                                    </Grid.RowDefinitions>
+
+                                    <Grid Grid.Row="0">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="90"/>
+                                            <ColumnDefinition Width="83"/>
+                                            <ColumnDefinition Width="83"/>
+                                            <ColumnDefinition Width="83"/>
+                                            <ColumnDefinition Width="83"/>
+                                            <ColumnDefinition Width="83"/>
+                                            <ColumnDefinition Width="60"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <Button Style="{StaticResource MyButtonStyle}" Grid.Column="0" Content="更多串口设置" Height="23" Margin="0,0,5,0"></Button>
+                                        <Button Style="{StaticResource MyButtonStyle}" Grid.Column="1" Content="接收期望字符" Height="23" Margin="0,0,5,0" Click="Button_Opinion_Click" ></Button>
+                                        <Button Style="{StaticResource MyButtonStyle}" Grid.Column="2" Content="保存接收数据" Height="23" Margin="0,0,5,0" Click="Button_SaveLog_Click"></Button>
+                                        <Button Style="{StaticResource MyButtonStyle}" Grid.Column="3" Content="清空发送区" Height="23" Margin="0,0,5,0" Click="Button_Clear_SendEdit_Click"></Button>
+                                        <Button Style="{StaticResource MyButtonStyle}" Grid.Column="4" Content="清空接收区" Height="23" Margin="0,0,5,0" Click="Button_Clear_RecvEdit_Click" ></Button>
+
+                                        <Button Style="{StaticResource MyButtonStyle}" Grid.Column="5" Content="长度查询" Height="23" Margin="0,0,5,0" ></Button>
+                                        <Button Style="{StaticResource MyButtonStyle}" Grid.Column="6" Content="扫频" Height="23" Margin="0,0,5,0" ></Button>
+
+                                    </Grid>
+                                    <Grid Grid.Row="1">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="1*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Grid Grid.Column="0">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="75"/>
+                                                <ColumnDefinition Width="75"/>
+                                                <ColumnDefinition Width="75"/>
+                                                <ColumnDefinition Width="75"/>
+                                                <ColumnDefinition Width="75"/>
+                                                <ColumnDefinition Width="58"/>
+                                                <ColumnDefinition Width="18"/>
+
+                                            </Grid.ColumnDefinitions>
+                                            <CheckBox Grid.Column="0"  Content="HEX接收"  HorizontalAlignment="Left" VerticalAlignment="Center"></CheckBox>
+                                            <CheckBox Name="savefileCheckBox5" Grid.Column="1"  Content="保存接收" HorizontalAlignment="Left" VerticalAlignment="Center" Click="SavefileCheckBox_Checked"></CheckBox>
+                                            <CheckBox Name="stampCheckBox5" Grid.Column="2" IsChecked="True" Content="加时间戳" HorizontalAlignment="Left" VerticalAlignment="Center" Click="StampCheckBox_Checked"></CheckBox>
+                                            <CheckBox Name="enterCheckBox5" Grid.Column="3" IsChecked="True" Content="回车换行" HorizontalAlignment="Left" VerticalAlignment="Center"></CheckBox>
+                                            <CheckBox Name="timerSendCheckBox5" Grid.Column="4"  Content="定时发送" HorizontalAlignment="Left" VerticalAlignment="Center" Click="TimerSendCheckBox_Check"></CheckBox>
+                                            <TextBox  Name="timerSendTextBox5" Text="1000" Grid.Column="5" Height="24" Width="58" HorizontalAlignment="Left" VerticalAlignment="Center" VerticalContentAlignment="Center"></TextBox>
+                                            <Label    Grid.Column="6" Content="ms" Height="25" HorizontalAlignment="Left" VerticalAlignment="Center"  VerticalContentAlignment="Center" Padding="0" />
+
+                                        </Grid>
+
+                                        <Button   Grid.Column="1" Height="26" Margin="4,0,0,0" Style="{StaticResource MyButtonStyle}" Content="一键启动显示&lt;&lt;" Width="108" Click="Button_Display_Start_Windows_Click" ></Button>
+                                    </Grid>
+
+                                    <Grid Grid.Row="2">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="1*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Grid Grid.Column="0">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="75"/>
+                                                <ColumnDefinition Width="75"/>
+                                                <ColumnDefinition Width="75"/>
+                                                <ColumnDefinition Width="78"/>
+                                                <ColumnDefinition Width="18"/>
+                                                <ColumnDefinition Width="53"/>
+                                                <ColumnDefinition Width="58"/>
+                                                <ColumnDefinition Width="18"/>
+                                            </Grid.ColumnDefinitions>
+                                            <CheckBox Grid.Column="0"  Content="HEX发送"  HorizontalAlignment="Left" VerticalAlignment="Center"></CheckBox>
+                                            <CheckBox Name="blockSendCheck5" Grid.Column="1"  Content="阻塞发送" HorizontalAlignment="Left" VerticalAlignment="Center" Click="BlockSendCheck_Click" ></CheckBox>
+                                            <CheckBox Name="loopSendCheck5" Grid.Column="2"  Content="循环发送" HorizontalAlignment="Left" VerticalAlignment="Center" Click="LoopSendCheck_Checked"></CheckBox>
+                                            <TextBox  Name="loopSendNumTextBox5" Text="10" Grid.Column="3" Height="24" Width="68" HorizontalAlignment="Left" VerticalAlignment="Center" VerticalContentAlignment="Center"></TextBox>
+                                            <Label    Grid.Column="4" Content="次" Height="25" HorizontalAlignment="Left" VerticalAlignment="Center"  VerticalContentAlignment="Center" Padding="0" />
+                                            <Label    Grid.Column="5" Content="发送间隔:" Height="25" HorizontalAlignment="Left" VerticalAlignment="Center"  VerticalContentAlignment="Center" Padding="0" />
+                                            <TextBox  Name="loopSendTimeTextBox5" Text="1000" Grid.Column="6" Height="24" Width="58" HorizontalAlignment="Left" VerticalAlignment="Center" VerticalContentAlignment="Center"></TextBox>
+                                            <Label    Grid.Column="7" Content="ms" Height="25" HorizontalAlignment="Left" VerticalAlignment="Center"  VerticalContentAlignment="Center" Padding="0" />
+                                        </Grid>
+
+                                        <Button Name="AtCmdList_Button5" Grid.Column="1" Height="26" Margin="5,0,0,0" Style="{StaticResource MyButtonStyle}" Content="指令列表隐藏&lt;&lt;" Width="108" Click="Button_Grid_Click" />
+                                    </Grid>
+
+                                    <Grid Grid.Row="4">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="1*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <Grid Grid.Column="0">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="48"/>
+                                                <ColumnDefinition Width="245"/>
+                                                <ColumnDefinition Width="48" />
+                                                <ColumnDefinition Width="108" />
+                                                <ColumnDefinition Width="105" />
+                                            </Grid.ColumnDefinitions>
+                                            <Label Grid.Column="0" Content="端口号:" Height="23" HorizontalAlignment="Left" VerticalAlignment="Center" Padding="1" VerticalContentAlignment="Center"/>
+                                            <ComboBox Name="portsComboBox5" Grid.Column="1" IsReadOnly="True" Height="23" DropDownOpened="MyComboBox_DropDownOpened" SelectionChanged="PortsComboBox_SelectionChanged"></ComboBox>
+                                            <Label Grid.Column="2" Content="波特率:" Height="23" VerticalAlignment="Center"  HorizontalAlignment="Center" Padding="0" VerticalContentAlignment="Center"></Label>
+                                            <ComboBox Name="baudRateComboBox5" Grid.Column="3" Height="23" IsEditable="True"  SelectionChanged="BaudRateComboBox_SelectionChanged" >
+                                                <ComboBoxItem>9600</ComboBoxItem>
+                                                <ComboBoxItem>19200</ComboBoxItem>
+                                                <ComboBoxItem>38400</ComboBoxItem>
+                                                <ComboBoxItem>57600</ComboBoxItem>
+                                                <ComboBoxItem IsSelected="True">115200</ComboBoxItem>
+                                                <ComboBoxItem>460800</ComboBoxItem>
+                                                <ComboBoxItem>512000</ComboBoxItem>
+                                                <ComboBoxItem>921600</ComboBoxItem>
+                                            </ComboBox>
+                                        </Grid>
+
+                                        <Button Name="openButton5" Grid.Column="1"  Height="26" Margin="3,0,0,0" 
+                                    Style="{StaticResource MyButtonStyle}" 
+                                    Content="打开串口" Width="108" 
+                                    Click="Button_Open_Port_Click" >
+
+                                        </Button>
+                                    </Grid>
+
+                                </Grid>
+                                <Grid Grid.Row="1">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBox Name="Send_At_Edit5" Grid.Column="0" Text="AT" TextWrapping="Wrap" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" KeyDown="Send_At_Edit_KeyDown" />
+                                    <Button Grid.Column="1" Margin="3,0,0,0" Style="{StaticResource MyButtonStyle}"   Content="发送" Width="108" MinHeight="74" Click="Button_Click_Send_AtCmd" />
+                                </Grid>
+
+                            </Grid>
+                        </Grid>
+                    </TabItem>
+                    <TabItem Header="端口6">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="2*"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <TextBox Grid.Row="0" x:Name="recvDataRichTextBox6"  MaxLength="1048576"  BorderThickness="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                            </TextBox>
+                            <GridSplitter Grid.Row="1" Height="3" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" ShowsPreview="True"/>
+                            <Grid Grid.Row="2">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+                                <Grid Grid.Row="0">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="30"/>
+                                        <RowDefinition Height="30"/>
+                                        <RowDefinition Height="30"/>
+                                        <RowDefinition Height="30"/>
+                                    </Grid.RowDefinitions>
+
+                                    <Grid Grid.Row="0">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="90"/>
+                                            <ColumnDefinition Width="83"/>
+                                            <ColumnDefinition Width="83"/>
+                                            <ColumnDefinition Width="83"/>
+                                            <ColumnDefinition Width="83"/>
+                                            <ColumnDefinition Width="83"/>
+                                            <ColumnDefinition Width="60"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <Button Style="{StaticResource MyButtonStyle}" Grid.Column="0" Content="更多串口设置" Height="23" Margin="0,0,5,0"></Button>
+                                        <Button Style="{StaticResource MyButtonStyle}" Grid.Column="1" Content="接收期望字符" Height="23" Margin="0,0,5,0" Click="Button_Opinion_Click" ></Button>
+                                        <Button Style="{StaticResource MyButtonStyle}" Grid.Column="2" Content="保存接收数据" Height="23" Margin="0,0,5,0" Click="Button_SaveLog_Click"></Button>
+                                        <Button Style="{StaticResource MyButtonStyle}" Grid.Column="3" Content="清空发送区" Height="23" Margin="0,0,5,0" Click="Button_Clear_SendEdit_Click"></Button>
+                                        <Button Style="{StaticResource MyButtonStyle}" Grid.Column="4" Content="清空接收区" Height="23" Margin="0,0,5,0" Click="Button_Clear_RecvEdit_Click" ></Button>
+
+                                        <Button Style="{StaticResource MyButtonStyle}" Grid.Column="5" Content="长度查询" Height="23" Margin="0,0,5,0" ></Button>
+                                        <Button Style="{StaticResource MyButtonStyle}" Grid.Column="6" Content="扫频" Height="23" Margin="0,0,5,0" ></Button>
+
+                                    </Grid>
+                                    <Grid Grid.Row="1">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="1*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Grid Grid.Column="0">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="75"/>
+                                                <ColumnDefinition Width="75"/>
+                                                <ColumnDefinition Width="75"/>
+                                                <ColumnDefinition Width="75"/>
+                                                <ColumnDefinition Width="75"/>
+                                                <ColumnDefinition Width="58"/>
+                                                <ColumnDefinition Width="18"/>
+
+                                            </Grid.ColumnDefinitions>
+                                            <CheckBox Grid.Column="0"  Content="HEX接收"  HorizontalAlignment="Left" VerticalAlignment="Center"></CheckBox>
+                                            <CheckBox Name="savefileCheckBox6" Grid.Column="1"  Content="保存接收" HorizontalAlignment="Left" VerticalAlignment="Center" Click="SavefileCheckBox_Checked"></CheckBox>
+                                            <CheckBox Name="stampCheckBox6" Grid.Column="2" IsChecked="True" Content="加时间戳" HorizontalAlignment="Left" VerticalAlignment="Center" Click="StampCheckBox_Checked"></CheckBox>
+                                            <CheckBox Name="enterCheckBox6" Grid.Column="3" IsChecked="True" Content="回车换行" HorizontalAlignment="Left" VerticalAlignment="Center"></CheckBox>
+                                            <CheckBox Name="timerSendCheckBox6" Grid.Column="4"  Content="定时发送" HorizontalAlignment="Left" VerticalAlignment="Center" Click="TimerSendCheckBox_Check"></CheckBox>
+                                            <TextBox  Name="timerSendTextBox6" Text="1000" Grid.Column="5" Height="24" Width="58" HorizontalAlignment="Left" VerticalAlignment="Center" VerticalContentAlignment="Center"></TextBox>
+                                            <Label    Grid.Column="6" Content="ms" Height="25" HorizontalAlignment="Left" VerticalAlignment="Center"  VerticalContentAlignment="Center" Padding="0" />
+
+                                        </Grid>
+
+                                        <Button   Grid.Column="1" Height="26" Margin="4,0,0,0" Style="{StaticResource MyButtonStyle}" Content="一键启动显示&lt;&lt;" Width="108" Click="Button_Display_Start_Windows_Click" ></Button>
+                                    </Grid>
+
+                                    <Grid Grid.Row="2">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="1*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Grid Grid.Column="0">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="75"/>
+                                                <ColumnDefinition Width="75"/>
+                                                <ColumnDefinition Width="75"/>
+                                                <ColumnDefinition Width="78"/>
+                                                <ColumnDefinition Width="18"/>
+                                                <ColumnDefinition Width="53"/>
+                                                <ColumnDefinition Width="58"/>
+                                                <ColumnDefinition Width="18"/>
+                                            </Grid.ColumnDefinitions>
+                                            <CheckBox Grid.Column="0"  Content="HEX发送"  HorizontalAlignment="Left" VerticalAlignment="Center"></CheckBox>
+                                            <CheckBox Name="blockSendCheck6" Grid.Column="1"  Content="阻塞发送" HorizontalAlignment="Left" VerticalAlignment="Center" Click="BlockSendCheck_Click" ></CheckBox>
+                                            <CheckBox Name="loopSendCheck6" Grid.Column="2"  Content="循环发送" HorizontalAlignment="Left" VerticalAlignment="Center" Click="LoopSendCheck_Checked"></CheckBox>
+                                            <TextBox  Name="loopSendNumTextBox6" Text="10" Grid.Column="3" Height="24" Width="68" HorizontalAlignment="Left" VerticalAlignment="Center" VerticalContentAlignment="Center"></TextBox>
+                                            <Label    Grid.Column="4" Content="次" Height="25" HorizontalAlignment="Left" VerticalAlignment="Center"  VerticalContentAlignment="Center" Padding="0" />
+                                            <Label    Grid.Column="5" Content="发送间隔:" Height="25" HorizontalAlignment="Left" VerticalAlignment="Center"  VerticalContentAlignment="Center" Padding="0" />
+                                            <TextBox  Name="loopSendTimeTextBox6" Text="1000" Grid.Column="6" Height="24" Width="58" HorizontalAlignment="Left" VerticalAlignment="Center" VerticalContentAlignment="Center"></TextBox>
+                                            <Label    Grid.Column="7" Content="ms" Height="25" HorizontalAlignment="Left" VerticalAlignment="Center"  VerticalContentAlignment="Center" Padding="0" />
+                                        </Grid>
+
+                                        <Button Name="AtCmdList_Button6" Grid.Column="1" Height="26" Margin="5,0,0,0" Style="{StaticResource MyButtonStyle}" Content="指令列表隐藏&lt;&lt;" Width="108" Click="Button_Grid_Click" />
+                                    </Grid>
+
+                                    <Grid Grid.Row="4">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="1*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <Grid Grid.Column="0">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="48"/>
+                                                <ColumnDefinition Width="245"/>
+                                                <ColumnDefinition Width="48" />
+                                                <ColumnDefinition Width="108" />
+                                                <ColumnDefinition Width="105" />
+                                            </Grid.ColumnDefinitions>
+                                            <Label Grid.Column="0" Content="端口号:" Height="23" HorizontalAlignment="Left" VerticalAlignment="Center" Padding="1" VerticalContentAlignment="Center"/>
+                                            <ComboBox Name="portsComboBox6" Grid.Column="1" IsReadOnly="True" Height="23" DropDownOpened="MyComboBox_DropDownOpened" SelectionChanged="PortsComboBox_SelectionChanged"></ComboBox>
+                                            <Label Grid.Column="2" Content="波特率:" Height="23" VerticalAlignment="Center"  HorizontalAlignment="Center" Padding="0" VerticalContentAlignment="Center"></Label>
+                                            <ComboBox Name="baudRateComboBox6" Grid.Column="3" Height="23" IsEditable="True"  SelectionChanged="BaudRateComboBox_SelectionChanged" >
+                                                <ComboBoxItem>9600</ComboBoxItem>
+                                                <ComboBoxItem>19200</ComboBoxItem>
+                                                <ComboBoxItem>38400</ComboBoxItem>
+                                                <ComboBoxItem>57600</ComboBoxItem>
+                                                <ComboBoxItem IsSelected="True">115200</ComboBoxItem>
+                                                <ComboBoxItem>460800</ComboBoxItem>
+                                                <ComboBoxItem>512000</ComboBoxItem>
+                                                <ComboBoxItem>921600</ComboBoxItem>
+                                            </ComboBox>
+                                        </Grid>
+
+                                        <Button Name="openButton6" Grid.Column="1"  Height="26" Margin="3,0,0,0" 
+                                    Style="{StaticResource MyButtonStyle}" 
+                                    Content="打开串口" Width="108" 
+                                    Click="Button_Open_Port_Click" >
+
+                                        </Button>
+                                    </Grid>
+
+                                </Grid>
+                                <Grid Grid.Row="1">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBox Name="Send_At_Edit6" Grid.Column="0" Text="AT" TextWrapping="Wrap" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" KeyDown="Send_At_Edit_KeyDown"/>
+                                    <Button Grid.Column="1" Margin="3,0,0,0" Style="{StaticResource MyButtonStyle}"   Content="发送" Width="108" MinHeight="74" Click="Button_Click_Send_AtCmd" />
+                                </Grid>
+
+                            </Grid>
+                        </Grid>
+                    </TabItem>
+                    <TabItem Header="端口7">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="2*"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <TextBox Grid.Row="0" x:Name="recvDataRichTextBox7"  MaxLength="1048576"  BorderThickness="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                            </TextBox>
+                            <GridSplitter Grid.Row="1" Height="3" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" ShowsPreview="True"/>
+                            <Grid Grid.Row="2">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+                                <Grid Grid.Row="0">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="30"/>
+                                        <RowDefinition Height="30"/>
+                                        <RowDefinition Height="30"/>
+                                        <RowDefinition Height="30"/>
+                                    </Grid.RowDefinitions>
+
+                                    <Grid Grid.Row="0">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="90"/>
+                                            <ColumnDefinition Width="83"/>
+                                            <ColumnDefinition Width="83"/>
+                                            <ColumnDefinition Width="83"/>
+                                            <ColumnDefinition Width="83"/>
+                                            <ColumnDefinition Width="83"/>
+                                            <ColumnDefinition Width="60"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <Button Style="{StaticResource MyButtonStyle}" Grid.Column="0" Content="更多串口设置" Height="23" Margin="0,0,5,0"></Button>
+                                        <Button Style="{StaticResource MyButtonStyle}" Grid.Column="1" Content="接收期望字符" Height="23" Margin="0,0,5,0" Click="Button_Opinion_Click" ></Button>
+                                        <Button Style="{StaticResource MyButtonStyle}" Grid.Column="2" Content="保存接收数据" Height="23" Margin="0,0,5,0" Click="Button_SaveLog_Click"></Button>
+                                        <Button Style="{StaticResource MyButtonStyle}" Grid.Column="3" Content="清空发送区" Height="23" Margin="0,0,5,0" Click="Button_Clear_SendEdit_Click"></Button>
+                                        <Button Style="{StaticResource MyButtonStyle}" Grid.Column="4" Content="清空接收区" Height="23" Margin="0,0,5,0" Click="Button_Clear_RecvEdit_Click" ></Button>
+
+                                        <Button Style="{StaticResource MyButtonStyle}" Grid.Column="5" Content="长度查询" Height="23" Margin="0,0,5,0" ></Button>
+                                        <Button Style="{StaticResource MyButtonStyle}" Grid.Column="6" Content="扫频" Height="23" Margin="0,0,5,0" ></Button>
+
+                                    </Grid>
+                                    <Grid Grid.Row="1">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="1*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Grid Grid.Column="0">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="75"/>
+                                                <ColumnDefinition Width="75"/>
+                                                <ColumnDefinition Width="75"/>
+                                                <ColumnDefinition Width="75"/>
+                                                <ColumnDefinition Width="75"/>
+                                                <ColumnDefinition Width="58"/>
+                                                <ColumnDefinition Width="18"/>
+
+                                            </Grid.ColumnDefinitions>
+                                            <CheckBox Grid.Column="0"  Content="HEX接收"  HorizontalAlignment="Left" VerticalAlignment="Center"></CheckBox>
+                                            <CheckBox Name="savefileCheckBox7" Grid.Column="1"  Content="保存接收" HorizontalAlignment="Left" VerticalAlignment="Center" Click="SavefileCheckBox_Checked"></CheckBox>
+                                            <CheckBox Name="stampCheckBox7" Grid.Column="2" IsChecked="True" Content="加时间戳" HorizontalAlignment="Left" VerticalAlignment="Center" Click="StampCheckBox_Checked"></CheckBox>
+                                            <CheckBox Name="enterCheckBox7" Grid.Column="3" IsChecked="True" Content="回车换行" HorizontalAlignment="Left" VerticalAlignment="Center"></CheckBox>
+                                            <CheckBox Name="timerSendCheckBox7" Grid.Column="4"  Content="定时发送" HorizontalAlignment="Left" VerticalAlignment="Center" Click="TimerSendCheckBox_Check"></CheckBox>
+                                            <TextBox  Name="timerSendTextBox7" Text="1000" Grid.Column="5" Height="24" Width="58" HorizontalAlignment="Left" VerticalAlignment="Center" VerticalContentAlignment="Center"></TextBox>
+                                            <Label    Grid.Column="6" Content="ms" Height="25" HorizontalAlignment="Left" VerticalAlignment="Center"  VerticalContentAlignment="Center" Padding="0" />
+
+                                        </Grid>
+
+                                        <Button   Grid.Column="1" Height="26" Margin="4,0,0,0" Style="{StaticResource MyButtonStyle}" Content="一键启动显示&lt;&lt;" Width="108" Click="Button_Display_Start_Windows_Click" ></Button>
+                                    </Grid>
+
+                                    <Grid Grid.Row="2">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="1*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Grid Grid.Column="0">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="75"/>
+                                                <ColumnDefinition Width="75"/>
+                                                <ColumnDefinition Width="75"/>
+                                                <ColumnDefinition Width="78"/>
+                                                <ColumnDefinition Width="18"/>
+                                                <ColumnDefinition Width="53"/>
+                                                <ColumnDefinition Width="58"/>
+                                                <ColumnDefinition Width="18"/>
+                                            </Grid.ColumnDefinitions>
+                                            <CheckBox Grid.Column="0"  Content="HEX发送"  HorizontalAlignment="Left" VerticalAlignment="Center"></CheckBox>
+                                            <CheckBox Name="blockSendCheck7" Grid.Column="1"  Content="阻塞发送" HorizontalAlignment="Left" VerticalAlignment="Center" Click="BlockSendCheck_Click" ></CheckBox>
+                                            <CheckBox Name="loopSendCheck7" Grid.Column="2"  Content="循环发送" HorizontalAlignment="Left" VerticalAlignment="Center" Click="LoopSendCheck_Checked"></CheckBox>
+                                            <TextBox  Name="loopSendNumTextBox7" Text="10" Grid.Column="3" Height="24" Width="68" HorizontalAlignment="Left" VerticalAlignment="Center" VerticalContentAlignment="Center"></TextBox>
+                                            <Label    Grid.Column="4" Content="次" Height="25" HorizontalAlignment="Left" VerticalAlignment="Center"  VerticalContentAlignment="Center" Padding="0" />
+                                            <Label    Grid.Column="5" Content="发送间隔:" Height="25" HorizontalAlignment="Left" VerticalAlignment="Center"  VerticalContentAlignment="Center" Padding="0" />
+                                            <TextBox  Name="loopSendTimeTextBox7" Text="1000" Grid.Column="6" Height="24" Width="58" HorizontalAlignment="Left" VerticalAlignment="Center" VerticalContentAlignment="Center"></TextBox>
+                                            <Label    Grid.Column="7" Content="ms" Height="25" HorizontalAlignment="Left" VerticalAlignment="Center"  VerticalContentAlignment="Center" Padding="0" />
+                                        </Grid>
+
+                                        <Button Name="AtCmdList_Button7" Grid.Column="1" Height="26" Margin="5,0,0,0" Style="{StaticResource MyButtonStyle}" Content="指令列表隐藏&lt;&lt;" Width="108" Click="Button_Grid_Click" />
+                                    </Grid>
+
+                                    <Grid Grid.Row="4">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="1*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <Grid Grid.Column="0">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="48"/>
+                                                <ColumnDefinition Width="245"/>
+                                                <ColumnDefinition Width="48" />
+                                                <ColumnDefinition Width="108" />
+                                                <ColumnDefinition Width="105" />
+                                            </Grid.ColumnDefinitions>
+                                            <Label Grid.Column="0" Content="端口号:" Height="23" HorizontalAlignment="Left" VerticalAlignment="Center" Padding="1" VerticalContentAlignment="Center"/>
+                                            <ComboBox Name="portsComboBox7" Grid.Column="1" IsReadOnly="True" Height="23" DropDownOpened="MyComboBox_DropDownOpened" SelectionChanged="PortsComboBox_SelectionChanged"></ComboBox>
+                                            <Label Grid.Column="2" Content="波特率:" Height="23" VerticalAlignment="Center"  HorizontalAlignment="Center" Padding="0" VerticalContentAlignment="Center"></Label>
+                                            <ComboBox Name="baudRateComboBox7" Grid.Column="3" Height="23" IsEditable="True"  SelectionChanged="BaudRateComboBox_SelectionChanged" >
+                                                <ComboBoxItem>9600</ComboBoxItem>
+                                                <ComboBoxItem>19200</ComboBoxItem>
+                                                <ComboBoxItem>38400</ComboBoxItem>
+                                                <ComboBoxItem>57600</ComboBoxItem>
+                                                <ComboBoxItem IsSelected="True">115200</ComboBoxItem>
+                                                <ComboBoxItem>460800</ComboBoxItem>
+                                                <ComboBoxItem>512000</ComboBoxItem>
+                                                <ComboBoxItem>921600</ComboBoxItem>
+                                            </ComboBox>
+                                        </Grid>
+
+                                        <Button Name="openButton7" Grid.Column="1"  Height="26" Margin="3,0,0,0" 
+                                    Style="{StaticResource MyButtonStyle}" 
+                                    Content="打开串口" Width="108" 
+                                    Click="Button_Open_Port_Click" >
+
+                                        </Button>
+                                    </Grid>
+
+                                </Grid>
+                                <Grid Grid.Row="1">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBox Name="Send_At_Edit7" Grid.Column="0" Text="AT" TextWrapping="Wrap" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" KeyDown="Send_At_Edit_KeyDown"/>
+                                    <Button Grid.Column="1" Margin="3,0,0,0" Style="{StaticResource MyButtonStyle}"   Content="发送" Width="108" MinHeight="74" Click="Button_Click_Send_AtCmd" />
+                                </Grid>
+
+                            </Grid>
+                        </Grid>
+                    </TabItem>
+                    <TabItem Header="端口8">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="2*"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <TextBox Grid.Row="0" x:Name="recvDataRichTextBox8"  MaxLength="1048576"  BorderThickness="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                            </TextBox>
+                            <GridSplitter Grid.Row="1" Height="3" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" ShowsPreview="True"/>
+                            <Grid Grid.Row="2">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+                                <Grid Grid.Row="0">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="30"/>
+                                        <RowDefinition Height="30"/>
+                                        <RowDefinition Height="30"/>
+                                        <RowDefinition Height="30"/>
+                                    </Grid.RowDefinitions>
+
+                                    <Grid Grid.Row="0">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="90"/>
+                                            <ColumnDefinition Width="83"/>
+                                            <ColumnDefinition Width="83"/>
+                                            <ColumnDefinition Width="83"/>
+                                            <ColumnDefinition Width="83"/>
+                                            <ColumnDefinition Width="83"/>
+                                            <ColumnDefinition Width="60"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <Button Style="{StaticResource MyButtonStyle}" Grid.Column="0" Content="更多串口设置" Height="23" Margin="0,0,5,0"></Button>
+                                        <Button Style="{StaticResource MyButtonStyle}" Grid.Column="1" Content="接收期望字符" Height="23" Margin="0,0,5,0" Click="Button_Opinion_Click" ></Button>
+                                        <Button Style="{StaticResource MyButtonStyle}" Grid.Column="2" Content="保存接收数据" Height="23" Margin="0,0,5,0" Click="Button_SaveLog_Click"></Button>
+                                        <Button Style="{StaticResource MyButtonStyle}" Grid.Column="3" Content="清空发送区" Height="23" Margin="0,0,5,0" Click="Button_Clear_SendEdit_Click"></Button>
+                                        <Button Style="{StaticResource MyButtonStyle}" Grid.Column="4" Content="清空接收区" Height="23" Margin="0,0,5,0" Click="Button_Clear_RecvEdit_Click" ></Button>
+
+                                        <Button Style="{StaticResource MyButtonStyle}" Grid.Column="5" Content="长度查询" Height="23" Margin="0,0,5,0" ></Button>
+                                        <Button Style="{StaticResource MyButtonStyle}" Grid.Column="6" Content="扫频" Height="23" Margin="0,0,5,0" ></Button>
+
+                                    </Grid>
+                                    <Grid Grid.Row="1">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="1*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Grid Grid.Column="0">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="75"/>
+                                                <ColumnDefinition Width="75"/>
+                                                <ColumnDefinition Width="75"/>
+                                                <ColumnDefinition Width="75"/>
+                                                <ColumnDefinition Width="75"/>
+                                                <ColumnDefinition Width="58"/>
+                                                <ColumnDefinition Width="18"/>
+
+                                            </Grid.ColumnDefinitions>
+                                            <CheckBox Grid.Column="0"  Content="HEX接收"  HorizontalAlignment="Left" VerticalAlignment="Center"></CheckBox>
+                                            <CheckBox Name="savefileCheckBox8" Grid.Column="1"  Content="保存接收" HorizontalAlignment="Left" VerticalAlignment="Center" Click="SavefileCheckBox_Checked"></CheckBox>
+                                            <CheckBox Name="stampCheckBox8" Grid.Column="2" IsChecked="True" Content="加时间戳" HorizontalAlignment="Left" VerticalAlignment="Center" Click="StampCheckBox_Checked"></CheckBox>
+                                            <CheckBox Name="enterCheckBox8" Grid.Column="3" IsChecked="True" Content="回车换行" HorizontalAlignment="Left" VerticalAlignment="Center"></CheckBox>
+                                            <CheckBox Name="timerSendCheckBox8" Grid.Column="4"  Content="定时发送" HorizontalAlignment="Left" VerticalAlignment="Center" Click="TimerSendCheckBox_Check"></CheckBox>
+                                            <TextBox  Name="timerSendTextBox8" Text="1000" Grid.Column="5" Height="24" Width="58" HorizontalAlignment="Left" VerticalAlignment="Center" VerticalContentAlignment="Center"></TextBox>
+                                            <Label    Grid.Column="6" Content="ms" Height="25" HorizontalAlignment="Left" VerticalAlignment="Center"  VerticalContentAlignment="Center" Padding="0" />
+
+                                        </Grid>
+
+                                        <Button   Grid.Column="1" Height="26" Margin="4,0,0,0" Style="{StaticResource MyButtonStyle}" Content="一键启动显示&lt;&lt;" Width="108" Click="Button_Display_Start_Windows_Click" ></Button>
+                                    </Grid>
+
+                                    <Grid Grid.Row="2">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="1*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Grid Grid.Column="0">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="75"/>
+                                                <ColumnDefinition Width="75"/>
+                                                <ColumnDefinition Width="75"/>
+                                                <ColumnDefinition Width="78"/>
+                                                <ColumnDefinition Width="18"/>
+                                                <ColumnDefinition Width="53"/>
+                                                <ColumnDefinition Width="58"/>
+                                                <ColumnDefinition Width="18"/>
+                                            </Grid.ColumnDefinitions>
+                                            <CheckBox Grid.Column="0"  Content="HEX发送"  HorizontalAlignment="Left" VerticalAlignment="Center"></CheckBox>
+                                            <CheckBox Name="blockSendCheck8" Grid.Column="1"  Content="阻塞发送" HorizontalAlignment="Left" VerticalAlignment="Center" Click="BlockSendCheck_Click" ></CheckBox>
+                                            <CheckBox Name="loopSendCheck8" Grid.Column="2"  Content="循环发送" HorizontalAlignment="Left" VerticalAlignment="Center" Click="LoopSendCheck_Checked"></CheckBox>
+                                            <TextBox  Name="loopSendNumTextBox8" Text="10" Grid.Column="3" Height="24" Width="68" HorizontalAlignment="Left" VerticalAlignment="Center" VerticalContentAlignment="Center"></TextBox>
+                                            <Label    Grid.Column="4" Content="次" Height="25" HorizontalAlignment="Left" VerticalAlignment="Center"  VerticalContentAlignment="Center" Padding="0" />
+                                            <Label    Grid.Column="5" Content="发送间隔:" Height="25" HorizontalAlignment="Left" VerticalAlignment="Center"  VerticalContentAlignment="Center" Padding="0" />
+                                            <TextBox  Name="loopSendTimeTextBox8" Text="1000" Grid.Column="6" Height="24" Width="58" HorizontalAlignment="Left" VerticalAlignment="Center" VerticalContentAlignment="Center"></TextBox>
+                                            <Label    Grid.Column="7" Content="ms" Height="25" HorizontalAlignment="Left" VerticalAlignment="Center"  VerticalContentAlignment="Center" Padding="0" />
+                                        </Grid>
+
+                                        <Button Name="AtCmdList_Button8" Grid.Column="1" Height="26" Margin="5,0,0,0" Style="{StaticResource MyButtonStyle}" Content="指令列表隐藏&lt;&lt;" Width="108" Click="Button_Grid_Click" />
+                                    </Grid>
+
+                                    <Grid Grid.Row="4">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="1*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <Grid Grid.Column="0">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="48"/>
+                                                <ColumnDefinition Width="245"/>
+                                                <ColumnDefinition Width="48" />
+                                                <ColumnDefinition Width="108" />
+                                                <ColumnDefinition Width="105" />
+                                            </Grid.ColumnDefinitions>
+                                            <Label Grid.Column="0" Content="端口号:" Height="23" HorizontalAlignment="Left" VerticalAlignment="Center" Padding="1" VerticalContentAlignment="Center"/>
+                                            <ComboBox Name="portsComboBox8" Grid.Column="1" IsReadOnly="True" Height="23" DropDownOpened="MyComboBox_DropDownOpened" SelectionChanged="PortsComboBox_SelectionChanged"></ComboBox>
+                                            <Label Grid.Column="2" Content="波特率:" Height="23" VerticalAlignment="Center"  HorizontalAlignment="Center" Padding="0" VerticalContentAlignment="Center"></Label>
+                                            <ComboBox Name="baudRateComboBox8" Grid.Column="3" Height="23" IsEditable="True"  SelectionChanged="BaudRateComboBox_SelectionChanged" >
+                                                <ComboBoxItem>9600</ComboBoxItem>
+                                                <ComboBoxItem>19200</ComboBoxItem>
+                                                <ComboBoxItem>38400</ComboBoxItem>
+                                                <ComboBoxItem>57600</ComboBoxItem>
+                                                <ComboBoxItem IsSelected="True">115200</ComboBoxItem>
+                                                <ComboBoxItem>460800</ComboBoxItem>
+                                                <ComboBoxItem>512000</ComboBoxItem>
+                                                <ComboBoxItem>921600</ComboBoxItem>
+                                            </ComboBox>
+                                        </Grid>
+
+                                        <Button Name="openButton8" Grid.Column="1"  Height="26" Margin="3,0,0,0" 
+                                    Style="{StaticResource MyButtonStyle}" 
+                                    Content="打开串口" Width="108" 
+                                    Click="Button_Open_Port_Click" >
+
+                                        </Button>
+                                    </Grid>
+
+                                </Grid>
+                                <Grid Grid.Row="1">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBox Name="Send_At_Edit8" Grid.Column="0" Text="AT" TextWrapping="Wrap" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" KeyDown="Send_At_Edit_KeyDown"/>
+                                    <Button Grid.Column="1" Margin="3,0,0,0" Style="{StaticResource MyButtonStyle}"   Content="发送" Width="108" MinHeight="74" Click="Button_Click_Send_AtCmd" />
+                                </Grid>
+
+                            </Grid>
+                        </Grid>
+                    </TabItem>
+                </TabControl>
+            </Grid>
+            <GridSplitter Grid.Column="1" Name="myGridSplitter"  Width="3" VerticalAlignment="Stretch" HorizontalAlignment="Center" ShowsPreview="True"/>
+            <Grid Name="TabControlContainer" Grid.Column="2" Background="White" SizeChanged="TabControlContainer_SizeChanged">
+                <TabControl Name="GridTab"   Height="Auto" Width="Auto" Background="White" SelectionChanged="TabControl_SelectionChanged" >
+                    <TabItem Header="AT指令列表" Height="21" VerticalAlignment="Bottom">
+                        <Grid Background="White" >
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="99*"/>
+                                <ColumnDefinition Width="323*"/>
+                                <ColumnDefinition Width="0*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="2*"/>
+                            </Grid.RowDefinitions>
+
+                            <ComboBox Name="ATCmdComBox1" Grid.Row="1" Foreground="#FF00A0B8" HorizontalContentAlignment="Center" 
+                                  Height="21" VerticalAlignment="Bottom" SelectionChanged="ATCmdComBox_SelectionChanged" Grid.ColumnSpan="2">
+                                <ComboBoxItem IsSelected="True">同步AP  AT指令列表</ComboBoxItem>
+                                <ComboBoxItem>同步IoTE AT指令列表</ComboBoxItem>
+                                <ComboBoxItem>异步IoTE AT指令列表</ComboBoxItem>
+                                <ComboBoxItem>单路网关 AT指令列表</ComboBoxItem>
+                            </ComboBox>
+                            <DataGrid Grid.Row="2" SelectionUnit="CellOrRowHeader"
+                        Name="myDataGrid_1" 
+                        AutoGenerateColumns="False" 
+                        CanUserAddRows="False" 
+                        RowHeaderWidth="0"
+                        CanUserReorderColumns="False" 
+                        HorizontalGridLinesBrush="#FFDDE1E2" 
+                        VerticalGridLinesBrush="#FFDDE1E2" 
+                        Foreground="#FF00A0B8"
+                        VerticalScrollBarVisibility="Auto"
+                        ItemsSource="{Binding}" 
+                        Background="White" Grid.ColumnSpan="2" >
+
+                                <DataGrid.Columns>
+
+                                    <DataGridTextColumn Header="NO" CanUserResize="False" CanUserSort="False" IsReadOnly="True"  Binding="{Binding Index}">
+                                        <!--<DataGridTextColumn.CellStyle>
+                                        <Style TargetType="{x:Type DataGridCell}">
+                                            <EventSetter Event="PreviewMouseDown"  Handler="DataGridCell_PreviewMouseDown" />
+                                            <Setter Property="ContextMenu" Value="{StaticResource MyContextMenu}"/>
+                                        </Style>
+                                    </DataGridTextColumn.CellStyle>-->
+                                        <DataGridTextColumn.HeaderStyle>
+                                            <Style TargetType="DataGridColumnHeader" >
+                                                <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                                <Setter Property="VerticalContentAlignment" Value="Center"/>
+                                            </Style>
+                                        </DataGridTextColumn.HeaderStyle>
+                                    </DataGridTextColumn>
+
+                                    <DataGridTemplateColumn  Header="Hex" CanUserResize="False" >
+                                        <DataGridTemplateColumn.HeaderStyle>
+                                            <Style TargetType="DataGridColumnHeader">
+                                                <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                                <Setter Property="VerticalContentAlignment" Value="Center"/>
+                                            </Style>
+                                        </DataGridTemplateColumn.HeaderStyle>
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <CheckBox HorizontalAlignment="Center" VerticalAlignment="Center" IsChecked ="{Binding Hex}" Click="GridCheckStatus_Click"></CheckBox>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+
+                                    <DataGridTextColumn Header="AT指令" Width="*" Binding="{Binding AT指令}">
+                                        <DataGridTextColumn.CellStyle>
+                                            <Style TargetType="{x:Type DataGridCell}">
+                                                <EventSetter Event="PreviewMouseDown"  Handler="DataGridCell_PreviewMouseDown" />
+                                                <Setter Property="ContextMenu" Value="{StaticResource MyContextMenu}"/>
+                                            </Style>
+                                        </DataGridTextColumn.CellStyle>
+                                        <DataGridTextColumn.HeaderStyle>
+                                            <Style TargetType="DataGridColumnHeader">
+                                                <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                                <Setter Property="VerticalContentAlignment" Value="Center"/>
+                                                <Setter Property="IsEnabled" Value="False"/>
+                                            </Style>
+                                        </DataGridTextColumn.HeaderStyle>
+                                    </DataGridTextColumn>
+
+                                    <DataGridTemplateColumn Header="说明(单击发送)" Width="100" CanUserResize="False">
+                                        <DataGridTemplateColumn.HeaderStyle>
+                                            <Style TargetType="DataGridColumnHeader">
+                                                <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                                <Setter Property="VerticalContentAlignment" Value="Center"/>
+                                            </Style>
+                                        </DataGridTemplateColumn.HeaderStyle>
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Button Name="SendButton" Content="{Binding 发送}" Click="GridSendButton_Click" MouseRightButtonDown="Button_MouseRightButtonDown"></Button>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+
+                                </DataGrid.Columns>
+                            </DataGrid>
+
+                        </Grid>
+                    </TabItem>
+                    <TabItem Header="AT批量发送">
+                        <Grid Background="White" >
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="2*"/>
+                            </Grid.RowDefinitions>
+
+
+                            <Grid Grid.Row="1">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="118" />
+                                </Grid.ColumnDefinitions>
+                                <ComboBox Name="ATCmdComBox2" Grid.Column="0" Margin="0,0,0,1" Foreground="#FF00A0B8" HorizontalContentAlignment="Center" SelectionChanged="ATCmdComBox_SelectionChanged">
+                                    <ComboBoxItem IsSelected="True">AT批量发送指令列表1</ComboBoxItem>
+                                    <ComboBoxItem >AT批量发送指令列表2</ComboBoxItem>
+                                    <ComboBoxItem >AT批量发送指令列表3</ComboBoxItem>
+                                </ComboBox>
+                                <CheckBox Grid.Column="1" Margin="5,0,0,0" Name="MulitSendCheckBox" Content="开启批量发送" VerticalContentAlignment="Center" HorizontalAlignment="Left" VerticalAlignment="Center"   Click="MulitSendCheckBox_Click"></CheckBox>
+                            </Grid>
+                            <DataGrid Grid.Row="2" SelectionUnit="CellOrRowHeader"
+                          Name="myDataGrid_2" 
+                          AutoGenerateColumns="False" 
+                          CanUserAddRows="False" 
+                          RowHeaderWidth="0"
+                          CanUserReorderColumns="False" 
+                          HorizontalGridLinesBrush="#FFDDE1E2" 
+                          VerticalGridLinesBrush="#FFDDE1E2" 
+                          Foreground="#FF00A0B8"
+                          VerticalScrollBarVisibility="Auto"
+                          ItemsSource="{Binding}" 
+                          Background="White"
+                          >
+
+                                <DataGrid.Columns>
+
+                                    <DataGridTextColumn Header="NO" CanUserResize="False" CanUserSort="False" IsReadOnly="True"  Binding="{Binding Index}">
+                                        <DataGridTextColumn.CellStyle>
+                                            <Style TargetType="{x:Type DataGridCell}">
+                                                <EventSetter Event="PreviewMouseDown"  Handler="DataGridCell_PreviewMouseDown" />
+                                                <Setter Property="ContextMenu" Value="{StaticResource MyContextMenu}"/>
+                                            </Style>
+                                        </DataGridTextColumn.CellStyle>
+                                        <DataGridTextColumn.HeaderStyle>
+                                            <Style TargetType="DataGridColumnHeader" >
+                                                <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                                <Setter Property="VerticalContentAlignment" Value="Center"/>
+                                            </Style>
+                                        </DataGridTextColumn.HeaderStyle>
+                                    </DataGridTextColumn>
+
+                                    <DataGridTemplateColumn  Header="选择" CanUserResize="False" >
+                                        <DataGridTemplateColumn.HeaderStyle>
+                                            <Style TargetType="DataGridColumnHeader">
+                                                <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                                <Setter Property="VerticalContentAlignment" Value="Center"/>
+                                            </Style>
+                                        </DataGridTemplateColumn.HeaderStyle>
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <CheckBox HorizontalAlignment="Center" VerticalAlignment="Center" IsChecked ="{Binding Hex}" Click="GridCheckStatus_Click"></CheckBox>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+
+                                    <DataGridTextColumn Header="延时[ms]" CanUserResize="False" Width="60" Binding="{Binding 延时}">
+                                        <DataGridTextColumn.HeaderStyle>
+                                            <Style TargetType="DataGridColumnHeader">
+                                                <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                                <Setter Property="VerticalContentAlignment" Value="Center"/>
+                                                <Setter Property="IsEnabled" Value="False"/>
+                                                <!-- 添加此行 -->
+                                            </Style>
+                                        </DataGridTextColumn.HeaderStyle>
+                                    </DataGridTextColumn>
+
+                                    <DataGridTextColumn Header="AT指令" Width="*" Binding="{Binding AT指令}">
+                                        <DataGridTextColumn.CellStyle>
+                                            <Style TargetType="{x:Type DataGridCell}">
+                                                <EventSetter Event="PreviewMouseDown"  Handler="DataGridCell_PreviewMouseDown" />
+                                                <Setter Property="ContextMenu" Value="{StaticResource MyContextMenu}"/>
+                                            </Style>
+                                        </DataGridTextColumn.CellStyle>
+                                        <DataGridTextColumn.HeaderStyle>
+                                            <Style TargetType="DataGridColumnHeader">
+                                                <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                                <Setter Property="VerticalContentAlignment" Value="Center"/>
+                                                <Setter Property="IsEnabled" Value="False"/>
+                                            </Style>
+                                        </DataGridTextColumn.HeaderStyle>
+                                    </DataGridTextColumn>
+
+                                    <DataGridTemplateColumn Header="说明(单击发送)" Width="100" CanUserResize="False">
+                                        <DataGridTemplateColumn.HeaderStyle>
+                                            <Style TargetType="DataGridColumnHeader">
+                                                <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                                <Setter Property="VerticalContentAlignment" Value="Center"/>
+                                            </Style>
+                                        </DataGridTemplateColumn.HeaderStyle>
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Button Name="SendButton" Content="{Binding 发送}" Click="GridSendButton_Click" MouseRightButtonDown="Button_MouseRightButtonDown"></Button>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+
+                                </DataGrid.Columns>
+                            </DataGrid>
+
+                        </Grid>
+                    </TabItem>
+                    <TabItem Header="AT自动应答" >
+                        <Grid Background="White" >
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="123*"/>
+                                <ColumnDefinition Width="299*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+
+                                <RowDefinition Height="2*"/>
+                            </Grid.RowDefinitions>
+
+                            <Grid Grid.Row="1" Grid.ColumnSpan="2">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="118" />
+                                </Grid.ColumnDefinitions>
+                                <ComboBox Name="ATCmdComBox3" Grid.Column="0" Margin="0,0,0,1" Foreground="#FF00A0B8" HorizontalContentAlignment="Center" SelectionChanged="ATCmdComBox_SelectionChanged">
+                                    <ComboBoxItem IsSelected="True">自动应答指令列表1</ComboBoxItem>
+                                    <ComboBoxItem >自动应答指令列表2</ComboBoxItem>
+                                    <ComboBoxItem >自动应答指令列表3</ComboBoxItem>
+                                </ComboBox>
+                                <CheckBox Grid.Column="1" Margin="5,0,0,0" Name="AutoAckCheckBox" Content="开启自动应答" VerticalContentAlignment="Center" HorizontalAlignment="Left" VerticalAlignment="Center" Click="AutoAckCheckBox_Click" >
+                                    
+                                </CheckBox>
+                            </Grid>
+
+                            <DataGrid Grid.Row="2" SelectionUnit="CellOrRowHeader"
+                          Name="myDataGrid_3" 
+                          AutoGenerateColumns="False" 
+                          CanUserAddRows="False" 
+                          RowHeaderWidth="0"
+                          CanUserReorderColumns="False" 
+                          HorizontalGridLinesBrush="#FFDDE1E2" 
+                          VerticalGridLinesBrush="#FFDDE1E2" 
+                          Foreground="#FF00A0B8"
+                          VerticalScrollBarVisibility="Auto"
+                          ItemsSource="{Binding}" 
+                          Background="White" Grid.ColumnSpan="2"
+                          
+                          >
+
+                                <DataGrid.Columns>
+
+                                    <DataGridTextColumn Header="NO" CanUserResize="False" CanUserSort="False" IsReadOnly="True"  Binding="{Binding Index}">
+                                        <DataGridTextColumn.CellStyle>
+                                            <Style TargetType="{x:Type DataGridCell}">
+                                                <EventSetter Event="PreviewMouseDown"  Handler="DataGridCell_PreviewMouseDown" />
+                                                <Setter Property="ContextMenu" Value="{StaticResource MyContextMenu}"/>
+                                            </Style>
+                                        </DataGridTextColumn.CellStyle>
+                                        <DataGridTextColumn.HeaderStyle>
+                                            <Style TargetType="DataGridColumnHeader" >
+                                                <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                                <Setter Property="VerticalContentAlignment" Value="Center"/>
+                                            </Style>
+                                        </DataGridTextColumn.HeaderStyle>
+                                    </DataGridTextColumn>
+
+                                    <DataGridTemplateColumn  Header="选择" CanUserResize="False" >
+                                        <DataGridTemplateColumn.HeaderStyle>
+                                            <Style TargetType="DataGridColumnHeader">
+                                                <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                                <Setter Property="VerticalContentAlignment" Value="Center"/>
+                                            </Style>
+                                        </DataGridTemplateColumn.HeaderStyle>
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <CheckBox HorizontalAlignment="Center" VerticalAlignment="Center" IsChecked ="{Binding Hex}" Click="GridCheckStatus_Click"></CheckBox>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+
+                                    <!--<DataGridTemplateColumn Header="应答" Width="40">
+                                    <DataGridTemplateColumn.HeaderStyle>
+                                        <Style TargetType="DataGridColumnHeader">
+                                            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                            <Setter Property="VerticalContentAlignment" Value="Center"/>
+                                        </Style>
+                                    </DataGridTemplateColumn.HeaderStyle>
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBox Name="ack_TextBox" Text="{Binding 应答}" TextChanged="ack_TextBox_TextChanged"></TextBox>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>-->
+                                    <DataGridTextColumn Header="应答" CanUserResize="False" Width="60" Binding="{Binding 应答}">
+                                        <DataGridTextColumn.HeaderStyle>
+                                            <Style TargetType="DataGridColumnHeader">
+                                                <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                                <Setter Property="VerticalContentAlignment" Value="Center"/>
+                                                <Setter Property="IsEnabled" Value="False"/>
+                                            </Style>
+                                        </DataGridTextColumn.HeaderStyle>
+                                        <DataGridTextColumn.CellStyle>
+                                            <Style TargetType="DataGridCell">
+                                                <Setter Property="TextBlock.TextAlignment" Value="Center"/>
+                                            </Style>
+                                        </DataGridTextColumn.CellStyle>
+                                    </DataGridTextColumn>
+                                    <!--<DataGridTemplateColumn Header="延时" Width="40">
+                                    <DataGridTemplateColumn.HeaderStyle>
+                                        <Style TargetType="DataGridColumnHeader">
+                                            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                            <Setter Property="VerticalContentAlignment" Value="Center"/>
+                                        </Style>
+                                    </DataGridTemplateColumn.HeaderStyle>
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBox Name="delay_TextBox" Text="{Binding 延时}" TextChanged="delay_TextBox_TextChanged"></TextBox>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>-->
+
+                                    <DataGridTextColumn Header="延时[ms]" CanUserResize="False" Width="60" Binding="{Binding 延时}">
+                                        <DataGridTextColumn.HeaderStyle>
+                                            <Style TargetType="DataGridColumnHeader">
+                                                <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                                <Setter Property="VerticalContentAlignment" Value="Center"/>
+                                                <Setter Property="IsEnabled" Value="False"/>
+                                                <!-- 添加此行 -->
+                                            </Style>
+
+                                        </DataGridTextColumn.HeaderStyle>
+
+                                        <DataGridTextColumn.CellStyle>
+                                            <Style TargetType="DataGridCell">
+                                                <Setter Property="TextBlock.TextAlignment" Value="Center"/>
+                                            </Style>
+                                        </DataGridTextColumn.CellStyle>
+                                    </DataGridTextColumn>
+
+                                    <!--<DataGridTemplateColumn Header="AT指令" Width="*">
+                                    <DataGridTemplateColumn.HeaderStyle>
+                                        <Style TargetType="DataGridColumnHeader">
+                                            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                            <Setter Property="VerticalContentAlignment" Value="Center"/>
+                                        </Style>
+                                    </DataGridTemplateColumn.HeaderStyle>
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBox Name="AtCmd_TextBox" Text="{Binding AT指令}"></TextBox>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>-->
+
+                                    <DataGridTextColumn Header="AT指令" Width="*" Binding="{Binding AT指令}">
+                                        <DataGridTextColumn.CellStyle>
+                                            <Style TargetType="{x:Type DataGridCell}">
+                                                <EventSetter Event="PreviewMouseDown"  Handler="DataGridCell_PreviewMouseDown" />
+                                                <Setter Property="ContextMenu" Value="{StaticResource MyContextMenu}"/>
+                                            </Style>
+                                        </DataGridTextColumn.CellStyle>
+                                        <DataGridTextColumn.HeaderStyle>
+                                            <Style TargetType="DataGridColumnHeader">
+                                                <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                                <Setter Property="VerticalContentAlignment" Value="Center"/>
+                                                <Setter Property="IsEnabled" Value="False"/>
+                                            </Style>
+                                        </DataGridTextColumn.HeaderStyle>
+                                    </DataGridTextColumn>
+
+                                    <DataGridTemplateColumn Header="说明(单击发送)" Width="100" CanUserResize="False">
+                                        <DataGridTemplateColumn.HeaderStyle>
+                                            <Style TargetType="DataGridColumnHeader">
+                                                <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                                <Setter Property="VerticalContentAlignment" Value="Center"/>
+                                            </Style>
+                                        </DataGridTemplateColumn.HeaderStyle>
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Button Name="SendButton" Content="{Binding 发送}" Click="GridSendButton_Click" MouseRightButtonDown="Button_MouseRightButtonDown"></Button>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+
+
+
+                                </DataGrid.Columns>
+                            </DataGrid>
+
+                        </Grid>
+                    </TabItem>
+                </TabControl>
+            </Grid>
+        </Grid>
+        <DockPanel Grid.Row="2" LastChildFill="True">
+            <StatusBar DockPanel.Dock="Bottom">
+                <StatusBarItem HorizontalAlignment="Right">
+                    <!--<TextBlock Name="timeDateTextBlock" Foreground="White"></TextBlock>-->
+                    <TextBlock Name ="recvStatus"></TextBlock>
+                </StatusBarItem>
+
+                <StatusBarItem HorizontalAlignment="Right">
+                    <TextBlock Name="timeDateTextBlock" Foreground="Black"></TextBlock>
+                </StatusBarItem>
+            </StatusBar>
+        </DockPanel>
+    </Grid>
+</Window>
