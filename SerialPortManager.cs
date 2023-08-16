@@ -5,6 +5,7 @@ using System.Threading;
 using System.Windows.Controls;
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Windows;
 
 namespace SerialPortExample
 {
@@ -13,7 +14,7 @@ namespace SerialPortExample
         private const string DllName = "MFCLibrarySerial.dll"; // 替换为实际的DLL名称
 
         [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
-        public static extern IntPtr readData(int index);
+ public static extern IntPtr readData(int index);
         [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
         public static extern void freeData(IntPtr pData);
         [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
@@ -22,6 +23,8 @@ namespace SerialPortExample
         public static extern bool SendPortString(int index,string data);
         [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
         public static extern bool ClosePort(int index);
+        [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+        public static extern bool IsOpendPort(int index);
         [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
         public static extern bool SetPortBaudrate(int index,int baud);
         [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
@@ -58,7 +61,22 @@ namespace SerialPortExample
         public bool ClosePort(int index)
         {
             //Marshal.FreeCoTaskMem(dataPointer); // 释放内存
-            return MySerialPort.ClosePort(index);
+            try
+            {
+                return MySerialPort.ClosePort(index);
+
+            }
+            catch (Exception ex)
+            {
+                // 处理其他异常
+                Console.WriteLine("Exception occurred: " + ex.Message);
+                return false;
+            }
+        }
+
+        public bool IsOpendPort(int index)
+        {
+            return MySerialPort.IsOpendPort(index);
         }
 
         public bool SetPortBaudrate(int index,int baud = 115200)
@@ -83,7 +101,17 @@ namespace SerialPortExample
 
         public bool SendPortString(int index,string atCmd)
         {
-            return MySerialPort.SendPortString(index, atCmd);
+            try
+            {
+                return MySerialPort.SendPortString(index, atCmd);
+
+            }
+            catch (Exception ex)
+            {
+                // 处理其他异常
+                MessageBox.Show("端口异常：" + ex.Message);
+                return false;
+            }
         }
 
         public string ReadPortBuff(int index)

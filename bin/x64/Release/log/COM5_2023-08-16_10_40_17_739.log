@@ -1,0 +1,41 @@
+[2023-08-16 10:40:19.047] 发送->:AT+WIOTASEND=60000,49,0
+klwcofpfrtcdgcgytneakvyfashmxvkhvbnaospoxvggndq
+█
+[2023-08-16 10:40:19.174] 接收<- [2023-08-16 10:40:19.174] 接收<-ERROR
+ERR CMD MATCH FAILED!
+ERROR
+
+[2023-08-16 10:40:19.689] 发送->:AT+WIOTASEND=60000,49,0
+klwcofpfrtcdgcgytneakvyfashmxvkhvbnaospoxvggndq
+█
+[2023-08-16 10:40:19.795] 接收<- [2023-08-16 10:40:19.795] 接收<-ERROR
+ERR CMD MATCH FAILED!
+ERROR
+
+[2023-08-16 10:40:22.989] 发送->:AT+WIOTASEND=60000,49,0
+klwcofpfrtcdgcgytneakvyfashmxvkhvbnaospoxvggndq
+█
+[2023-08-16 10:40:24.780] 发送->:AT+WIOTASEND=60000,49,0
+klwcofpfrtcdgcgytneakvyfashmxvkhvbnaospoxvggndq
+█
+[2023-08-16 10:40:28.144] 发送->:AT+WIOTASEND=60000,49,0
+klwcofpfrtcdgcgytneakvyfashmxvkhvbnaospoxvggndq
+█
+[2023-08-16 10:40:28.204] 发送->:AT+WIOTASEND=60000,49,0
+klwcofpfrtcdgcgytneakvyfashmxvkhvbnaospoxvggndq
+█
+[2023-08-16 10:40:30.005] 发送->:AT+WIOTASEND=60000,49,0
+klwcofpfrtcdgcgytneakvyfashmxvkhvbnaospoxvggndq
+█
+[2023-08-16 10:40:31.360] 发送->:AT+WIOTASEND=60000,49,0
+klwcofpfrtcdgcgytneakvyfashmxvkhvbnaospoxvggndq
+█
+[2023-08-16 10:40:32.592] 发送->:AT+WIOTASEND=60000,49,0
+klwcofpfrtcdgcgytneakvyfashmxvkhvbnaospoxvggndq
+█
+[2023-08-16 10:40:33.864] 发送->:AT+WIOTASEND=60000,49,0
+klwcofpfrtcdgcgytneakvyfashmxvkhvbnaospoxvggndq
+█
+[2023-08-16 10:40:35.108] 发送->:AT+WIOTASEND=60000,49,0
+klwcofpfrtcdgcgytneakvyfashmxvkhvbnaospoxvggndq
+█

@@ -1,0 +1,164 @@
+[2023-08-16 10:36:24.993] 发送->:AT+WIOTASEND=60000,49,0
+klwcofpfrtcdgcgytneakvyfashmxvkhvbnaospoxvggndq
+█
+[2023-08-16 10:36:25.116] 接收<- [2023-08-16 10:36:25.116] 接收<-ERROR
+ERR CMD MATCH FAILED!
+ERROR
+
+AT+WIOTASEND=60000,49,0
+klwcofpfrtcdgcgytneakvyfashmxvkhvbnaospoxvggndq
+
+[2023-08-16 10:36:28.457] 接收<- ERROR
+ERR CMD MATCH FAILED!
+ERROR
+
+AT+WIOTASEND=60000,49,0
+klwcofpfrtcdgcgytneakvyfashmxvkhvbnaospoxvggndq
+
+[2023-08-16 10:36:29.284] 接收<- ERROR
+ERR CMD MATCH FAILED!
+ERROR
+
+AT+WIOTASEND=60000,49,0
+klwcofpfrtcdgcgytneakvyfashmxvkhvbnaospoxvggndq
+
+[2023-08-16 10:36:30.207] 接收<- ERROR
+ERR CMD MATCH FAILED!
+ERROR
+
+AT+WIOTASEND=60000,49,0
+klwcofpfrtcdgcgytneakvyfashmxvkhvbnaospoxvggndq
+
+[2023-08-16 10:36:31.437] 接收<- ERROR
+ERR CMD MATCH FAILED!
+ERROR
+
+AT+WIOTASEND=60000,49,0
+klwcofpfrtcdgcgytneakvyfashmxvkhvbnaospoxvggndq
+
+[2023-08-16 10:36:31.656] 接收<- ERROR
+ERR CMD MATCH FAILED!
+ERROR
+
+AT+WIOTASEND=60000,49,0
+klwcofpfrtcdgcgytneakvyfashmxvkhvbnaospoxvggndq
+
+[2023-08-16 10:36:32.171] 接收<- ERROR
+ERR CMD MATCH FAILED!
+ERROR
+
+[2023-08-16 10:36:34.816] 发送->:AT+WIOTASEND=60000,49,0
+klwcofpfrtcdgcgytneakvyfashmxvkhvbnaospoxvggndq
+█
+[2023-08-16 10:36:34.898] 接收<- [2023-08-16 10:36:34.898] 接收<-ERROR
+ERR CMD MATCH FAILED!
+ERROR
+
+[2023-08-16 10:36:35.702] 发送->:AT+WIOTASEND=60000,49,0
+klwcofpfrtcdgcgytneakvyfashmxvkhvbnaospoxvggndq
+█
+[2023-08-16 10:36:35.819] 接收<- [2023-08-16 10:36:35.819] 接收<-ERROR
+ERR CMD MATCH FAILED!
+ERROR
+
+[2023-08-16 10:36:36.105] 发送->:AT+WIOTASEND=60000,49,0
+klwcofpfrtcdgcgytneakvyfashmxvkhvbnaospoxvggndq
+█
+[2023-08-16 10:36:36.130] 接收<- [2023-08-16 10:36:36.130] 接收<-ERROR
+ERR CM
+[2023-08-16 10:36:36.256] 接收<- [2023-08-16 10:36:36.256] 接收<-D MATCH FAILED!
+ERROR
+
+[2023-08-16 10:36:36.376] 发送->:AT+WIOTASEND=60000,49,0
+klwcofpfrtcdgcgytneakvyfashmxvkhvbnaospoxvggndq
+█
+[2023-08-16 10:36:36.475] 接收<- [2023-08-16 10:36:36.475] 接收<-ERROR
+ERR CMD MATCH FAILED!
+ERROR
+
+[2023-08-16 10:36:42.217] 发送->:AT+WIOTASEND=60000,49,0
+klwcofpfrtcdgcgytneakvyfashmxvkhvbnaospoxvggndq
+█
+[2023-08-16 10:36:42.327] 接收<- [2023-08-16 10:36:42.327] 接收<-ERROR
+ERR CMD MATCH FAILED!
+ERROR
+
+[2023-08-16 10:36:43.036] 发送->:AT+WIOTASEND=60000,49,0
+klwcofpfrtcdgcgytneakvyfashmxvkhvbnaospoxvggndq
+█
+[2023-08-16 10:36:43.146] 接收<- [2023-08-16 10:36:43.146] 接收<-ERROR
+ERR CMD MATCH FAILED!
+ERROR
+
+AT+WIOTASEND=60000,49,0
+klwcofpfrtcdgcgytneakvyfashmxvkhvbnaospoxvggndq
+
+[2023-08-16 10:36:45.575] 接收<- ERROR
+ERR CMD MATCH FAILED!
+ERROR
+
+AT+WIOTASEND=60000,49,0
+klwcofpfrtcdgcgytneakvyfashmxvkhvbnaospoxvggndq
+
+[2023-08-16 10:36:46.390] 接收<- ERROR
+ERR CMD MATCH FAILED!
+ERROR
+
+AT&L
+
+[2023-08-16 10:36:55.426] 接收<- Commands list : 
+AT+FACTORY=<type>,<data>,<data1>
+AT+WIOTACKMEM=<total>,<used>,<maxused>
+AT+WIOTASYMBMODE=<symbol_mode>
+AT+WIOTAPAGINGRX=<freq>,<spec_idx>,<band>,<symbol>,<awaken_id>,<detect_period>,<nlen>,<utimes>,<thres>,<extra_flag>,<extra_period>
+AT+WIOTAPAGINGTX=<freq>,<spec_idx>,<band>,<symbol>,<awaken_id>,<send_time>
+AT+WIOTASCANFREQ=<timeout>,<round>,<dataLen>,<freqnum>
+AT+WIOTAUNIFAIL=<cnt>
+AT+WIOTADJUST=<mode>
+AT+WIOTASTATE
+AT+WIOTAFRAMEINFO
+AT+WIOTARECVMODE=<mode>
+AT+WIOTATXMODE=<mode>
+AT+WIOTAINCRECV=<flag>
+AT+WIOTASUBFRAMEMODE=<mode>, <flag>
+AT+WIOTACONTINUESEND=<flag>
+AT+WIOTADETECTIME=<time>
+AT+WIOTABCROUND=<round>
+AT+WIOTASUBNUM=<number>
+AT+WIOTASAVESTATIC
+AT+WIOTALIGHT=<mode>
+AT+WIOTAOSC=<mode>
+AT+WIOTACRC=<crc_limit>
+AT+WIOTATHROUGHT=<mode>,<type>
+AT+WIOTASTATS=<mode>,<type>
+AT+WIOTALOG=<mode>
+AT+WIOTADTUSEND=<timeout>,<wait>,<end>
+AT+WIOTATRANS=<timeout>,<end>
+AT+WIOTASEND=<timeout>,<len>,<userId>
+AT+WIOTARUN=<state>
+AT+WIOTACONFIG=<id_len>,<symbol>,<band>,<pz
+[2023-08-16 10:36:55.545] 接收<- >,<bt>,<spec_idx>,<systemid>,<subsystemid>
+AT+WIOTARADIO
+AT+WIOTAUSERID=<id0>
+AT+WIOTADCXO=<dcxo>
+AT+WIOTAFREQ=<freqpint>
+AT+WIOTAPOW=<mode>,<power>
+AT+WIOTARATE=<rate_mode>,<rate_value>
+AT+WIOTALPM=<mode>,<value>,<value2>
+AT+WIOTAINIT
+AT+WIOTAVERSION
+AT+PULSEWIDTH=<width>
+AT+STOREDATA
+AT+MODE=<mode>
+AT+UBOOTLOG=<uart_flag>,<log_flag>,<select_flag>
+AT+PARTITIONSIZE=<bin_size>,<reserved_size>,<ota_size>
+AT+UBOOTMODE=<mode>
+AT+UBOOTBAUDRATE=<baudrate>
+AT+UBOOTVERSION
+AT+UART=<baudrate>,<databits>,<stopbits>,<parity>,<flow_control>
+AT&L
+ATE<value>
+AT+RST
+AT
+OK
+

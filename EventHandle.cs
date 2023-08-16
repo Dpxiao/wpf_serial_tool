@@ -362,13 +362,15 @@ namespace WIoTa_Serial_Tool
             , savefileCheckBox6 , savefileCheckBox7 , savefileCheckBox8 };
             string baudRate = baudRateComboBox[portNum].Text;//由于可编辑所以要这样获取值
             string portNumber = SelectComPort();
-            int port_num = PortTab.SelectedIndex;            
+            int port_num = PortTab.SelectedIndex;
             //ConfigurePort(port_num);
+           
             if (portNumber != null)
             {
+                
                 mySerial[port_num] = new SerialPortManager();
+                
                 mySerial[port_num].portNum = port_num;
-             
                 //读取配置文件，然后将该值传入。
                 ConfigurationManager.RefreshSection("appSettings");
                 // 获取新的值
@@ -591,6 +593,11 @@ namespace WIoTa_Serial_Tool
         }
         private void Button_Click_Send_AtCmd(object sender, RoutedEventArgs e)
         {
+            int port_num = PortTab.SelectedIndex;
+            Button[] openButton = { openButton1, openButton2, openButton3, openButton4, openButton5, openButton6, openButton7, openButton8 };
+            CheckBox[] loopSendCheck = { loopSendCheck1, loopSendCheck2, loopSendCheck3, loopSendCheck4, loopSendCheck5, loopSendCheck6, loopSendCheck7, loopSendCheck8 };
+            CheckBox[] timerSendCheckBox = { timerSendCheckBox1, timerSendCheckBox2, timerSendCheckBox3, timerSendCheckBox4, timerSendCheckBox5, timerSendCheckBox6, timerSendCheckBox7, timerSendCheckBox8 };
+
             TextBox[] Send_At_Edit = { Send_At_Edit1, Send_At_Edit2, Send_At_Edit3, Send_At_Edit4, Send_At_Edit5, Send_At_Edit6, Send_At_Edit7, Send_At_Edit8 };
             CheckBox[] enterCheckBox = { enterCheckBox1, enterCheckBox2, enterCheckBox3, enterCheckBox4, enterCheckBox5, enterCheckBox6, enterCheckBox7, enterCheckBox8 };
             if (OpenSerial_Clicked_Send())
@@ -604,8 +611,10 @@ namespace WIoTa_Serial_Tool
                 string output = AtCmd.Replace("\\r", "\r");
                 AtCmd = output.Replace("\\n", "\n");
                 Add_TimeStamp(AtCmd,portNum);
-                mySerial[portNum].SendPortString(portNum,AtCmd);
+                mySerial[portNum].SendPortString(portNum, AtCmd);
+          
             }
+
         }
         private void mySerialWrite(int port_num,string AtCmd)
         {

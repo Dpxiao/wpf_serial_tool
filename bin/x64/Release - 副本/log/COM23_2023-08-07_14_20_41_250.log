@@ -1,0 +1,273 @@
+[2023-08-07 14:20:41.274] 接收<- wcmd2c w 5 r 4 type 13 cc 0x0 idx 0 subf 2
+track succ pre 0x1 rssi -21 cur 20.0 last 20.54 ratio 132013/132013 frac -376 to 0 fo 44561 frame 132025
+
+[2023-08-07 14:20:41.390] 接收<- cmdtype 7 isSuc 0 cc 0x0 subf 5
+
+[2023-08-07 14:20:41.502] 接收<- wcmd2c w 6 r 5 type 13 cc 0x0 idx 0 subf 2
+track succ pre 0x1 rssi -22 cur 19.50 last 20.43 ratio 132014/132014 frac -376 to 0 fo 0 frame 132026
+cmdtype 7 isSuc 0 cc 0x0 subf 5
+
+[2023-08-07 14:20:41.615] 接收<- wcmd2c w 7 r 6 type 13 cc 0x0 idx 0 subf 2
+track succ pre 0x1 rssi -21 cur 20.0 last 20.39 ratio 132015/132015 frac -376 to 0 fo 0 frame 132027
+cmdtype 7 isSuc 0 cc 0x0 subf 5
+
+[2023-08-07 14:20:41.728] 接收<- wcmd2c w 0 r 7 type 13 cc 0x0 idx 0 subf 2
+track succ pre 0x1 rssi -22 cur 20.0 last 20.35 ratio 132016/132016 frac -376 to 0 fo 0 frame 132028
+cmdtype 7 isSuc 0 cc 0x0 subf 5
+
+[2023-08-07 14:20:41.944] 接收<- wcmd2c w 1 r 0 type 13 cc 0x0 idx 0 subf 2
+track succ pre 0x1 rssi -21 cur 20.25 last 20.34 ratio 132017/132017 frac -376 to 0 fo 0 frame 132029
+cmdtype 7 isSuc 0 cc 0x0 subf 5
+
+[2023-08-07 14:20:42.056] 接收<- wcmd2c w 2 r 1 type 13 cc 0x0 idx 0 subf 2
+track succ pre 0x1 rssi -21 cur 20.0 last 20.30 ratio 132018/132018 frac -376 to 0 fo 0 frame 132030
+cmdtype 7 isSuc 0 cc 0x0 subf 5
+
+[2023-08-07 14:20:42.169] 接收<- wcmd2c w 3 r 2 type 13 cc 0x0 idx 0 subf 2
+track succ pre 0x1 rssi -22 cur 19.25 last 20.20 ratio 132019/132019 frac -376 to 0 fo 0 frame 132031
+cmdtype 7 isSuc 0 cc 0x0 subf 5
+
+[2023-08-07 14:20:42.382] 接收<- wcmd2c w 4 r 3 type 13 cc 0x0 idx 0 subf 2
+track succ pre 0x1 rssi -21 cur 20.0 last 20.18 ratio 132020/132020 frac -376 to 0 fo 0 frame 132032
+cmdtype 7 isSuc 0 cc 0x0 subf 5
+
+[2023-08-07 14:20:42.495] 接收<- wcmd2c w 5 r 4 type 13 cc 0x0 idx 0 subf 2
+track succ pre 0x9 rssi -21 cur 24.50 last 20.61 ratio 132021/132021 frac -376 to 0 fo 44561 frame 132033
+cmdtype 7 isSuc 0 cc 0x0 subf 5
+wcmd2c w 6 r 5 type 2 cc 0x0 idx 0 subf 6
+cmdtype 2 isSuc 1 cc 0x0 subf 9
+
+[2023-08-07 14:20:42.607] 接收<- wcmd2c w 7 r 6 type 13 cc 0x0 idx 0 subf 2
+track succ pre 0x1 rssi -21 cur 20.0 last 20.55 ratio 132022/132022 frac -376 to 0 fo 0 frame 132034
+cmdtype 7 isSuc 0 cc 0x0 subf 5
+
+[2023-08-07 14:20:42.820] 接收<- wcmd2c w 0 r 7 type 13 cc 0x0 idx 0 subf 2
+track succ pre 0x1 rssi -22 cur 19.50 last 20.44 ratio 132023/132023 frac -376 to 1 fo 0 frame 132035
+cmdtype 7 isSuc 0 cc 0x0 subf 5
+
+[2023-08-07 14:20:42.933] 接收<- wcmd2c w 1 r 0 type 13 cc 0x0 idx 0 subf 2
+track succ pre 0x1 rssi -21 cur 19.75 last 20.37 ratio 132024/132024 frac -376 to 0 fo 0 frame 132036
+cmdtype 7 isSuc 0 cc 0x0 subf 5
+
+[2023-08-07 14:20:43.046] 接收<- wcmd2c w 2 r 1 type 13 cc 0x0 idx 0 subf 2
+track succ pre 0x1 rssi -21 cur 19.50 last 20.29 ratio 132025/132025 frac -376 to 1 fo 0 frame 132037
+cmdtype 7 isSuc 0 cc 0x0 subf 5
+
+[2023-08-07 14:20:43.259] 接收<- wcmd2c w 3 r 2 type 13 cc 0x0 idx 0 subf 2
+track succ pre 0x1 rssi -22 cur 19.0 last 20.16 ratio 132026/132026 frac -376 to 0 fo 0 frame 132038
+cmdtype 7 isSuc 0 cc 0x0 subf 5
+
+[2023-08-07 14:20:43.372] 接收<- wcmd2c w 4 r 3 type 13 cc 0x0 idx 0 subf 2
+track succ pre 0x1 rssi -21 cur 20.25 last 20.17 ratio 132027/132027 frac -375 to 0 fo 44561 frame 132039
+cmdtype 7 isSuc 0 cc 0x0 subf 5
+
+[2023-08-07 14:20:43.484] 接收<- uc_wiota_gateway_api_handle connect_state 1
+wcmd2c w 5 r 4 type 13 cc 0x0 idx 0 subf 2
+track succ pre 0x1 rssi -21 cur 20.25 last 20.17 ratio 132028/132028 frac -375 to 0 fo 0 frame 132040
+cmdtype 7 isSuc 0 cc 0x0 subf 5
+
+[2023-08-07 14:20:43.698] 接收<- wcmd2c w 6 r 5 type 13 cc 0x0 idx 0 subf 2
+track succ pre 0x1 rssi -21 cur 20.25 last 20.18 ratio 132029/132029 frac -375 to 0 fo 0 frame 132041
+cmdtype 7 isSuc 0 cc 0x0 subf 5
+
+[2023-08-07 14:20:43.811] 接收<- wcmd2c w 7 r 6 type 13 cc 0x0 idx 0 subf 2
+track succ pre 0x1 rssi -21 cur 20.25 last 20.19 ratio 132030/132030 frac -375 to 0 fo 0 frame 132042
+cmdtype 7 isSuc 0 cc 0x0 subf 5
+
+[2023-08-07 14:20:43.923] 接收<- wcmd2c w 0 r 7 type 13 cc 0x0 idx 0 subf 2
+track succ pre 0x1 rssi -21 cur 19.25 last 20.9 ratio 132031/132031 frac -375 to 0 fo 0 frame 132043
+cmdtype 7 isSuc 0 cc 0x0 subf 5
+
+[2023-08-07 14:20:44.137] 接收<- wcmd2c w 1 r 0 type 13 cc 0x0 idx 0 subf 2
+track succ pre 0x9 rssi -21 cur 25.75 last 20.66 ratio 132032/132032 frac -375 to 0 fo 0 frame 132044
+cmdtype 7 isSuc 0 cc 0x0 subf 5
+wcmd2c w 2 r 1 type 2 cc 0x0 idx 0 subf 6
+cmdtype 2 isSuc 1 cc 0x0 subf 9
+
+[2023-08-07 14:20:44.250] 接收<- wcmd2c w 3 r 2 type 13 cc 0x0 idx 0 subf 2
+track succ pre 0x1 rssi -21 cur 20.25 last 20.62 ratio 132033/132033 frac -376 to 0 fo -44561 frame 132045
+cmdtype 7 isSuc 0 cc 0x0 subf 5
+
+[2023-08-07 14:20:44.362] 接收<- wcmd2c w 4 r 3 type 13 cc 0x0 idx 0 subf 2
+track succ pre 0x1 rssi -21 cur 20.25 last 20.58 ratio 132034/132034 frac -376 to 0 fo 0 frame 132046
+cmdtype 7 isSuc 0 cc 0x0 subf 5
+
+[2023-08-07 14:20:44.577] 接收<- wcmd2c w 5 r 4 type 13 cc 0x0 idx 0 subf 2
+track succ pre 0x1 rssi -21 cur 19.75 last 20.50 ratio 132035/132035 frac -376 to 0 fo 0 frame 132047
+cmdtype 7 isSuc 0 cc 0x0 subf 5
+
+[2023-08-07 14:20:44.691] 接收<- wcmd2c w 6 r 5 type 13 cc 0x0 idx 0 subf 2
+track succ pre 0x1 rssi -22 cur 19.50 last 20.40 ratio 132036/132036 frac -376 to 0 fo 0 frame 132048
+cmdtype 7 isSuc 0 cc 0x0 subf 5
+
+[2023-08-07 14:20:44.804] 接收<- frame_head_dfe 2093536049
+wcmd2c w 7 r 6 type 13 cc 0x0 idx 0 subf 2
+track succ pre 0x1 rssi -21 cur 20.25 last 20.38 ratio 132037/132037 frac -376 to 0 fo -44561 frame 132049
+cmdtype 7 isSuc 0 cc 0x0 subf 5
+
+[2023-08-07 14:20:44.925] 接收<- wcmd2c w 0 r 7 type 13 cc 0x0 idx 0 subf 2
+track succ pre 0x1 rssi -21 cur 20.25 last 20.37 ratio 132038/132038 frac -377 to 0 fo -44561 frame 132050
+
+[2023-08-07 14:20:45.038] 接收<- cmdtype 7 isSuc 0 cc 0x0 subf 5
+
+[2023-08-07 14:20:45.151] 接收<- wcmd2c w 1 r 0 type 13 cc 0x0 idx 0 subf 2
+track succ pre 0x1 rssi -21 cur 20.25 last 20.35 ratio 132039/132039 frac -376 to 0 fo 44561 frame 132051
+cmdtype 7 isSuc 0 cc 0x0 subf 5
+
+[2023-08-07 14:20:45.263] 接收<- wcmd2c w 2 r 1 type 13 cc 0x0 idx 0 subf 2
+track succ pre 0x1 rssi -21 cur 20.25 last 20.34 ratio 132040/132040 frac -377 to 0 fo -89122 frame 132052
+cmdtype 7 isSuc 0 cc 0x0 subf 5
+
+[2023-08-07 14:20:45.379] 接收<- wcmd2c w 3 r 2 type 13 cc 0x0 idx 0 subf 2
+track succ pre 0x1 rssi -21 cur 19.25 last 20.23 ratio 132041/132041 frac -377 to 0 fo 0 frame 132053
+cmdtype 7 isSuc 0 cc 0x0 subf 5
+
+[2023-08-07 14:20:45.593] 接收<- wcmd2c w 4 r 3 type 13 cc 0x0 idx 0 subf 2
+track succ pre 0x1 rssi -21 cur 20.25 last 20.24 ratio 132042/132042 frac -377 to 0 fo 0 frame 132054
+cmdtype 7 isSuc 0 cc 0x0 subf 5
+
+[2023-08-07 14:20:45.707] 接收<- wcmd2c w 5 r 4 type 13 cc 0x0 idx 0 subf 2
+track succ pre 0x9 rssi -22 cur 24.0 last 20.61 ratio 132043/132043 frac -377 to 0 fo 0 frame 132055
+cmdtype 7 isSuc 0 cc 0x0 subf 5
+wcmd2c w 6 r 5 type 2 cc 0x0 idx 0 subf 6
+cmdtype 2 isSuc 1 cc 0x0 subf 9
+
+[2023-08-07 14:20:45.820] 接收<- wcmd2c w 7 r 6 type 13 cc 0x0 idx 0 subf 2
+track succ pre 0x1 rssi -21 cur 20.0 last 20.55 ratio 132044/132044 frac -377 to 0 fo 0 frame 132056
+cmdtype 7 isSuc 0 cc 0x0 subf 5
+
+[2023-08-07 14:20:45.944] 接收<- frame_head_dfe 2094703793
+wcmd2c w 0 r 7 type 13 cc 0x0 idx 0 subf 2
+track succ pre 0x1 rssi -21 cur 20.0 last 20.49 ratio 132045/132045 frac -377 to 0 fo 44561 frame 132057
+
+[2023-08-07 14:20:46.056] 接收<- cmdtype 7 isSuc 0 cc 0x0 subf 5
+
+[2023-08-07 14:20:46.168] 接收<- wcmd2c w 1 r 0 type 13 cc 0x0 idx 0 subf 2
+track succ pre 0x1 rssi -21 cur 20.0 last 20.44 ratio 132046/132046 frac -377 to 0 fo 0 frame 132058
+cmdtype 7 isSuc 0 cc 0x0 subf 5
+
+[2023-08-07 14:20:46.280] 接收<- wcmd2c w 2 r 1 type 13 cc 0x0 idx 0 subf 2
+track succ pre 0x1 rssi -21 cur 19.75 last 20.37 ratio 132047/132047 frac -377 to 0 fo 0 frame 132059
+cmdtype 7 isSuc 0 cc 0x0 subf 5
+
+[2023-08-07 14:20:46.412] 接收<- wcmd2c w 3 r 2 type 13 cc 0x0 idx 0 subf 2
+track succ pre 0x1 rssi -21 cur 19.0 last 20.24 ratio 132048/132048 frac -377 to 0 fo 0 frame 132060
+cmdtype 7 isSuc 0 cc 0x0 subf 5
+
+[2023-08-07 14:20:46.525] 接收<- wcmd2c w 4 r 3 type 13 cc 0x0 idx 0 subf 2
+track succ pre 0x1 rssi -21 cur 20.0 last 20.21 ratio 132049/132049 frac -376 to 0 fo 44561 frame 132061
+
+[2023-08-07 14:20:46.638] 接收<- cmdtype 7 isSuc 0 cc 0x0 subf 5
+
+[2023-08-07 14:20:46.751] 接收<- wcmd2c w 5 r 4 type 13 cc 0x0 idx 0 subf 2
+track succ pre 0x1 rssi -22 cur 19.50 last 20.14 ratio 132050/132050 frac -376 to 1 fo 44561 frame 132062
+cmdtype 7 isSuc 0 cc 0x0 subf 5
+
+[2023-08-07 14:20:46.863] 接收<- wcmd2c w 6 r 5 type 13 cc 0x0 idx 0 subf 2
+track succ pre 0x1 rssi -21 cur 19.75 last 20.10 ratio 132051/132051 frac -376 to 0 fo 0 frame 132063
+cmdtype 7 isSuc 0 cc 0x0 subf 5
+
+[2023-08-07 14:20:46.994] 接收<- wcmd2c w 7 r 6 type 13 cc 0x0 idx 0 subf 2
+track succ pre 0x1 rssi -21 cur 20.25 last 20.12 ratio 132052/132052 frac -375 to 0 fo 44561 frame 132064
+cmdtype 7 isSuc 0 cc 0x0 subf 5
+
+[2023-08-07 14:20:47.135] 接收<- wcmd2c w 0 r 7 type 13 cc 0x0 idx 0 subf 2
+track succ pre 0x1 rssi -22 cur 18.75 last 19.98 ratio 132053/132053 frac -375 to 1 fo 0 frame 132065
+cmdtype 7 isSuc 0 cc 0x0 subf 5
+
+[2023-08-07 14:20:47.348] 接收<- wcmd2c w 1 r 0 type 13 cc 0x0 idx 0 subf 2
+track succ pre 0x9 rssi -21 cur 24.75 last 20.45 ratio 132054/132054 frac -375 to 0 fo 0 frame 132066
+cmdtype 7 isSuc 0 cc 0x0 subf 5
+wcmd2c w 2 r 1 type 2 cc 0x0 idx 0 subf 6
+cmdtype 2 isSuc 1 cc 0x0 subf 9
+
+[2023-08-07 14:20:47.462] 接收<- wcmd2c w 3 r 2 type 13 cc 0x0 idx 0 subf 2
+track succ pre 0x1 rssi -21 cur 20.25 last 20.43 ratio 132055/132055 frac -375 to 0 fo 0 frame 132067
+cmdtype 7 isSuc 0 cc 0x0 subf 5
+
+[2023-08-07 14:20:47.575] 接收<- wcmd2c w 4 r 3 type 13 cc 0x0 idx 0 subf 2
+track succ pre 0x1 rssi -21 cur 20.50 last 20.44 ratio 132056/132056 frac -375 to 0 fo 44561 frame 132068
+cmdtype 7 isSuc 0 cc 0x0 subf 5
+
+[2023-08-07 14:20:47.695] 接收<- wcmd2c w 5 r 4 type 13 cc 0x0 idx 0 subf 2
+track succ pre 0x1 rssi -21 cur 20.25 last 20.42 ratio 132057/132057 frac -375 to 0 fo 0 frame 132069
+
+[2023-08-07 14:20:47.808] 接收<- cmdtype 7 isSuc 0 cc 0x0 subf 5
+
+[2023-08-07 14:20:47.921] 接收<- wcmd2c w 6 r 5 type 13 cc 0x0 idx 0 subf 2
+track succ pre 0x1 rssi -21 cur 19.75 last 20.35 ratio 132058/132058 frac -375 to 0 fo 0 frame 132070
+cmdtype 7 isSuc 0 cc 0x0 subf 5
+
+[2023-08-07 14:20:48.033] 接收<- wcmd2c w 7 r 6 type 13 cc 0x0 idx 0 subf 2
+track succ pre 0x1 rssi -21 cur 20.25 last 20.34 ratio 132059/132059 frac -375 to 0 fo 0 frame 132071
+cmdtype 7 isSuc 0 cc 0x0 subf 5
+
+[2023-08-07 14:20:48.163] 接收<- wcmd2c w 0 r 7 type 13 cc 0x0 idx 0 subf 2
+track succ pre 0x1 rssi -22 cur 20.25 last 20.33 ratio 132060/132060 frac -375 to 0 fo 0 frame 132072
+cmdtype 7 isSuc 0 cc 0x0 subf 5
+
+[2023-08-07 14:20:48.277] 接收<- wcmd2c w 1 r 0 type 13 cc 0x0 idx 0 subf 2
+track succ pre 0x1 rssi -21 cur 20.25 last 20.32 ratio 132061/132061 frac -375 to 0 fo 0 frame 132073
+
+[2023-08-07 14:20:48.390] 接收<- cmdtype 7 isSuc 0 cc 0x0 subf 5
+
+[2023-08-07 14:20:48.503] 接收<- wcmd2c w 2 r 1 type 13 cc 0x0 idx 0 subf 2
+track succ pre 0x1 rssi -21 cur 20.25 last 20.32 ratio 132062/132062 frac -375 to 0 fo -44561 frame 132074
+cmdtype 7 isSuc 0 cc 0x0 subf 5
+uc_wiota_gateway_api_handle connect_state 1
+
+[2023-08-07 14:20:48.616] 接收<- wcmd2c w 3 r 2 type 13 cc 0x0 idx 0 subf 2
+track succ pre 0x1 rssi -22 cur 19.50 last 20.23 ratio 132063/132063 frac -375 to 0 fo 0 frame 132075
+cmdtype 7 isSuc 0 cc 0x0 subf 5
+
+[2023-08-07 14:20:48.743] 接收<- wcmd2c w 4 r 3 type 13 cc 0x0 idx 0 subf 2
+track succ pre 0x1 rssi -21 cur 20.25 last 20.23 ratio 132064/132064 frac -375 to 0 fo 44561 frame 132076
+cmdtype 7 isSuc 0 cc 0x0 subf 5
+
+[2023-08-07 14:20:48.956] 接收<- wcmd2c w 5 r 4 type 13 cc 0x0 idx 0 subf 2
+track succ pre 0x9 rssi -22 cur 24.50 last 20.66 ratio 132065/132065 frac -375 to 0 fo 0 frame 132077
+cmdtype 7 isSuc 0 cc 0x0 subf 5
+wcmd2c w 6 r 5 type 2 cc 0x0 idx 0 subf 6
+cmdtype 2 isSuc 1 cc 0x0 subf 9
+
+[2023-08-07 14:20:49.069] 接收<- wcmd2c w 7 r 6 type 13 cc 0x0 idx 0 subf 2
+track succ pre 0x1 rssi -21 cur 20.25 last 20.62 ratio 132066/132066 frac -375 to 0 fo -44561 frame 132078
+cmdtype 7 isSuc 0 cc 0x0 subf 5
+
+[2023-08-07 14:20:49.183] 接收<- wcmd2c w 0 r 7 type 13 cc 0x0 idx 0 subf 2
+track succ pre 0x1 rssi -22 cur 20.0 last 20.56 ratio 132067/132067 frac -375 to 0 fo 0 frame 132079
+cmdtype 7 isSuc 0 cc 0x0 subf 5
+
+[2023-08-07 14:20:49.302] 接收<- wcmd2c w 1 r 0 type 13 cc 0x0 idx 0 subf 2
+track succ pre 0x1 rssi -21 cur 20.0 last 20.50 ratio 132068/132068 frac -376 to 0 fo -44561 frame 132080
+
+[2023-08-07 14:20:49.415] 接收<- cmdtype 7 isSuc 0 cc 0x0 subf 5
+
+[2023-08-07 14:20:49.527] 接收<- wcmd2c w 2 r 1 type 13 cc 0x0 idx 0 subf 2
+track succ pre 0x1 rssi -21 cur 20.0 last 20.45 ratio 132069/132069 frac -375 to 0 fo 44561 frame 132081
+cmdtype 7 isSuc 0 cc 0x0 subf 5
+
+[2023-08-07 14:20:49.641] 接收<- wcmd2c w 3 r 2 type 13 cc 0x0 idx 0 subf 2
+track succ pre 0x1 rssi -22 cur 19.25 last 20.33 ratio 132070/132070 frac -375 to 0 fo 44561 frame 132082
+cmdtype 7 isSuc 0 cc 0x0 subf 5
+
+[2023-08-07 14:20:49.780] 接收<- wcmd2c w 4 r 3 type 13 cc 0x0 idx 0 subf 2
+track succ pre 0x1 rssi -21 cur 20.25 last 20.32 ratio 132071/132071 frac -374 to 0 fo 44561 frame 132083
+cmdtype 7 isSuc 0 cc 0x0 subf 5
+
+[2023-08-07 14:20:49.904] 接收<- wcmd2c w 5 r 4 type 13 cc 0x0 idx 0 subf 2
+track succ pre 0x1 rssi -21 cur 20.0 last 20.29 ratio 132072/132072 frac -375 to 0 fo -44561 frame 132084
+cmdtype 7 isSuc 0 cc 0x0 subf 5
+
+[2023-08-07 14:20:50.119] 接收<- wcmd2c w 6 r 5 type 13 cc 0x0 idx 0 subf 2
+track succ pre 0x1 rssi -21 cur 20.25 last 20.28 ratio 132073/132073 frac -375 to 0 fo -44561 frame 132085
+cmdtype 7 isSuc 0 cc 0x0 subf 5
+
+[2023-08-07 14:20:50.231] 接收<- wcmd2c w 7 r 6 type 13 cc 0x0 idx 0 subf 2
+track succ pre 0x1 rssi -21 cur 19.75 last 20.23 ratio 132074/132074 frac -376 to 0 fo -44561 frame 132086
+cmdtype 7 isSuc 0 cc 0x0 subf 5
+
+[2023-08-07 14:20:50.343] 接收<- wcmd2c w 0 r 7 type 13 cc 0x0 idx 0 subf 2
+track succ pre 0x1 rssi -22 cur 18.75 last 20.8 ratio 132075/132075 frac -376 to 1 fo 0 frame 132087
+cmdtype 7 isSuc 0 cc 0x0 subf 5
+

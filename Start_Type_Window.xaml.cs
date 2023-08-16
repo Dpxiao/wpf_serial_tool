@@ -22,6 +22,32 @@ namespace WIoTa_Serial_Tool
             ReadAppConfig();
         }
 
+        private void setosc2_Click(object sender, RoutedEventArgs e)
+        {
+            if (oscCheckBox2.IsChecked ?? false)
+            {
+                checkBox_dcxo2.IsChecked = false;
+            }
+
+            if (oscCheckBox3.IsChecked ?? false)
+            {
+                checkBox_dcxo3.IsChecked = false;
+            }
+        }
+
+        private void setdcxo2_Click(object sender, RoutedEventArgs e)
+        {
+            if (checkBox_dcxo2.IsChecked ?? false)
+            {
+                oscCheckBox2.IsChecked = false;
+            }
+
+            if (checkBox_dcxo3.IsChecked ?? false)
+            {
+                oscCheckBox3.IsChecked = false;
+            }
+        }
+
         private void start_Button_Click(object sender, RoutedEventArgs e)
         {
             int type = StartTab.SelectedIndex;
@@ -162,7 +188,7 @@ namespace WIoTa_Serial_Tool
             if (iotemcsCheckBox2.IsChecked ?? false)
             {
                 int mcs = iotemcsComboBox2.SelectedIndex;
-                AtCmdList.Add($"AT+WIOTAPOW=0,{mcs}");
+                AtCmdList.Add($"AT+WIOTARATE=0,{mcs}");
             }
 
             if (runWIoTaCheckBox2.IsChecked ?? false)
@@ -257,7 +283,7 @@ namespace WIoTa_Serial_Tool
             if (iotemcsCheckBox3.IsChecked ?? false)
             {
                 int mcs = iotemcsComboBox3.SelectedIndex;
-                AtCmdList.Add($"AT+WIOTAPOW=0,{mcs}");
+                AtCmdList.Add($"AT+WIOTARATE=0,{mcs}");
             }
 
             if (runWIoTaCheckBox3.IsChecked ?? false)
@@ -495,8 +521,8 @@ namespace WIoTa_Serial_Tool
                 BTComboBox[i].SelectedIndex = index;
             }
 
-            ComboBox[] groupnumComboBox = { groupnumComboBox1, groupnumComboBox2, groupnumComboBox3 };
-            for (int i = 0; i < 3; i++)
+            ComboBox[] groupnumComboBox = { groupnumComboBox1, groupnumComboBox2 };
+            for (int i = 0; i < 2; i++)
             {
                 //groupnum
                 readValue = ReadXml(xmlDoc, root, $"groupnum_WIoTa{i + 1}");
@@ -776,8 +802,8 @@ namespace WIoTa_Serial_Tool
             }
 
             //groupnum
-            ComboBox[] groupnumComboBox = { groupnumComboBox1, groupnumComboBox2, groupnumComboBox3 };
-            for (int i = 0; i < 3; i++)
+            ComboBox[] groupnumComboBox = { groupnumComboBox1, groupnumComboBox2 };
+            for (int i = 0; i < 2; i++)
             {
                 selectedValue = groupnumComboBox[i].SelectedIndex.ToString();
                 writeXml(xmlDoc, root, selectedValue, $"groupnum_WIoTa{i + 1}");

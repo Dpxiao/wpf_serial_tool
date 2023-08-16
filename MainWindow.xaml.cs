@@ -613,6 +613,7 @@ namespace WIoTa_Serial_Tool
             StartSendPara parameters = (StartSendPara)obj;
             SerialPortManager mySerial = parameters.mySerial;
             List<GridDataTemp> DataTemp = parameters.DataTemp;
+
             int port_num = parameters.PortNum;
             string At_cmd = "";
             while (isRunning_mulit)

@@ -1,0 +1,384 @@
+[2023-08-08 19:40:46.565] 接收<- active arrange ultype 3 mode 0
+wcmd2c w 5 r 4 type 3 cc 0xa idx 0 subf 16
+
+[2023-08-08 19:40:46.786] 接收<- wcmd2c w 6 r 5 type 6 cc 0x0 idx 0 subf 24
+wcmd2c w 7 r 5 type 4 cc 0x0 idx 0 subf 24
+
+[2023-08-08 19:40:46.999] 接收<- track succ pre 0x1 rssi -83 cur 0.0 last 0.2 ratio 366/367 frac 1494 to 1 fo 0 frame 372
+cmdtype 4 isSuc 1 cc 0xc subf 3
+cmdtype 3 isSuc 0 cc 0x0 subf 3
+active ack ul type 3
+gen next data Len 16 cc 0xa seq 3 islast 1 mcs 2 2
+
+[2023-08-08 19:40:47.412] 接收<- active arrange ultype 3 mode 0
+wcmd2c w 0 r 7 type 3 cc 0xa idx 0 subf 16
+
+[2023-08-08 19:40:47.666] 接收<- wcmd2c w 1 r 0 type 6 cc 0x0 idx 0 subf 24
+wcmd2c w 2 r 0 type 4 cc 0x0 idx 0 subf 24
+track succ pre 0x1 rssi -82 cur 7.25 last 0.70 ratio 367/368 frac 1495 to 1 fo 10955 frame 373
+
+[2023-08-08 19:40:47.879] 接收<- cmdtype 4 isSuc 1 cc 0xc subf 3
+cmdtype 3 isSuc 0 cc 0x1f subf 3
+active ack ul type 3
+mac sent isUsed 1 result 0
+uc send result 0 data 0x30b0f0
+
+[2023-08-08 19:40:48.492] 接收<- wcmd2c w 3 r 2 type 4 cc 0x0 idx 0 subf 24
+
+[2023-08-08 19:40:48.705] 接收<- track succ pre 0x9 rssi -82 cur 7.75 last 1.40 ratio 368/369 frac 1494 to 1 fo -10955 frame 374
+cmdtype 3 isSuc 0 cc 0x4 subf 3
+wcmd2c w 4 r 3 type 2 cc 0x0 idx 0 subf 6
+
+[2023-08-08 19:40:48.919] 接收<- cmdtype 2 isSuc 1 cc 0x0 subf 9
+cmdtype 2 isSuc 1 cc 0401
+l1 mac cmd 203 msg 30b170
+state 3 mac data len 107 isempty 1
+gen first data mode 1 cc 0xa isEnd 0 len 30 total 2
+
+[2023-08-08 19:40:49.132] 接收<- active arrange ultype 3 mode 0
+wcmd2c w 5 r 4 type 3 cc 0xa idx 0 subf 16
+
+[2023-08-08 19:40:49.364] 接收<- wcmd2c w 6 r 5 type 6 cc 0x0 idx 0 subf 24
+wcmd2c w 7 r 5 type 4 cc 0x0 idx 0 subf 24
+track succ pre 0x1 rssi -83 cur 1.50 last 1.41 ratio 369/370 frac 1494 to 1 fo -10955 frame 375
+
+[2023-08-08 19:40:49.578] 接收<- cmdtype 4 isSuc 1 cc 0xc subf 3
+cmdtype 3 isSuc 0 cc 0x10 subf 3
+active ack ul type 3
+gen next data Len 30 cc 0xa seq 1 islast 0 mcs 255 2
+
+[2023-08-08 19:40:49.991] 接收<- active arrange ultype 3 mode 0
+wcmd2c w 0 r 7 type 3 cc 0xa idx 0 subf 16
+
+[2023-08-08 19:40:50.204] 接收<- wcmd2c w 1 r 0 type 6 cc 0x0 idx 0 subf 24
+wcmd2c w 2 r 0 type 4 cc 0x0 idx 0 subf 24
+track succ pre 0x1 rssi -82 cur -4.50 last 0.92 ratio 370/371 frac 1494 to 0 fo 0 frame 376
+
+[2023-08-08 19:40:50.416] 接收<- cmdtype 4 isSuc 1 cc 0xc subf 3
+cmdtype 3 isSuc 0 cc 0xb subf 3
+active ack ul type 3
+gen next data Len 30 cc 0xa seq 2 islast 0 mcs 255 2
+
+[2023-08-08 19:40:50.831] 接收<- active arrange ultype 3 mode 0
+wcmd2c w 3 r 2 type 3 cc 0xa idx 0 subf 16
+
+[2023-08-08 19:40:51.043] 接收<- wcmd2c w 4 r 3 type 6 cc 0x0 idx 0 subf 24
+wcmd2c w 5 r 3 type 4 cc 0x0 idx 0 subf 24
+track succ pre 0x1 rssi -82 cur 8.25 last 1.65 ratio 371/372 frac 1494 to 1 fo -10955 frame 377
+
+[2023-08-08 19:40:51.256] 接收<- cmdtype 4 isSuc 1 cc 0xc subf 3
+cmdtype 3 isSuc 0 cc 0xc subf 3
+active ack ul type 3
+gen next data Len 17 cc 0xa seq 3 islast 1 mcs 2 2
+
+[2023-08-08 19:40:51.670] 接收<- active arrange ultype 3 mode 0
+wcmd2c w 6 r 5 type 3 cc 0xa idx 0 subf 16
+
+[2023-08-08 19:40:51.891] 接收<- wcmd2c w 7 r 6 type 6 cc 0x0 idx 0 subf 24
+wcmd2c w 0 r 6 type 4 cc 0x0 idx 0 subf 24
+track succ pre 0x1 rssi -82 cur 7.50 last 2.24 ratio 372/373 frac 1494 to 1 fo 0 frame 378
+
+[2023-08-08 19:40:52.105] 接收<- cmdtype 4 isSuc 1 cc 0xc subf 3
+cmdtype 3 isSuc 0 cc 0x1f subf 3
+active ack ul type 3
+mac sent isUsed 1 result 0
+uc send result 0 data 0x30b0f0
+
+[2023-08-08 19:40:52.732] 接收<- wcmd2c w 1 r 0 type 4 cc 0x0 idx 0 subf 24
+total 24380 used 10072 maxused 11008
+track succ pre 0x1 rssi -82 cur 2.0 last 2.21 ratio 373/374 frac 1494 to 1 fo 0 frame 379
+
+[2023-08-08 19:40:52.945] 接收<- cmdtype 3 isSuc 0 cc 0x1d subf 3
+
+[2023-08-08 19:40:53.157] 接收<- mac user singalCode 0x401
+l1 mac cmd 203 msg 30b170
+state 3 mac data len 108 isempty 1
+gen first data mode 1 cc 0xa isEnd 0 len 30 total 2
+
+[2023-08-08 19:40:53.370] 接收<- active arrange ultype 3 mode 0
+wcmd2c w 2 r 1 type 3 cc 0xa idx 0 subf 16
+
+[2023-08-08 19:40:53.581] 接收<- wcmd2c w 3 r 2 type 6 cc 0x0 idx 0 subf 24
+wcmd2c w 4 r 2 type 4 cc 0x0 idx 0 subf 24
+track succ pre 0x1 rssi -84 cur -12.25 last 0.86 ratio 374/375 frac 1494 to 1 fo -32864 frame 380
+
+[2023-08-08 19:40:53.795] 接收<- cmdtype 4 isSuc 0 cc 0x0 subf 3
+cmdtype 3 isSuc 0 cc 0x2 subf 3
+
+[2023-08-08 19:40:54.208] 接收<- active arrange ultype 3 mode 0
+gen first data mode 1 cc 0xa isEnd 0 len 30 total 2
+resend sm times 1
+wcmd2c w 5 r 4 type 3 cc 0xa idx 0 subf 16
+not update tx offset 0 0 num 1
+
+[2023-08-08 19:40:54.463] 接收<- wcmd2c w 6 r 5 type 6 cc 0x0 idx 0 subf 24
+wcmd2c w 7 r 5 type 4 cc 0x0 idx 0 subf 24
+track succ pre 0x1 rssi -83 cur -1.75 last 0.70 ratio 375/376 frac 1494 to 1 fo 0 frame 381
+cmdtype 4 isSuc 1 cc 0xc subf 3
+cmdtype 3 isSuc 0 cc 0x0 subf 3
+active ack ul type 3
+gen next data Len 30 cc 0xa seq 1 islast 0 mcs 255 2
+
+[2023-08-08 19:40:54.879] 接收<- active arrange ultype 3 mode 0
+wcmd2c w 0 r 7 type 3 cc 0xa idx 0 subf 16
+
+[2023-08-08 19:40:55.305] 接收<- wcmd2c w 1 r 0 type 6 cc 0x0 idx 0 subf 24
+wcmd2c w 2 r 0 type 4 cc 0x0 idx 0 subf 24
+track succ pre 0x1 rssi -82 cur 8.25 last 1.46 ratio 376/377 frac 1494 to 1 fo -10955 frame 382
+cmdtype 4 isSuc 1 cc 0xc subf 3
+cmdtype 3 isSuc 0 cc 0x8 subf 3
+active ack ul type 3
+gen next data Len 30 cc 0xa seq 2 islast 0 mcs 255 2
+
+[2023-08-08 19:40:55.919] 接收<- active arrange ultype 3 mode 0
+wcmd2c w 3 r 2 type 3 cc 0xa idx 0 subf 16
+
+[2023-08-08 19:40:56.142] 接收<- wcmd2c w 4 r 3 type 6 cc 0x0 idx 0 subf 24
+wcmd2c w 5 r 3 type 4 cc 0x0 idx 0 subf 24
+track succ pre 0x1 rssi -86 cur 0.0 last 1.31 ratio 377/378 frac 1494 to 1 fo -10955 frame 383
+cmdtype 4 isSuc 1 cc 0xc subf 3
+cmdtype 3 isSuc 0 cc 0x8 subf 3
+active ack ul type 3
+gen next data Len 18 cc 0xa seq 3 islast 1 mcs 2 2
+
+[2023-08-08 19:40:56.755] 接收<- active arrange ultype 3 mode 0
+wcmd2c w 6 r 5 type 3 cc 0xa idx 0 subf 16
+
+[2023-08-08 19:40:56.969] 接收<- wcmd2c w 7 r 6 type 6 cc 0x0 idx 0 subf 24
+wcmd2c w 0 r 6 type 4 cc 0x0 idx 0 subf 24
+track succ pre 0x1 rssi -84 cur -1.75 last 1.10 ratio 378/379 frac 1494 to 1 fo -10955 frame 384
+
+[2023-08-08 19:40:57.182] 接收<- cmdtype 4 isSuc 1 cc 0xc subf 3
+cmdtype 3 isSuc 0 cc 0x1f subf 3
+active ack ul type 3
+mac sent isUsed 1 result 0
+uc send result 0 data 0x30b0f0
+
+[2023-08-08 19:40:57.811] 接收<- wcmd2c w 1 r 0 type 4 cc 0x0 idx 0 subf 24
+track succ pre 0x9 rssi -83 cur -3.0 last 0.69 ratio 379/380 frac 1494 to 1 fo 0 frame 385
+
+[2023-08-08 19:40:58.032] 接收<- cmdtype 3 isSuc 0 cc 0x0 subf 3
+wcmd2c w 2 r 1 type 2 cc 0x0 idx 0 subf 6
+cmdtype 2 isSuc 1 cc 0x0 subf 9
+
+[2023-08-08 19:40:58.264] 接收<- mac user singalCode 0x401
+l1 mac cmd 203 msg 30b174
+state 3 mac data len 109 isempty 1
+gen first data mode 1 cc 0xa isEnd 0 len 30 total 2
+active arrange ultype 3 mode 0
+wcmd2c w 3 r 2 type 3 cc 0xa idx 0 subf 16
+
+[2023-08-08 19:40:58.679] 接收<- wcmd2c w 4 r 3 type 6 cc 0x0 idx 0 subf 24
+wcmd2c w 5 r 3 type 4 cc 0x0 idx 0 subf 24
+track succ pre 0x1 rssi -89 cur 0.0 last 0.62 ratio 380/381 frac 1493 to 1 fo -32864 frame 386
+cmdtype 4 isSuc 0 cc 0x0 subf 3
+cmdtype 3 isSuc 0 cc 0xa subf 3
+
+[2023-08-08 19:40:59.293] 接收<- active arrange ultype 3 mode 0
+gen first data mode 1 cc 0xa isEnd 0 len 30 total 2
+resend sm times 1
+wcmd2c w 6 r 5 type 3 cc 0xa idx 0 subf 16
+not update tx offset 0 0 num 1
+
+[2023-08-08 19:40:59.505] 接收<- wcmd2c w 7 r 6 type 6 cc 0x0 idx 0 subf 24
+wcmd2c w 0 r 6 type 4 cc 0x0 idx 0 subf 24
+track succ pre 0x1 rssi -84 cur -5.25 last 0.14 ratio 381/382 frac 1493 to 1 fo 10955 frame 387
+
+[2023-08-08 19:40:59.717] 接收<- cmdtype 4 isSuc 1 cc 0xc subf 3
+cmdtype 3 isSuc 0 cc 0x1f subf 3
+active ack ul type 3
+gen next data Len 30 cc 0xa seq 1 islast 0 mcs 255 2
+
+[2023-08-08 19:41:00.130] 接收<- active arrange ultype 3 mode 0
+wcmd2c w 1 r 0 type 3 cc 0xa idx 0 subf 16
+
+[2023-08-08 19:41:00.343] 接收<- wcmd2c w 2 r 1 type 6 cc 0x0 idx 0 subf 24
+wcmd2c w 3 r 1 type 4 cc 0x0 idx 0 subf 24
+track succ pre 0x1 rssi -85 cur 7.50 last 0.87 ratio 382/383 frac 1493 to 0 fo 0 frame 388
+
+[2023-08-08 19:41:00.556] 接收<- cmdtype 4 isSuc 1 cc 0xc subf 3
+cmdtype 3 isSuc 0 cc 0x8 subf 3
+active ack ul type 3
+gen next data Len 30 cc 0xa seq 2 islast 0 mcs 255 2
+
+[2023-08-08 19:41:00.969] 接收<- active arrange ultype 3 mode 0
+wcmd2c w 4 r 3 type 3 cc 0xa idx 0 subf 16
+
+[2023-08-08 19:41:01.181] 接收<- wcmd2c w 5 r 4 type 6 cc 0x0 idx 0 subf 24
+wcmd2c w 6 r 4 type 4 cc 0x0 idx 0 subf 24
+track succ pre 0x1 rssi -86 cur -12.25 last 0.33 ratio 383/384 frac 1493 to 1 fo 0 frame 389
+
+[2023-08-08 19:41:01.394] 接收<- cmdtype 4 isSuc 0 cc 0x0 subf 3
+cmdtype 3 isSuc 0 cc 0xf subf 3
+
+[2023-08-08 19:41:01.807] 接收<- active arrange ultype 3 mode 0
+gen next data Len 30 cc 0xa seq 2 islast 0 mcs 255 2
+resend sm times 1
+wcmd2c w 7 r 6 type 3 cc 0xa idx 0 subf 16
+not update tx offset 0 0 num 1
+
+[2023-08-08 19:41:02.032] 接收<- wcmd2c w 0 r 7 type 6 cc 0x0 idx 0 subf 24
+wcmd2c w 1 r 7 type 4 cc 0x0 idx 0 subf 24
+track succ pre 0x1 rssi -85 cur -2.50 last 0.45 ratio 384/385 frac 1493 to 1 fo 10955 frame 390
+
+[2023-08-08 19:41:02.246] 接收<- cmdtype 4 isSuc 1 cc 0xc subf 3
+cmdtype 3 isSuc 0 cc 0x1b subf 3
+active ack ul type 3
+gen next data Len 19 cc 0xa seq 3 islast 1 mcs 2 2
+
+[2023-08-08 19:41:02.659] 接收<- active arrange ultype 3 mode 0
+wcmd2c w 2 r 1 type 3 cc 0xa idx 0 subf 16
+total 24380 used 10240 maxused 11008
+
+[2023-08-08 19:41:02.871] 接收<- wcmd2c w 3 r 2 type 6 cc 0x0 idx 0 subf 24
+wcmd2c w 4 r 2 type 4 cc 0x0 idx 0 subf 24
+track succ pre 0x1 rssi -83 cur 8.25 last 0.41 ratio 385/386 frac 1493 to 1 fo -10955 frame 391
+
+[2023-08-08 19:41:03.084] 接收<- cmdtype 4 isSuc 1 cc 0xc subf 3
+cmdtype 3 isSuc 0 cc 0x3 subf 3
+active ack ul type 3
+mac sent isUsed 1 result 0
+uc send result 0 data 0x30b0f0
+
+[2023-08-08 19:41:03.717] 接收<- wcmd2c w 5 r 4 type 4 cc 0x0 idx 0 subf 24
+track succ pre 0x1 rssi -81 cur 8.75 last 1.25 ratio 386/387 frac 1493 to 1 fo 0 frame 392
+
+[2023-08-08 19:41:03.930] 接收<- cmdtype 3 isSuc 0 cc 0x1f subf 3
+
+[2023-08-08 19:41:04.144] 接收<- mac user singalCode 0x401
+l1 mac cmd 203 msg 30b174
+state 3 mac data len 110 isempty 1
+gen first data mode 1 cc 0xa isEnd 0 len 30 total 2
+
+[2023-08-08 19:41:04.357] 接收<- active arrange ultype 3 mode 0
+wcmd2c w 6 r 5 type 3 cc 0xa idx 0 subf 16
+
+[2023-08-08 19:41:04.570] 接收<- wcmd2c w 7 r 6 type 6 cc 0x0 idx 0 subf 24
+wcmd2c w 0 r 6 type 4 cc 0x0 idx 0 subf 24
+track succ pre 0x1 rssi -81 cur 0.75 last 1.20 ratio 387/388 frac 1493 to 1 fo 10955 frame 393
+
+[2023-08-08 19:41:04.783] 接收<- cmdtype 4 isSuc 1 cc 0xc subf 3
+cmdtype 3 isSuc 0 cc 0x8 subf 3
+active ack ul type 3
+gen next data Len 30 cc 0xa seq 1 islast 0 mcs 255 2
+
+[2023-08-08 19:41:05.197] 接收<- active arrange ultype 3 mode 0
+wcmd2c w 1 r 0 type 3 cc 0xa idx 0 subf 16
+
+[2023-08-08 19:41:05.411] 接收<- wcmd2c w 2 r 1 type 6 cc 0x0 idx 0 subf 24
+wcmd2c w 3 r 1 type 4 cc 0x0 idx 0 subf 24
+track succ pre 0x1 rssi -82 cur -1.50 last 1.3 ratio 388/389 frac 1493 to 1 fo 0 frame 394
+
+[2023-08-08 19:41:05.623] 接收<- cmdtype 4 isSuc 1 cc 0xc subf 3
+cmdtype 3 isSuc 0 cc 0xa subf 3
+active ack ul type 3
+gen next data Len 30 cc 0xa seq 2 islast 0 mcs 255 2
+
+[2023-08-08 19:41:06.037] 接收<- active arrange ultype 3 mode 0
+wcmd2c w 4 r 3 type 3 cc 0xa idx 0 subf 16
+
+[2023-08-08 19:41:06.250] 接收<- wcmd2c w 5 r 4 type 6 cc 0x0 idx 0 subf 24
+wcmd2c w 6 r 4 type 4 cc 0x0 idx 0 subf 24
+track succ pre 0x1 rssi -82 cur -3.75 last 0.65 ratio 389/390 frac 1493 to 1 fo 0 frame 395
+
+[2023-08-08 19:41:06.464] 接收<- cmdtype 4 isSuc 1 cc 0xc subf 3
+cmdtype 3 isSuc 0 cc 0xb subf 3
+active ack ul type 3
+gen next data Len 20 cc 0xa seq 3 islast 1 mcs 2 2
+
+[2023-08-08 19:41:06.878] 接收<- active arrange ultype 3 mode 0
+wcmd2c w 7 r 6 type 3 cc 0xa idx 0 subf 16
+
+[2023-08-08 19:41:07.091] 接收<- wcmd2c w 0 r 7 type 6 cc 0x0 idx 0 subf 24
+wcmd2c w 1 r 7 type 4 cc 0x0 idx 0 subf 24
+track succ pre 0x9 rssi -81 cur 8.25 last 1.41 ratio 390/391 frac 1493 to 1 fo 0 frame 396
+
+[2023-08-08 19:41:07.330] 接收<- cmdtype 4 isSuc 1 cc 0xc subf 3
+cmdtype 3 isSuc 0 cc 0x8 subf 3
+active ack ul type 3
+mac sent isUsed 1 result 0
+uc send result 0 data 0x30b0f0
+wcmd2c w 2 r 1 type 2 cc 0x0 idx 0 subf 6
+cmdtype 2 isSuc 1 cc 0x0 subf 9
+
+[2023-08-08 19:41:07.944] 接收<- wcmd2c w 3 r 2 type 4 cc 0x0 idx 0 subf 24
+track succ pre 0x1 rssi -82 cur 8.75 last 2.14 ratio 391/392 frac 1494 to 1 fo 10955 frame 397
+
+[2023-08-08 19:41:08.157] 接收<- cmdtype 3 isSuc 0 cc 0x11 subf 3
+
+[2023-08-08 19:41:08.370] 接收<- mac user singalCode 0x401
+l1 mac cmd 203 msg 30b174
+state 3 mac data len 111 isempty 1
+gen first data mode 1 cc 0xa isEnd 0 len 30 total 2
+
+[2023-08-08 19:41:08.584] 接收<- active arrange ultype 3 mode 0
+wcmd2c w 4 r 3 type 3 cc 0xa idx 0 subf 16
+
+[2023-08-08 19:41:08.822] 接收<- wcmd2c w 5 r 4 type 6 cc 0x0 idx 0 subf 24
+wcmd2c w 6 r 4 type 4 cc 0x0 idx 0 subf 24
+track succ pre 0x1 rssi -82 cur -3.75 last 1.65 ratio 392/393 frac 1493 to 1 fo -10955 frame 398
+cmdtype 4 isSuc 1 cc 0xc subf 3
+cmdtype 3 isSuc 0 cc 0x8 subf 3
+active ack ul type 3
+gen next data Len 30 cc 0xa seq 1 islast 0 mcs 255 2
+
+[2023-08-08 19:41:09.237] 接收<- active arrange ultype 3 mode 0
+wcmd2c w 7 r 6 type 3 cc 0xa idx 0 subf 16
+
+[2023-08-08 19:41:09.668] 接收<- wcmd2c w 0 r 7 type 6 cc 0x0 idx 0 subf 24
+wcmd2c w 1 r 7 type 4 cc 0x0 idx 0 subf 24
+track succ pre 0x1 rssi -84 cur -12.75 last 0.31 ratio 393/394 frac 1493 to 1 fo -21909 frame 399
+cmdtype 4 isSuc 0 cc 0x0 subf 3
+cmdtype 3 isSuc 0 cc 0xc subf 3
+
+[2023-08-08 19:41:10.090] 接收<- active arrange ultype 3 mode 0
+gen next data Len 30 cc 0xa seq 1 islast 0 mcs 255 2
+resend sm times 1
+wcmd2c w 2 r 1 type 3 cc 0xa idx 0 subf 16
+not update tx offset 0 0 num 1
+
+[2023-08-08 19:41:10.504] 接收<- wcmd2c w 3 r 2 type 6 cc 0x0 idx 0 subf 24
+wcmd2c w 4 r 2 type 4 cc 0x0 idx 0 subf 24
+track succ pre 0x1 rssi -83 cur 0.0 last 0.28 ratio 394/395 frac 1493 to 0 fo 0 frame 400
+cmdtype 4 isSuc 1 cc 0xc subf 3
+cmdtype 3 isSuc 0 cc 0xc subf 3
+active ack ul type 3
+gen next data Len 30 cc 0xa seq 2 islast 0 mcs 255 2
+
+[2023-08-08 19:41:11.119] 接收<- active arrange ultype 3 mode 0
+wcmd2c w 5 r 4 type 3 cc 0xa idx 0 subf 16
+
+[2023-08-08 19:41:11.348] 接收<- wcmd2c w 6 r 5 type 6 cc 0x0 idx 0 subf 24
+wcmd2c w 7 r 5 type 4 cc 0x0 idx 0 subf 24
+track succ pre 0x1 rssi -81 cur 8.50 last 1.10 ratio 395/396 frac 1493 to 1 fo 0 frame 401
+cmdtype 4 isSuc 1 cc 0xc subf 3
+cmdtype 3 isSuc 0 cc 0x19 subf 3
+active ack ul type 3
+gen next data Len 21 cc 0xa seq 3 islast 1 mcs 2 2
+
+[2023-08-08 19:41:11.961] 接收<- active arrange ultype 3 mode 0
+wcmd2c w 0 r 7 type 3 cc 0xa idx 0 subf 16
+
+[2023-08-08 19:41:12.204] 接收<- wcmd2c w 1 r 0 type 6 cc 0x0 idx 0 subf 24
+wcmd2c w 2 r 0 type 4 cc 0x0 idx 0 subf 24
+track succ pre 0x1 rssi -84 cur -5.50 last 0.54 ratio 396/397 frac 1493 to 1 fo -10955 frame 402
+cmdtype 4 isSuc 1 cc 0xc subf 3
+cmdtype 3 isSuc 0 cc 0x19 subf 3
+active ack ul type 3
+mac sent isUsed 1 result 0
+uc send result 0 data 0x30b0f0
+
+[2023-08-08 19:41:12.827] 接收<- total 24380 used 10072 maxused 11008
+
+[2023-08-08 19:41:13.042] 接收<- wcmd2c w 3 r 2 type 4 cc 0x0 idx 0 subf 24
+track succ pre 0x1 rssi -84 cur 1.25 last 0.61 ratio 397/398 frac 1493 to 1 fo 0 frame 403
+cmdtype 3 isSuc 0 cc 0xd subf 3
+
+[2023-08-08 19:41:13.255] 接收<- mac user singalCode 0x401
+l1 mac cmd 203 msg 30b174
+state 3 mac data len 112 isempty 1
+gen first data mode 1 cc 0xa isEnd 0 len 30 total 2
+
+[2023-08-08 19:41:13.468] 接收<- active arrange ultype 3 mode 0
+wcmd2c w 4 r 3 type 3 cc 0xa idx 0 subf 16
+

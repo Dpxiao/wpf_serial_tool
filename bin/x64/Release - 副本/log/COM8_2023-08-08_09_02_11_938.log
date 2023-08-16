@@ -1,0 +1,252 @@
+[2023-08-08 09:02:12.344] 接收<- -->total 24440 used 4264 maxused 10900
+
+memory heap address:
+heap_ptr: 0x00309b60
+lfree   : 0x0030ac08
+heap_end: 0x0030faec
+
+--memory item information --
+[0x00309b60 -   120] NONE ra 0x2076e
+[0x00309bec -    1K] NONE ra 0x22750
+[0x0030a0c8 -   120] main ra 0x2076e
+[0x0030a154 -   512] main ra 0x22750
+[0x0030a368 -   120] main ra 0x2076e
+[0x0030a3f4 -    2K] main ra 0x22750
+[0x0030ac08 -   19K]      ra 0x17ad6
+cur make time:Jul 11 2023 09:15:20
+cur git version:v2.6_iote : wangzheng <zheng.wang@ucchip.com>
+cur cce version:d61c8d0
+oldsys 0
+subsys init1 u 123 idL 1 pp 1 group 0 symL 1 dlul 0 bt 1 subsys 0x21456981
+subsys init2 0x1020304 0x0 
+ 8288
+ ?
+ v2.6_iote
+ ucchip
+ v1.0
+l1 buffer init
+groupnum dl 0 ul 0
+frameLen 145968
+activeTime 20
+userid 0x1020304
+calc limit symLen 1 rfMcs 0 btValue 1 isDS 4
+calc result mcs 0 0 data 2 6
+static subsystem_id *(list+0) 0x0
+static freq *(list+0) 1
+static freq *(list+1) 3
+static freq *(list+2) 5
+static freq *(list+3) 7
+static freq *(list+
+[2023-08-08 09:02:12.463] 接收<- 4) 10
+static freq *(list+5) 13
+static freq *(list+6) 15
+static freq *(list+7) 17
+static freq *(list+8) 20
+static freq *(list+9) 23
+static freq *(list+10) 26
+static freq *(list+11) 29
+static freq *(list+12) 255
+gateway strategy 12
+create l1_i task taskHandle 0030b3f8
+create l1_m task taskHandle 0030b93c
+create mac task taskHandle 0030be60
+inter task start
+oldsys 0
+subsys init1 u 123 idL 1 pp 1 group 0 symL 1 dlul 0 bt 1 subsys 0x21456981
+subsys init2 0x1020304 0x0 
+ 8288
+ ?
+ v2.6_iote
+ ucchip
+ v1.0
+cce fetch done
+l1 main task start
+mac task start
+oldsys 0
+subsys init1 u 123 idL 1 pp 1 group 0 symL 1 dlul 0 bt 1 subsys 0x21456981
+subsys init2 0x1020304 0x0 
+ 8288
+ ?
+ v2.6_iote
+ ucchip
+ v1.0
+groupnum dl 0 ul 0
+frameLen 145968
+activeTime 20
+mac user singalCode 0x404
+l1 mac cmd 204 msg 30ac80
+user ctrl type 3 status 0 sync 0
+status change 0 to 0
+recv scan cmd num 12 len 12
+wcmd2c w 1 r 0 type 1 cc 0x0 idx 0 subf 0
+
+[2023-08-08 09:02:12.680] 接收<- scan result 1 type 1
+freq 1 rssi -92 -92
+freq 3 rssi -92 -92
+freq 5 rssi -92 -92
+freq 7 rssi -92 -92
+wcmd2c w 2 r 1 type 1 cc 0x0 idx 0 subf 0
+
+[2023-08-08 09:02:12.898] 接收<- scan result 1 type 1
+freq 1 rssi -113 -113
+freq 3 rssi -107 -107
+freq 5 rssi -107 -107
+freq 7 rssi -107 -107
+wcmd2c w 3 r 2 type 1 cc 0x0 idx 0 subf 0
+
+[2023-08-08 09:02:13.210] 接收<- scan result 1 type 1
+freq 10 rssi -91 -91
+freq 13 rssi -91 -91
+freq 15 rssi -92 -92
+freq 17 rssi -92 -92
+wcmd2c w 4 r 3 type 1 cc 0x0 idx 0 subf 0
+
+[2023-08-08 09:02:13.537] 接收<- scan result 1 type 1
+freq 10 rssi -109 -109
+freq 13 rssi -117 -117
+freq 15 rssi -107 -107
+freq 17 rssi -113 -113
+wcmd2c w 5 r 4 type 1 cc 0x0 idx 0 subf 0
+
+[2023-08-08 09:02:13.852] 接收<- scan result 1 type 1
+freq 20 rssi -92 -92
+freq 23 rssi -92 -92
+freq 26 rssi -91 -91
+freq 29 rssi -91 -91
+wcmd2c w 6 r 5 type 1 cc 0x0 idx 0 subf 0
+
+[2023-08-08 09:02:14.168] 接收<- scan result 1 type 1
+freq 20 rssi -114 -114
+freq 23 rssi -110 -110
+freq 26 rssi -111 -111
+freq 29 rssi -108 -108
+rssi sort top 10: 
+freq 3 rssi -107
+freq 5 rssi -107
+freq 7 rssi -107
+freq 15 rssi -107
+freq 29 rssi -108
+freq 10 rssi -109
+freq 23 rssi -110
+freq 26 rssi -111
+freq 1 rssi -113
+freq 17 rssi -113
+wcmd2c w 7 r 6 type 1 cc 0x0 idx 0 subf 0
+
+[2023-08-08 09:02:14.985] 接收<- scan result 0 type 2
+snr 0 agc 15 idx 0 freq 3
+wcmd2c w 0 r 7 type 1 cc 0x0 idx 0 subf 0
+
+[2023-08-08 09:02:15.408] 接收<- scan result 0 type 2
+snr 0 agc 15 idx 1 freq 5
+wcmd2c w 1 r 0 type 1 cc 0x0 idx 0 subf 0
+
+[2023-08-08 09:02:16.035] 接收<- scan result 0 type 2
+snr 0 agc 15 idx 2 freq 7
+wcmd2c w 2 r 1 type 1 cc 0x0 idx 0 subf 0
+
+[2023-08-08 09:02:16.459] 接收<- scan result 0 type 2
+snr -11 agc 15 idx 3 freq 15
+wcmd2c w 3 r 2 type 1 cc 0x0 idx 0 subf 0
+
+[2023-08-08 09:02:17.289] 接收<- scan result 0 type 2
+snr 0 agc 15 idx 4 freq 29
+wcmd2c w 4 r 3 type 1 cc 0x0 idx 0 subf 0
+
+[2023-08-08 09:02:17.911] 接收<- scan result 1 type 2
+snr 3 agc 15 idx 5 freq 10
+wcmd2c w 5 r 4 type 1 cc 0x0 idx 0 subf 2
+
+[2023-08-08 09:02:18.629] 接收<- scan result 0 type 2
+snr 0 agc 15 idx 6 freq 23
+wcmd2c w 6 r 5 type 1 cc 0x0 idx 0 subf 0
+
+[2023-08-08 09:02:19.143] 接收<- scan result 0 type 2
+snr 0 agc 15 idx 7 freq 26
+wcmd2c w 7 r 6 type 1 cc 0x0 idx 0 subf 0
+
+[2023-08-08 09:02:19.364] 接收<- total 24440 used 9344 maxused 10900.rate 38
+
+[2023-08-08 09:02:19.787] 接收<- scan result 0 type 2
+snr 0 agc 15 idx 8 freq 1
+wcmd2c w 0 r 7 type 1 cc 0x0 idx 0 subf 0
+
+[2023-08-08 09:02:20.211] 接收<- scan result 0 type 2
+snr 0 agc 15 idx 9 freq 17
+wcmd2c w 1 r 0 type 1 cc 0x0 idx 0 subf 0
+
+[2023-08-08 09:02:20.834] 接收<- scan result 0 type 2
+snr 0 agc 15 idx 10 freq 20
+wcmd2c w 2 r 1 type 1 cc 0x0 idx 0 subf 0
+
+[2023-08-08 09:02:21.364] 接收<- scan result 0 type 2
+snr 0 agc 15 idx 11 freq 13
+mac recv Len 96 p 0030ad30 result 0 type 6
+uc wiota exit
+
+[2023-08-08 09:02:21.784] 接收<- l1 isr del done
+
+[2023-08-08 09:02:21.885] 接收<- l1 main exit
+l1 main del done
+mac exit
+mac deling
+mac del done
+gateway select subsystem id 0x21456981 freq 10
+cur make time:Jul 11 2023 09:15:20
+cur git version:v2.6_iote : wangzheng <zheng.wang@ucchip.com>
+cur cce version:d61c8d0
+oldsys 0
+subsys init1 u 123 idL 1 pp 1 group 0 symL 1 dlul 0 bt 1 subsys 0x21456981
+subsys init2 0x1020304 0x0 
+ 8288
+ ?
+ v2.6_iote
+ ucchip
+ v1.0
+l1 buffer init
+groupnum dl 0 ul 0
+frameLen 145968
+activeTime 20
+userid 0x1020304
+calc limit symLen 1 rfMcs 0 btValue 1 isDS 4
+calc result mcs 0 0 data 2 6
+oldsys 0
+subsys init1 u 123 idL 1 pp 1 group 0 symL 1 dlul 0 bt 1 subsys 0x21456981
+subsys init2 0x1020304 0x0 
+ 8288
+ ?
+ v2.6_iote
+ ucchip
+ v1.0
+groupnum dl 0 ul 0
+frameLen 145968
+activeTime 20
+select subsystem id 0x21456981 freq 10
+create l1_i task taskHandle 0030b3f8
+create l1_m task taskHandle 0030b93c
+create mac task taskHandle 0030be60
+inter task start
+oldsys 0
+subsys init1 u 123 idL 1 pp 1 group 0 symL 1 dlul 0 bt 1 subsys 0x21456981
+su
+[2023-08-08 09:02:22.004] 接收<- bsys init2 0x1020304 0x0 
+ 8288
+ ?
+ v2.6_iote
+ ucchip
+ v1.0
+cce fetch done
+l1 main task start
+mac task start
+mac user singalCode 0x404
+l1 mac cmd 204 msg 30ac4c
+user ctrl type 1 status 0 sync 0
+wcmd2c w 1 r 0 type 1 cc 0x0 idx 0 subf 0
+
+[2023-08-08 09:03:11.484] 接收<- 鴛<瘌€x<€x
+[2023-08-08 09:03:12.601] 接收<- 鴛<瘌€x<€x
+[2023-08-08 09:03:12.724] 接收<- ?
+[2023-08-08 09:03:13.351] 接收<- 鴛<瘌€x<€x
+[2023-08-08 09:03:13.785] 接收<- 鴛<瘌€x<€x
+[2023-08-08 09:03:14.301] 接收<- 鴛<瘌€x<€x
+[2023-08-08 09:03:16.537] 接收<- 鴛<瘌€x<鴛<€x<
