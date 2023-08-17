@@ -138,7 +138,7 @@ namespace WIoTa_Serial_Tool
             Button[] AtCmdList_Button = { AtCmdList_Button1, AtCmdList_Button2 , AtCmdList_Button3 , AtCmdList_Button4 , AtCmdList_Button5 ,
                 AtCmdList_Button6 , AtCmdList_Button7 , AtCmdList_Button8 };
             isChecked_at_grid_flag = !isChecked_at_grid_flag;
-
+            this.SizeChanged += MainWindow_LocationChanged;
             if (isChecked_at_grid_flag)
             {
                 for (int i = 0; i < 8; i++)
@@ -172,12 +172,13 @@ namespace WIoTa_Serial_Tool
             {
                 for (int i = 0; i < 8; i++)
                 {
-                    AtCmdList_Button[i].Content = "指令列表隐藏";
+                    AtCmdList_Button[i].Content = "指令列表隐藏<<";
                 }
 
                 MainGrid.ColumnDefinitions[2].Width = new GridLength(gridWidth);
                 this.Width += gridWidth;
             }
+            this.SizeChanged += MainWindow_LocationChanged;
         }
 
         private TextBox RetTextBoxObject(int port_num)

@@ -93,6 +93,7 @@ namespace WIoTa_Serial_Tool
             ReadAppConfig();
             //recvDataRichTextBox.ScrollToEnd();
         }
+
         private bool ReadDataGrid()
         {
             string readValue = ConfigurationManager.AppSettings["tab_Index"];
@@ -182,23 +183,48 @@ namespace WIoTa_Serial_Tool
         private void Button_Display_Start_Windows_Click(object sender, RoutedEventArgs e)
         {
             int port_num = PortTab.SelectedIndex;
-         
+            Button[] Start_Button = { Start_Button1, Start_Button2, Start_Button3, Start_Button4,
+            Start_Button5,Start_Button6,Start_Button7,Start_Button8};
             if (Start_Window == null)
             {
-
+                for (int i = 0; i < 8; i++)
+                {
+                    Start_Button[i].Content = "一键启动扩展>>";
+                }
                 Start_Window = new Start_Type_Window();
 
                 Start_Window.ButtonClicked += ChildWindow_ButtonClicked;
                 Start_Window.serialPort = mySerial[port_num];
                 Start_Window.Closed += (s, args) => Start_Window = null; // 在窗口关闭时将实例变量重置为null
-                                                                            //Start_Window.ReadAppConfig();
+                                                                         //Start_Window.ReadAppConfig();
+
+                Start_Window.Owner = this;
+                Start_Window.Top = this.Top;
+                Start_Window.Left = this.Left + this.Width;
+
+                // 订阅主窗口的 LocationChanged 事件
+                this.LocationChanged += MainWindow_LocationChanged;
                 Start_Window.Show();
             }
             else
             {
-                Start_Window.Activate(); // 如果窗口已经创建，则将其激活
+                for (int i = 0; i < 8; i++)
+                {
+                    Start_Button[i].Content = "一键启动隐藏<<";
+                }
+                Start_Window.Close(); // 如果窗口已经创建，则将其激活
             }
            
+        }
+
+        private void MainWindow_LocationChanged(object sender, EventArgs e)
+        {
+            // 当主窗口移动时，更新子窗口的位置
+            if (Start_Window != null)
+            {
+                Start_Window.Top = this.Top;
+                Start_Window.Left = this.Left + this.Width; // 改变左侧位置为主窗口的右侧
+            }
         }
 
         private void MainWindow_Closing(object sender, CancelEventArgs e)

@@ -16,6 +16,15 @@ namespace WIoTa_Serial_Tool
     {
         public SerialPortManager serialPort;
         public event EventHandler<ButtonClickedEventArgs> ButtonClicked;
+        private UserID_Window1 MyUserIDSet;
+
+        public event EventHandler<string> ValuePassed;
+
+        private void OnValuePassed(string value)
+        {
+            ValuePassed?.Invoke(this, value);
+        }
+
         public Start_Type_Window()
         {
             InitializeComponent();
@@ -297,7 +306,7 @@ namespace WIoTa_Serial_Tool
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             SaveConfig();
-           
+            MyUserIDSet.Close();
         }
         private bool RetCheckStatus(string value)
         {
@@ -888,6 +897,27 @@ namespace WIoTa_Serial_Tool
             writeXml(xmlDoc, root, selectedValue, "activeTime_WIoTa2");
 
             xmlDoc.Save(configFilePath);
+        }
+
+        private void Button_Userid_Click(object sender, RoutedEventArgs e)
+        {
+            MyUserIDSet = new UserID_Window1();
+            MyUserIDSet.ValueSelected += ChildWindow_ValueSelected;
+            MyUserIDSet.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            MyUserIDSet.ShowDialog();
+        }
+
+        private void ChildWindow_ValueSelected(object sender, string value)
+        {
+            int type = StartTab.SelectedIndex;
+            if (type == 1)
+            {
+                useridTextBox2.Text = value;
+            }
+            if (type == 2)
+            {
+                useridTextBox3.Text = value;
+            }
         }
     }
     public class ButtonClickedEventArgs : EventArgs

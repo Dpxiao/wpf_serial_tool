@@ -169,7 +169,7 @@
 
                                         </Grid>
 
-                                        <Button   Grid.Column="1" Height="26" Margin="4,0,0,0" Style="{StaticResource MyButtonStyle}" Content="一键启动显示&lt;&lt;" Width="108" Click="Button_Display_Start_Windows_Click" ></Button>
+                                        <Button  Name="Start_Button1" Grid.Column="1" Height="26" Margin="4,2,0,0" Style="{StaticResource MyButtonStyle}" Content="一键启动显示&lt;&lt;" Width="108" Click="Button_Display_Start_Windows_Click" VerticalAlignment="Top" ></Button>
                                     </Grid>
 
                                     <Grid Grid.Row="2">
@@ -198,7 +198,7 @@
                                             <Label    Grid.Column="7" Content="ms" Height="25" HorizontalAlignment="Left" VerticalAlignment="Center"  VerticalContentAlignment="Center" Padding="0" />
                                         </Grid>
 
-                                        <Button Name="AtCmdList_Button1" Grid.Column="1" Height="26" Margin="5,0,0,0" Style="{StaticResource MyButtonStyle}" Content="指令列表隐藏&lt;&lt;" Width="108" Click="Button_Grid_Click" />
+                                        <Button Name="AtCmdList_Button1" Grid.Column="1" Margin="5,2,0,2" Style="{StaticResource MyButtonStyle}" Content="指令列表隐藏&lt;&lt;" Width="108" Click="Button_Grid_Click" />
                                     </Grid>
 
                                     <Grid Grid.Row="4">
@@ -321,7 +321,7 @@
 
                                         </Grid>
 
-                                        <Button   Grid.Column="1" Height="26" Margin="4,0,0,0" Style="{StaticResource MyButtonStyle}" Content="一键启动显示&lt;&lt;" Width="108" Click="Button_Display_Start_Windows_Click" ></Button>
+                                        <Button  Name="Start_Button2" Grid.Column="1" Height="26" Margin="4,0,0,0" Style="{StaticResource MyButtonStyle}" Content="一键启动显示&lt;&lt;" Width="108" Click="Button_Display_Start_Windows_Click" ></Button>
                                     </Grid>
 
                                     <Grid Grid.Row="2">
@@ -473,7 +473,7 @@
 
                                         </Grid>
 
-                                        <Button   Grid.Column="1" Height="26" Margin="4,0,0,0" Style="{StaticResource MyButtonStyle}" Content="一键启动显示&lt;&lt;" Width="108" Click="Button_Display_Start_Windows_Click" ></Button>
+                                        <Button   Name="Start_Button3" Grid.Column="1" Height="26" Margin="4,0,0,0" Style="{StaticResource MyButtonStyle}" Content="一键启动显示&lt;&lt;" Width="108" Click="Button_Display_Start_Windows_Click" ></Button>
                                     </Grid>
 
                                     <Grid Grid.Row="2">
@@ -625,7 +625,7 @@
 
                                         </Grid>
 
-                                        <Button   Grid.Column="1" Height="26" Margin="4,0,0,0" Style="{StaticResource MyButtonStyle}" Content="一键启动显示&lt;&lt;" Width="108" Click="Button_Display_Start_Windows_Click" ></Button>
+                                        <Button  Name="Start_Button4" Grid.Column="1" Height="26" Margin="4,0,0,0" Style="{StaticResource MyButtonStyle}" Content="一键启动显示&lt;&lt;" Width="108" Click="Button_Display_Start_Windows_Click" ></Button>
                                     </Grid>
 
                                     <Grid Grid.Row="2">
@@ -777,7 +777,7 @@
 
                                         </Grid>
 
-                                        <Button   Grid.Column="1" Height="26" Margin="4,0,0,0" Style="{StaticResource MyButtonStyle}" Content="一键启动显示&lt;&lt;" Width="108" Click="Button_Display_Start_Windows_Click" ></Button>
+                                        <Button  Name="Start_Button5" Grid.Column="1" Height="26" Margin="4,0,0,0" Style="{StaticResource MyButtonStyle}" Content="一键启动显示&lt;&lt;" Width="108" Click="Button_Display_Start_Windows_Click" ></Button>
                                     </Grid>
 
                                     <Grid Grid.Row="2">
@@ -929,7 +929,7 @@
 
                                         </Grid>
 
-                                        <Button   Grid.Column="1" Height="26" Margin="4,0,0,0" Style="{StaticResource MyButtonStyle}" Content="一键启动显示&lt;&lt;" Width="108" Click="Button_Display_Start_Windows_Click" ></Button>
+                                        <Button  Name="Start_Button6" Grid.Column="1" Height="26" Margin="4,0,0,0" Style="{StaticResource MyButtonStyle}" Content="一键启动显示&lt;&lt;" Width="108" Click="Button_Display_Start_Windows_Click" ></Button>
                                     </Grid>
 
                                     <Grid Grid.Row="2">
@@ -1081,7 +1081,7 @@
 
                                         </Grid>
 
-                                        <Button   Grid.Column="1" Height="26" Margin="4,0,0,0" Style="{StaticResource MyButtonStyle}" Content="一键启动显示&lt;&lt;" Width="108" Click="Button_Display_Start_Windows_Click" ></Button>
+                                        <Button  Name="Start_Button7" Grid.Column="1" Height="26" Margin="4,0,0,0" Style="{StaticResource MyButtonStyle}" Content="一键启动显示&lt;&lt;" Width="108" Click="Button_Display_Start_Windows_Click" ></Button>
                                     </Grid>
 
                                     <Grid Grid.Row="2">
@@ -1233,7 +1233,7 @@
 
                                         </Grid>
 
-                                        <Button   Grid.Column="1" Height="26" Margin="4,0,0,0" Style="{StaticResource MyButtonStyle}" Content="一键启动显示&lt;&lt;" Width="108" Click="Button_Display_Start_Windows_Click" ></Button>
+                                        <Button  Name="Start_Button8" Grid.Column="1" Height="26" Margin="4,0,0,0" Style="{StaticResource MyButtonStyle}" Content="一键启动显示&lt;&lt;" Width="108" Click="Button_Display_Start_Windows_Click" ></Button>
                                     </Grid>
 
                                     <Grid Grid.Row="2">
@@ -1555,7 +1555,7 @@
                                     <ComboBoxItem >自动应答指令列表3</ComboBoxItem>
                                 </ComboBox>
                                 <CheckBox Grid.Column="1" Margin="5,0,0,0" Name="AutoAckCheckBox" Content="开启自动应答" VerticalContentAlignment="Center" HorizontalAlignment="Left" VerticalAlignment="Center" Click="AutoAckCheckBox_Click" >
-                                    
+
                                 </CheckBox>
                             </Grid>
 

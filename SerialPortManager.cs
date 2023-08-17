@@ -157,7 +157,6 @@ namespace SerialPortExample
                 try
                 {
                     receivedData = ReadPortBuff(portNum);
-                    //receivedData = "sifdodsfnasfnaosidaoiwendksnaksndi0aowdkmcosnurygfiasndoasdiwen\r\n";
                     if (receivedData != null)
                     {
                         PrintLog(receivedData);

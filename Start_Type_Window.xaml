@@ -7,8 +7,7 @@
         mc:Ignorable="d"
         Title="一键启动窗口" Height="665" Width="300"
          ResizeMode="NoResize"
-         Closing="Window_Closing"
-        Topmost="True">
+         Closing="Window_Closing">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -241,7 +240,7 @@
                                 </Grid.ColumnDefinitions>
                                 <CheckBox Name="useridCheckBox2" Grid.Column="0" Content="设置UserID" Margin="3,0,20,1"  HorizontalAlignment="Left" VerticalAlignment="Center"/>
                                 <TextBox Name="useridTextBox2" Grid.Column="1"  Margin="3,0,0,1" Height="20" VerticalContentAlignment="Center" VerticalAlignment="Center"/>
-                                <Button Grid.Column="2" Content="选择" Margin="5,0,0,1" Height="20" VerticalAlignment="Center"/>
+                                <Button Grid.Column="2" Content="选择" Margin="5,0,0,1" Height="20" VerticalAlignment="Center" Click="Button_Userid_Click"/>
                             </Grid>
                             <CheckBox Name="oscCheckBox2" Grid.Row="6" Content="设置有源晶体" Margin="3,0,0,3" HorizontalAlignment="Left" VerticalAlignment="Center" Checked ="setosc2_Click"/>
                         </Grid>
@@ -544,7 +543,7 @@
                                 </Grid.ColumnDefinitions>
                                 <CheckBox Name="useridCheckBox3" Grid.Column="0" Content="设置UserID" Margin="3,0,20,1"  HorizontalAlignment="Left" VerticalAlignment="Center"/>
                                 <TextBox Name="useridTextBox3" Grid.Column="1"  Margin="3,0,0,1" Height="20" VerticalContentAlignment="Center" VerticalAlignment="Center"/>
-                                <Button Grid.Column="2" Content="选择" Margin="5,0,0,1" Height="20" VerticalAlignment="Center"/>
+                                <Button Grid.Column="2" Content="选择" Margin="5,0,0,1" Height="20" VerticalAlignment="Center" Click ="Button_Userid_Click"/>
                             </Grid>
                             <CheckBox Name="oscCheckBox3" Grid.Row="6" Content="设置有源晶体" Margin="3,0,0,3" HorizontalAlignment="Left" VerticalAlignment="Center" Checked ="setosc2_Click"/>
                         </Grid>
