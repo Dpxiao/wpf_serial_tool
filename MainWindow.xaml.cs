@@ -67,8 +67,7 @@ namespace WIoTa_Serial_Tool
         public MainWindow()
         {
             InitializeComponent();
-            //clockTimer.Tick += ClockTimer_Tick;
-            //clockTimer.Start();//CPU消耗10%
+            this.SizeChanged += MainWindow_LocationChanged;
             TextBox[] recvDataTextBox = { recvDataRichTextBox1, recvDataRichTextBox2, recvDataRichTextBox3, recvDataRichTextBox4, recvDataRichTextBox5, recvDataRichTextBox6, recvDataRichTextBox7, recvDataRichTextBox8 };
             for (int k = 0; k < 8; k++)
             {

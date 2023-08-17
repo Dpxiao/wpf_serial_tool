@@ -306,7 +306,10 @@ namespace WIoTa_Serial_Tool
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             SaveConfig();
-            MyUserIDSet.Close();
+            if (MyUserIDSet != null)
+            {
+                MyUserIDSet.Close();
+            }
         }
         private bool RetCheckStatus(string value)
         {
