@@ -1355,7 +1355,7 @@
 
                                 <DataGrid.Columns>
 
-                                    <DataGridTextColumn Header="NO" CanUserResize="False" CanUserSort="False" IsReadOnly="True"  Binding="{Binding Index}">
+                                    <DataGridTextColumn Header="NO" CanUserResize="False" CanUserSort="False" IsReadOnly="True"  Binding="{Binding NumCol}">
                                         <!--<DataGridTextColumn.CellStyle>
                                         <Style TargetType="{x:Type DataGridCell}">
                                             <EventSetter Event="PreviewMouseDown"  Handler="DataGridCell_PreviewMouseDown" />
@@ -1456,7 +1456,7 @@
 
                                 <DataGrid.Columns>
 
-                                    <DataGridTextColumn Header="NO" CanUserResize="False" CanUserSort="False" IsReadOnly="True"  Binding="{Binding Index}">
+                                    <DataGridTextColumn Header="NO" CanUserResize="False" CanUserSort="False" IsReadOnly="True"  Binding="{Binding NumCol}">
                                         <DataGridTextColumn.CellStyle>
                                             <Style TargetType="{x:Type DataGridCell}">
                                                 <EventSetter Event="PreviewMouseDown"  Handler="DataGridCell_PreviewMouseDown" />
@@ -1576,7 +1576,7 @@
 
                                 <DataGrid.Columns>
 
-                                    <DataGridTextColumn Header="NO" CanUserResize="False" CanUserSort="False" IsReadOnly="True"  Binding="{Binding Index}">
+                                    <DataGridTextColumn Header="NO" CanUserResize="False" CanUserSort="False" IsReadOnly="True"  Binding="{Binding NumCol}">
                                         <DataGridTextColumn.CellStyle>
                                             <Style TargetType="{x:Type DataGridCell}">
                                                 <EventSetter Event="PreviewMouseDown"  Handler="DataGridCell_PreviewMouseDown" />
@@ -1605,19 +1605,6 @@
                                         </DataGridTemplateColumn.CellTemplate>
                                     </DataGridTemplateColumn>
 
-                                    <!--<DataGridTemplateColumn Header="应答" Width="40">
-                                    <DataGridTemplateColumn.HeaderStyle>
-                                        <Style TargetType="DataGridColumnHeader">
-                                            <Setter Property="HorizontalContentAlignment" Value="Center"/>
-                                            <Setter Property="VerticalContentAlignment" Value="Center"/>
-                                        </Style>
-                                    </DataGridTemplateColumn.HeaderStyle>
-                                    <DataGridTemplateColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <TextBox Name="ack_TextBox" Text="{Binding 应答}" TextChanged="ack_TextBox_TextChanged"></TextBox>
-                                        </DataTemplate>
-                                    </DataGridTemplateColumn.CellTemplate>
-                                </DataGridTemplateColumn>-->
                                     <DataGridTextColumn Header="应答" CanUserResize="False" Width="60" Binding="{Binding 应答}">
                                         <DataGridTextColumn.HeaderStyle>
                                             <Style TargetType="DataGridColumnHeader">
@@ -1632,19 +1619,6 @@
                                             </Style>
                                         </DataGridTextColumn.CellStyle>
                                     </DataGridTextColumn>
-                                    <!--<DataGridTemplateColumn Header="延时" Width="40">
-                                    <DataGridTemplateColumn.HeaderStyle>
-                                        <Style TargetType="DataGridColumnHeader">
-                                            <Setter Property="HorizontalContentAlignment" Value="Center"/>
-                                            <Setter Property="VerticalContentAlignment" Value="Center"/>
-                                        </Style>
-                                    </DataGridTemplateColumn.HeaderStyle>
-                                    <DataGridTemplateColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <TextBox Name="delay_TextBox" Text="{Binding 延时}" TextChanged="delay_TextBox_TextChanged"></TextBox>
-                                        </DataTemplate>
-                                    </DataGridTemplateColumn.CellTemplate>
-                                </DataGridTemplateColumn>-->
 
                                     <DataGridTextColumn Header="延时[ms]" CanUserResize="False" Width="60" Binding="{Binding 延时}">
                                         <DataGridTextColumn.HeaderStyle>
@@ -1663,20 +1637,6 @@
                                             </Style>
                                         </DataGridTextColumn.CellStyle>
                                     </DataGridTextColumn>
-
-                                    <!--<DataGridTemplateColumn Header="AT指令" Width="*">
-                                    <DataGridTemplateColumn.HeaderStyle>
-                                        <Style TargetType="DataGridColumnHeader">
-                                            <Setter Property="HorizontalContentAlignment" Value="Center"/>
-                                            <Setter Property="VerticalContentAlignment" Value="Center"/>
-                                        </Style>
-                                    </DataGridTemplateColumn.HeaderStyle>
-                                    <DataGridTemplateColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <TextBox Name="AtCmd_TextBox" Text="{Binding AT指令}"></TextBox>
-                                        </DataTemplate>
-                                    </DataGridTemplateColumn.CellTemplate>
-                                </DataGridTemplateColumn>-->
 
                                     <DataGridTextColumn Header="AT指令" Width="*" Binding="{Binding AT指令}">
                                         <DataGridTextColumn.CellStyle>

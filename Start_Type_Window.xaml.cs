@@ -71,6 +71,7 @@ namespace WIoTa_Serial_Tool
                 case 1:
 
                     AtCmdList = Get_Sync_Iote_Cmd();
+                  
                     ButtonClicked?.Invoke(this, new ButtonClickedEventArgs(AtCmdList));
                     break;
                 case 2:
@@ -718,7 +719,7 @@ namespace WIoTa_Serial_Tool
                 bselectedValue = setFreqCheckBox[i].IsChecked ?? false;
                 writeXml(xmlDoc, root, bselectedValue.ToString(), $"freqidx_WIoTa{i + 1}");
             }
-            TextBox[] FreqIdxTextBox = { FreqIdxTextBox1, FreqIdxTextBox1, FreqIdxTextBox1 };
+            TextBox[] FreqIdxTextBox = { FreqIdxTextBox1, FreqIdxTextBox2, FreqIdxTextBox3 };
             for (int i = 0; i < 3; i++)
             {
                 selectedValue = FreqIdxTextBox[i].Text;
@@ -735,7 +736,7 @@ namespace WIoTa_Serial_Tool
             selectedValue = textBox_dcxo2.Text;
             writeXml(xmlDoc, root, selectedValue, "dcxoValue_WIoTa2");
 
-            selectedValue = textBox_dcxo2.Text;
+            selectedValue = textBox_dcxo3.Text;
             writeXml(xmlDoc, root, selectedValue, "dcxoValue_WIoTa3");
 
             //设置userid

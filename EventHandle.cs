@@ -10,8 +10,6 @@ using System.Windows.Input;
 using NoteWindow;
 using SerialPortExample;
 using System.Text;
-using NPOI.SS.UserModel;
-using NPOI.XSSF.UserModel;
 using System.Configuration;
 using System.Runtime.InteropServices;
 
@@ -704,20 +702,18 @@ namespace WIoTa_Serial_Tool
             saveDataGrid(TabName, tabIndex);
         }
 
-        private void saveDataGrid(string TabName,int Tabindex)
+        private void saveDataGrid(string TabName, int Tabindex)
         {
-            IWorkbook workbook;
-            workbook = new XSSFWorkbook();
             ComboBox[] ATCmdComBox = { ATCmdComBox1, ATCmdComBox2, ATCmdComBox3 };
             var selectedItem = ATCmdComBox[Tabindex].SelectedItem as ComboBoxItem;
-            //int tabIndex = GridTab.SelectedIndex;
-            if (sheets == null)
+            if (Tabindex == -1)
                 return;
             if (selectedItem != null)
             {
-                var sheetName = selectedItem.Content;
                 int itemNum = ATCmdComBox[Tabindex].SelectedIndex;
-                WriteExcel(workbook, sheets, $".//config//{TabName}.xlsx", (string)sheetName, itemNum, Tabindex, DataTemp);
+                string databasePath = $".//config//{TabName}.db";
+                CreateSQLiteTable(databasePath, $"sheet{itemNum}", Tabindex);
+                InsertDataToSQLite(databasePath, $"sheet{itemNum}", DataTemp, Tabindex);
             }
         }
 
@@ -821,7 +817,7 @@ namespace WIoTa_Serial_Tool
             // 更新所有行的行号和发送按钮文本
             for (int i = 0; i < DataTemp.Count; i++)
             {
-                DataTemp[i].Index = i + 1;
+                DataTemp[i].NumCol = i + 1;
                 DataTemp[i].发送 = $"发送按钮{i + 1}";
             }
            
@@ -893,11 +889,11 @@ namespace WIoTa_Serial_Tool
 
         private void UpdateGrid(int insertIndex)
         {
-            DataTemp.Insert(insertIndex, new GridDataTemp { Index = insertIndex, Hex = false, 应答 = "OK", 延时 = "1000", AT指令 = $"AT", 发送 = $"发送按钮{insertIndex}" });
+            DataTemp.Insert(insertIndex, new GridDataTemp { NumCol = insertIndex, Hex = false, 应答 = "OK", 延时 = "1000", AT指令 = $"AT", 发送 = $"发送按钮{insertIndex}" });
             // 更新所有行的行号和发送按钮文本
             for (int i = 0; i < DataTemp.Count; i++)
             {
-                DataTemp[i].Index = i + 1;
+                DataTemp[i].NumCol = i + 1;
                 //DataTemp[i].发送 = $"发送按钮{i + 1}";
             }
             // 重新设置 DataContext，以便数据绑定更新界面
@@ -986,14 +982,11 @@ namespace WIoTa_Serial_Tool
            
             string TabName = (GridTab.SelectedItem as TabItem)?.Header.ToString();
             ComboBox[] ATCmdComBox = { ATCmdComBox1, ATCmdComBox2, ATCmdComBox3 };
-            //保存上一个，加载下一个
+            
             if (tabIndex == -1)
             {
                 return;
-            }
-            var selectedItem = ATCmdComBox[tabIndex].SelectedItem as ComboBoxItem;
-            var sheetName = selectedItem.Content;
-
+            }     
             if (DataTemp != null)
             {
                 saveDataGrid(NowTabName, NextIndex);
@@ -1003,23 +996,17 @@ namespace WIoTa_Serial_Tool
                 //启动的时候为空
                 return;
             }
-
+            int sheet_index = ATCmdComBox[tabIndex].SelectedIndex;
             NowTabName = TabName;
             NextIndex = tabIndex;
-            string filePath = $".//config//{TabName}.xlsx";
-
-            if (File.Exists(filePath))
-            {
-                DataTemp.Clear();
-                DataTemp = ReadExcel(filePath, (string)sheetName, tabIndex);
-                DataContext = DataTemp;
-            }
-            else
+ 
+            string filePath = $".//config//{TabName}.db";
+            if (!ReadSqlData(filePath, sheet_index, tabIndex))
             {
                 DataTemp.Clear();
                 for (int i = 1; i <= 60; i++)
                 {
-                    DataTemp.Add(new GridDataTemp { Index = i, Hex = false, 应答 = "OK", 延时 = "1000", AT指令 = "AT", 发送 = $"发送按钮{i}" });
+                    DataTemp.Add(new GridDataTemp { NumCol = i, Hex = false, 延时 = "1000", 应答 = "OK", AT指令 = "AT", 发送 = $"发送按钮{i}" });
                 }
                 DataContext = DataTemp;
             }
@@ -1027,55 +1014,30 @@ namespace WIoTa_Serial_Tool
 
         private void LoadGridData_From_Excel()
         {
-            // 处理ComboBox内容更改事件
-            // 获取当前选中的 TabItem
             var selectedTab = GridTab.SelectedItem as TabItem;
             int tabIndex = GridTab.SelectedIndex;
             ComboBox[] ATCmdComBox = { ATCmdComBox1, ATCmdComBox2, ATCmdComBox3 };
-            // 如果存在选中的 TabItem，则获取其标题内容
             if (selectedTab != null)
             {
-                var title = selectedTab.Header.ToString();
+                var tab_Name = selectedTab.Header.ToString();
                 var selectedItem = ATCmdComBox[tabIndex].SelectedItem as ComboBoxItem;
                 if (selectedItem == null)
                     return;
                 var sheetName = selectedItem.Content;
+                int sheet_index = ATCmdComBox[tabIndex].SelectedIndex;
                 if (sheetName != null)
                 {
                     DataTemp.Clear();
-                    DataTemp = ReadExcel($".//config//{title}.xlsx", (string)sheetName, tabIndex);
-                    if (DataTemp.Count > 0)
-                    { 
-                        DataContext = DataTemp; 
-                    }
-                    else
+                    string filePath = $".//config//{tab_Name}.db";
+                    if (!ReadSqlData(filePath, sheet_index, tabIndex))
                     {
-                        if (tabIndex == 0)
+                        DataTemp.Clear();
+                        for (int i = 1; i <= 60; i++)
                         {
-                            for (int i = 1; i <= 60; i++)
-                            {
-                                DataTemp.Add(new GridDataTemp { Index = i, Hex = false, AT指令 = "AT", 发送 = $"发送按钮{i}" });
-                            }
-                            DataContext = DataTemp;
+                            DataTemp.Add(new GridDataTemp { NumCol = i, Hex = false, 延时 = "1000", 应答 = "OK", AT指令 = "AT", 发送 = $"发送按钮{i}" });
                         }
-                        if (tabIndex == 1)
-                        {
-                            for (int i = 1; i <= 60; i++)
-                            {
-                                DataTemp.Add(new GridDataTemp { Index = i, Hex = false, 延时 = "1000", AT指令 = "AT", 发送 = $"发送按钮{i}" });
-                            }
-                            DataContext = DataTemp;
-                        }
-                        if (tabIndex == 2)
-                        {
-                            for (int i = 1; i <= 60; i++)
-                            {
-                                DataTemp.Add(new GridDataTemp { Index = i, Hex = false, 延时 = "1000", 应答 = "OK", AT指令 = "AT", 发送 = $"发送按钮{i}" });
-                            }
-                            DataContext = DataTemp;
-                        }
-                       
-                    }      
+                        DataContext = DataTemp;
+                    }
                 }
             }
         }
@@ -1083,19 +1045,20 @@ namespace WIoTa_Serial_Tool
         {
             int tabIndex = GridTab.SelectedIndex;
             string TabName = (GridTab.SelectedItem as TabItem)?.Header.ToString();
+            ComboBox[] ATCmdComBox = { ATCmdComBox1, ATCmdComBox2, ATCmdComBox3 };
             if (tabIndex == -1)
                 return;
-            IWorkbook workbook;
-            workbook = new XSSFWorkbook();
-            ComboBox[] ATCmdComBox = { ATCmdComBox1, ATCmdComBox2, ATCmdComBox3 };
-            if (sheets == null)
-                return;
-            string sheetName = ATCmdComBox[tabIndex].Text;
-            if (sheetName != null)
+            var selectedItem = ATCmdComBox[tabIndex].SelectedItem as ComboBoxItem;
+            if (selectedItem != null)
             {
+                
                 int itemNum = ATCmdComBox[tabIndex].SelectedIndex;
-                WriteExcel(workbook, sheets, $".//config//{TabName}.xlsx", sheetName, itemNum, tabIndex, DataTemp);
+                string databasePath = $".//config//{TabName}.db";
+                CreateSQLiteTable(databasePath, $"sheet{NextIndexChild}", tabIndex);
+                InsertDataToSQLite(databasePath, $"sheet{NextIndexChild}", DataTemp, tabIndex);
+                NextIndexChild = itemNum;
             }
+            
             LoadGridData_From_Excel();
         }
 

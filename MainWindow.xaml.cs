@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows;
-using NPOI.SS.UserModel;
 using System.Configuration;
 using SerialPortExample;
 using System.ComponentModel;
@@ -26,15 +25,9 @@ namespace WIoTa_Serial_Tool
         private Start_Type_Window Start_Window; // 声明窗口实例变量
         private string logFileName;
         private List<GridDataTemp> DataTemp;
-
-       // private IWorkbook workbook;
-        private ISheet[] sheets;
         private SerialPortManager[] mySerial = new SerialPortManager[8];
         private Thread loopSendThread;
         private LoopSendPara parameters;
-        private StartSendPara startPara;
-        private StartSendPara AutoAckPara;
-        private StartSendPara MulitPara;
         private MyWindow NoteWindow;
         private Thread loopTimeSendThread;
         private Thread startSendThread;
@@ -54,67 +47,82 @@ namespace WIoTa_Serial_Tool
         private int portNum = 0;
         string NowTabName;
         int NextIndex;
-        private List<bool> isRunning_start = new List<bool> { true, true, true, true, true, true, true, true};
+        int NextIndexChild;
+        private List<bool> isRunning_start = new List<bool> { false, false, false, false, false, false, false, false };
         private bool isRunning_ack = true; //自动应答标志位
         private bool isRunning_mulit = true; //批量发送标志位
         private List<bool> isRunning_loopsend = new List<bool> { true, true, true, true, true, true, true, true };
         private List<bool> isRunning_looptimer = new List<bool> { true, true, true, true, true, true, true, true };
-        private DispatcherTimer clockTimer = new DispatcherTimer();
-
-        //[DllImport("MFCLibrarySerial.dll", EntryPoint = "Opne_serial", CharSet = CharSet.Ansi)]
-        // public static extern bool Opne_serial(string portName,int baud);
 
         public MainWindow()
         {
             InitializeComponent();
-            this.SizeChanged += MainWindow_LocationChanged;
+          
             TextBox[] recvDataTextBox = { recvDataRichTextBox1, recvDataRichTextBox2, recvDataRichTextBox3, recvDataRichTextBox4, recvDataRichTextBox5, recvDataRichTextBox6, recvDataRichTextBox7, recvDataRichTextBox8 };
             for (int k = 0; k < 8; k++)
             {
                 recvDataTextBox[k].UndoLimit = 0;
             }
-    
             DisplayPort();
-            //这个位置有错误风险
-            int itemCount = ATCmdComBox1.Items.Count;
-            sheets = new ISheet[itemCount];
 
             DataTemp = new List<GridDataTemp>();
             if (!ReadDataGrid())
             {
                 for (int i = 1; i <= 60; i++)
                 {
-                    DataTemp.Add(new GridDataTemp { Index = i, Hex = false, 应答 = "OK", 延时 = "1000", AT指令 = "AT", 发送 = $"发送按钮{i}" });
-                }
+                    DataTemp.Add(new GridDataTemp { NumCol = i, Hex = false, 应答 = "OK", 延时 = "1000", AT指令 = "AT", 发送 = $"发送按钮{i}" });
+                }            
             }
-           
             DataContext = DataTemp;
             ReadAppConfig();
-            //recvDataRichTextBox.ScrollToEnd();
+            this.SizeChanged += MainWindow_LocationChanged;
         }
 
         private bool ReadDataGrid()
         {
+
             string readValue = ConfigurationManager.AppSettings["tab_Index"];
             int tab_index = Convert.ToInt32(readValue);
             string tab_Name = ConfigurationManager.AppSettings["tab_Name"];
-            string tabComboBox_Name = ConfigurationManager.AppSettings[$"tabComboBox_Name{tab_index + 1}"];
-            string filePath = $".//config//{tab_Name}.xlsx";
+            readValue = ConfigurationManager.AppSettings[$"tabComboBox_Index{tab_index + 1}"];
+            int sheet_index = Convert.ToInt32(readValue);
+            ComboBox[] ATCmdComBox = { ATCmdComBox1, ATCmdComBox2, ATCmdComBox3 };
             NowTabName = tab_Name;
             NextIndex = tab_index;
-            if (File.Exists(filePath))
+            NextIndexChild = sheet_index;
+            string filePath = $".//config//{tab_Name}.db";
+            if (ReadSqlData(filePath, sheet_index, tab_index))
             {
-                DataTemp.Clear();
-                
-                DataTemp = ReadExcel(filePath, tabComboBox_Name, tab_index);
-                DataContext = DataTemp;
                 return true;
             }
             else
             {
                 return false;
             }
-           
+        }
+
+        private bool ReadSqlData(string filePath, int sheet_index, int tab_index)
+        {
+            if (File.Exists(filePath))
+            {
+                DataTemp.Clear();
+                DataTemp = ReadDataFromSQLite(filePath, $"sheet{sheet_index}", tab_index);
+                if (DataTemp.Count == 0)
+                {
+                    return false;
+                }
+                else
+                {
+                    DataContext = DataTemp;
+                    return true;
+                }
+
+            }
+            else
+            {
+               // MessageBox.Show($"{filePath}:不存在！");
+                return false;
+            }
         }
 
         private void Button_Opinion_Click(object sender, RoutedEventArgs e)
@@ -233,14 +241,12 @@ namespace WIoTa_Serial_Tool
             {
                 Start_Window.Close();
             }
-            //这里需要判断每一个然后进行关闭
-            //mySerial[0].CloseThread();
-           // mySerial[0].block_falg = false;
+
             SaveConfig();
             string TabName = (GridTab.SelectedItem as TabItem)?.Header.ToString();
             int tabIndex = GridTab.SelectedIndex;
-            saveDataGrid(TabName, tabIndex);
-
+          
+           saveDataGrid(TabName, tabIndex);
             for (int i = 0; i < 8; i++)
             {
                 isRunning_start[i] = false;
@@ -532,18 +538,24 @@ namespace WIoTa_Serial_Tool
             // 处理事件的逻辑放在这里，可以使用接收到的字符串列表：e.StringList
             // port_num
             int port_num = PortTab.SelectedIndex;
+            StartSendPara startPara;
             if (OpenSerial_Clicked_Send())
             {
-                startSendThread = new Thread(new ParameterizedThreadStart(StartSendThread_func));
-                startPara = new StartSendPara();
-                startPara.PortNum = port_num;
-                startPara.mySerial = mySerial[port_num];
-               
-                startPara.StringList = e.StringList;
-                isRunning_start[port_num] = true;
-                mySerial[port_num].isRunWiota = true;
+                if (!isRunning_start[port_num])
+                {
+                    startSendThread = new Thread(new ParameterizedThreadStart(StartSendThread_func));
+                    startPara = new StartSendPara();
+                    startPara.PortNum = port_num;
+                    startPara.mySerial = mySerial[port_num];
 
-                startSendThread.Start(startPara);
+                    startPara.StringList = e.StringList;
+                    isRunning_start[port_num] = true;
+                    mySerial[port_num].isRunWiota = true;
+
+                    startSendThread.Start(startPara);
+                }
+                startSendThread = null;
+                startPara = null;
             }
             else
             {
@@ -566,6 +578,8 @@ namespace WIoTa_Serial_Tool
             string At_cmd = "";
             foreach (string AtCmd in AtCmdList)
             {
+                //Console.WriteLine(AtCmd);
+               
                 if (!isRunning_start[port_num])
                 {
                     break;
@@ -593,15 +607,17 @@ namespace WIoTa_Serial_Tool
                     }
                     mySerial.block_falg = true;
                 }
-               
+                Thread.Sleep(100);
             }
             mySerial.isRunWiota = false;
+            isRunning_start[port_num] = false;
         }
 
         private void MulitSendCheckBox_Click(object sender, RoutedEventArgs e)
         {
             int tabIndex = GridTab.SelectedIndex;
             int port_num = PortTab.SelectedIndex;
+            StartSendPara MulitPara;
             if (MulitSendCheckBox.IsChecked ?? false)
             {
                 if (OpenSerial_Clicked_Send())
@@ -615,7 +631,6 @@ namespace WIoTa_Serial_Tool
                     //开启自动批量发送
                     isRunning_mulit = true;
                     mulitSendThread.Start(MulitPara);
-
                 }
                 else
                 {
@@ -686,6 +701,7 @@ namespace WIoTa_Serial_Tool
         {
             int tabIndex = GridTab.SelectedIndex;
             int port_num = PortTab.SelectedIndex;
+            StartSendPara AutoAckPara;
             if (AutoAckCheckBox.IsChecked??false)
             {
                
@@ -802,7 +818,7 @@ namespace WIoTa_Serial_Tool
 
     public class GridDataTemp
     {
-        public int Index { get; set; }
+        public int NumCol { get; set; }
         public bool Hex { get; set; }
         public string 延时 { get; set; }
         public string 应答 { get; set; }

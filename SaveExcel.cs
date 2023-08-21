@@ -2,357 +2,158 @@
 //using System.Threading.Tasks;
 using System.Windows;
 
-using NPOI.HSSF.UserModel;
-using NPOI.SS.UserModel;
-using NPOI.XSSF.UserModel;
 using System.IO;
 using System.Collections.Generic;
-
+using System.Data.SQLite;
 namespace WIoTa_Serial_Tool
 {
     public partial class MainWindow : Window
     {
-        // 将数据写入Excel文件
-
-        public static IWorkbook CreateWorkbook(string filePath)
+        public static void CreateSQLiteTable(string databasePath, string tableName, int tab_index)
         {
-            try
+            string connectionString = $"Data Source={databasePath};Version=3;";
+
+            using (SQLiteConnection connection = new SQLiteConnection(connectionString))
             {
-                if (File.Exists(filePath))
-                {
-                    // 如果文件已经存在，则直接打开并返回工作簿对象
-                    using (FileStream fs = new FileStream(filePath, FileMode.Open, FileAccess.Read))
-                    {
-                        if (Path.GetExtension(filePath) == ".xls")
-                        {
-                            return new HSSFWorkbook(fs);
-                        }
-                        else if (Path.GetExtension(filePath) == ".xlsx")
-                        {
-                            return new XSSFWorkbook(fs);
-                        }
-                        else
-                        {
-                            throw new Exception("不支持的文件格式");
-                        }
-                    }
-                }
-                else
-                {
-                    // 如果文件不存在，则创建一个新的工作簿对象并返回
-                    if (Path.GetExtension(filePath) == ".xls")
-                    {
-                        return new HSSFWorkbook();
-                    }
-                    else if (Path.GetExtension(filePath) == ".xlsx")
-                    {
-                        return new XSSFWorkbook();
-                    }
-                    else
-                    {
-                        throw new Exception("不支持的文件格式");
-                    }
-                }
-            }
-            catch (IOException ex)
-            {
-                MessageBox.Show($"{ex.Message}", "提示");
-                throw new Exception("文件打开失败！");
-            }
-        }
+                connection.Open();
 
-        public static bool IsSheetNameExists(IWorkbook workbook, string sheetName)
-        {
-            for (int i = 0; i < workbook.NumberOfSheets; i++)
-            {
-                if (workbook.GetSheetName(i) == sheetName)
-                {
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
-        public static int IsSheetNameItemNum(IWorkbook workbook, string sheetName)
-        {
-            for (int i = 0; i < workbook.NumberOfSheets; i++)
-            {
-                if (workbook.GetSheetName(i) == sheetName)
-                {
-                    return i;
-                }
-            }
-
-            return 0;
-        }
-
-        public static void WriteExcel(IWorkbook workbook, ISheet[] sheets, string filePath, string sheetName, int sheetNum, int tab_index, List<GridDataTemp> DataTemp)
-        {
-            workbook = CreateWorkbook(filePath);
-
-            sheets[sheetNum] = !IsSheetNameExists(workbook, sheetName) ? workbook.CreateSheet(sheetName) : workbook.GetSheet(sheetName);
-
-            for (int i = 0; i < DataTemp.Count; i++)
-            {
-
-                IRow row = sheets[sheetNum].CreateRow(i);
+                string createTableQuery = "";
                 switch (tab_index)
                 {
                     case 0:
-                        row.CreateCell(0).SetCellValue(DataTemp[i].Index);
-                        row.CreateCell(1).SetCellValue(DataTemp[i].Hex);
-                        row.CreateCell(2).SetCellValue(DataTemp[i].AT指令);
-                        row.CreateCell(3).SetCellValue(DataTemp[i].发送);
+                        createTableQuery = $"CREATE TABLE IF NOT EXISTS {tableName} (NumCol INTEGER, Hex INTEGER, AT指令 TEXT, 发送 TEXT)";
                         break;
                     case 1:
-                        
-                        row.CreateCell(0).SetCellValue(DataTemp[i].Index);
-                        row.CreateCell(1).SetCellValue(DataTemp[i].Hex);
-                        row.CreateCell(2).SetCellValue(DataTemp[i].延时);
-                        row.CreateCell(3).SetCellValue(DataTemp[i].AT指令);
-                        row.CreateCell(4).SetCellValue(DataTemp[i].发送);
+                        createTableQuery = $"CREATE TABLE IF NOT EXISTS {tableName} (NumCol INTEGER, Hex INTEGER, 延时 TEXT, AT指令 TEXT, 发送 TEXT)";
                         break;
                     case 2:
-                        row.CreateCell(0).SetCellValue(DataTemp[i].Index);
-                        row.CreateCell(1).SetCellValue(DataTemp[i].Hex);
-                        row.CreateCell(2).SetCellValue(DataTemp[i].应答);
-                        row.CreateCell(3).SetCellValue(DataTemp[i].延时);
-                        row.CreateCell(4).SetCellValue(DataTemp[i].AT指令);
-                        row.CreateCell(5).SetCellValue(DataTemp[i].发送);
-                        break;
-                    default:
-                        row.CreateCell(0).SetCellValue(DataTemp[i].Index);
-                        row.CreateCell(1).SetCellValue(DataTemp[i].Hex);
-                        row.CreateCell(2).SetCellValue(DataTemp[i].AT指令);
-                        row.CreateCell(3).SetCellValue(DataTemp[i].发送);
+                        createTableQuery = $"CREATE TABLE IF NOT EXISTS {tableName} (NumCol INTEGER, Hex INTEGER, 延时 TEXT, 应答 TEXT, AT指令 TEXT, 发送 TEXT)";
                         break;
                 }
-
-
-                // 创建一个单元格样式对象
-                ICellStyle cellStyle = workbook.CreateCellStyle();
-                cellStyle.Alignment = NPOI.SS.UserModel.HorizontalAlignment.Center; // 设置水平居中对齐
-
-                //// 设置边框样式为实线
-                //cellStyle.BorderTop = BorderStyle.Thin;
-                //cellStyle.BorderBottom = BorderStyle.Thin;
-                //cellStyle.BorderLeft = BorderStyle.Thin;
-                //cellStyle.BorderRight = BorderStyle.Thin;
-
-                // 将样式应用于单元格
-                row.GetCell(0).CellStyle = cellStyle;
-                row.GetCell(1).CellStyle = cellStyle;
-                row.GetCell(2).CellStyle = cellStyle;
-                row.GetCell(3).CellStyle = cellStyle;
-            }
-
-            try
-            {
-                using (FileStream fileStream = new FileStream(filePath, FileMode.Create, FileAccess.Write))
+                using (SQLiteCommand createTableCommand = new SQLiteCommand(createTableQuery, connection))
                 {
-                    workbook.Write(fileStream);
+                    createTableCommand.ExecuteNonQuery();
                 }
-                workbook.Close();
-            }
-            catch (IOException ex)
-            {
-                MessageBox.Show($"{ex.Message}", "提示");
-                workbook.Close();
             }
         }
 
-        //public static void WriteExcel(IWorkbook workbook, ISheet[] sheets, string filePath, string sheetName, int sheetNum, int tab_index, List<GridDataTemp> DataTemp)
-        //{
-        //    // Check if workbook already exists
-        //    if (workbook == null)
-        //        workbook = CreateWorkbook(filePath);
-
-        //    // Get or create the sheet
-        //    ISheet sheet;
-        //    if (!IsSheetNameExists(workbook, sheetName))
-        //    {
-        //        sheet = workbook.CreateSheet(sheetName);
-        //        sheets[sheetNum] = sheet;
-        //    }
-        //    else
-        //    {
-        //        sheet = workbook.GetSheet(sheetName);
-        //    }
-
-        //    // Clear existing rows in the sheet
-        //    while (sheet.LastRowNum > 0)
-        //    {
-        //        sheet.RemoveRow(sheet.GetRow(sheet.LastRowNum));
-        //    }
-
-        //    for (int i = 0; i < DataTemp.Count; i++)
-        //    {
-        //        IRow row = sheet.CreateRow(i);
-        //        switch (tab_index)
-        //        {
-        //            case 0:
-        //                row.CreateCell(0).SetCellValue(DataTemp[i].Index);
-        //                row.CreateCell(1).SetCellValue(DataTemp[i].Hex);
-        //                row.CreateCell(2).SetCellValue(DataTemp[i].AT指令);
-        //                row.CreateCell(3).SetCellValue(DataTemp[i].发送);
-        //                break;
-        //            case 1:
-        //                row.CreateCell(0).SetCellValue(DataTemp[i].Index);
-        //                row.CreateCell(1).SetCellValue(DataTemp[i].Hex);
-        //                row.CreateCell(2).SetCellValue(DataTemp[i].延时);
-        //                row.CreateCell(3).SetCellValue(DataTemp[i].AT指令);
-        //                row.CreateCell(4).SetCellValue(DataTemp[i].发送);
-        //                break;
-        //            case 2:
-        //                row.CreateCell(0).SetCellValue(DataTemp[i].Index);
-        //                row.CreateCell(1).SetCellValue(DataTemp[i].Hex);
-        //                row.CreateCell(2).SetCellValue(DataTemp[i].应答);
-        //                row.CreateCell(3).SetCellValue(DataTemp[i].延时);
-        //                row.CreateCell(4).SetCellValue(DataTemp[i].AT指令);
-        //                row.CreateCell(5).SetCellValue(DataTemp[i].发送);
-        //                break;
-        //            default:
-        //                row.CreateCell(0).SetCellValue(DataTemp[i].Index);
-        //                row.CreateCell(1).SetCellValue(DataTemp[i].Hex);
-        //                row.CreateCell(2).SetCellValue(DataTemp[i].AT指令);
-        //                row.CreateCell(3).SetCellValue(DataTemp[i].发送);
-        //                break;
-        //        }
-
-        //        // Create a cell style object
-        //        ICellStyle cellStyle = workbook.CreateCellStyle();
-        //        cellStyle.Alignment = NPOI.SS.UserModel.HorizontalAlignment.Center; // Set horizontal alignment to center
-
-        //        // Apply the style to the cells
-        //        row.GetCell(0).CellStyle = cellStyle;
-        //        row.GetCell(1).CellStyle = cellStyle;
-        //        row.GetCell(2).CellStyle = cellStyle;
-        //        row.GetCell(3).CellStyle = cellStyle;
-        //    }
-
-        //    try
-        //    {
-        //        using (FileStream fileStream = new FileStream(filePath, FileMode.Create, FileAccess.Write))
-        //        {
-        //            workbook.Write(fileStream);
-        //        }
-        //    }
-        //    catch (IOException ex)
-        //    {
-        //        MessageBox.Show($"{ex.Message}", "提示");
-        //    }
-        //    finally
-        //    {
-        //        // Close the workbook
-        //        workbook.Close();
-        //    }
-        //}
-
-
-        //读取EXCEL数据
-        public static List<GridDataTemp> ReadExcel(string filePath,string sheetName,int tab_index)
+        public static void InsertDataToSQLite(string databasePath, string tableName, List<GridDataTemp> data, int tab_index)
         {
-            List<GridDataTemp> DataTemp = new List<GridDataTemp>();
-            IWorkbook workbook;
+            string connectionString = $"Data Source={databasePath};Version=3;";
+
+            using (SQLiteConnection connection = new SQLiteConnection(connectionString))
+            {
+                connection.Open();
+
+                // 清空表格
+                string deleteQuery = $"DELETE FROM {tableName}";
+                using (SQLiteCommand deleteCommand = new SQLiteCommand(deleteQuery, connection))
+                {
+                    deleteCommand.ExecuteNonQuery();
+                }
+
+                string insertQuery = "";
+                switch (tab_index)
+                {
+                    case 0:
+                        insertQuery = $"INSERT INTO {tableName} (NumCol, Hex, AT指令, 发送) VALUES (@NumCol, @Hex, @AT指令, @发送)";
+                        break;
+                    case 1:
+                        insertQuery = $"INSERT INTO {tableName} (NumCol, Hex, 延时, AT指令, 发送) VALUES (@NumCol, @Hex, @延时, @AT指令, @发送)";
+                        break;
+                    case 2:
+                        insertQuery = $"INSERT INTO {tableName} (NumCol, Hex, 延时, 应答, AT指令, 发送) VALUES (@NumCol, @Hex, @延时, @应答, @AT指令, @发送)";
+                        break;
+                }
+
+                using (SQLiteCommand insertCommand = new SQLiteCommand(insertQuery, connection))
+                {
+                    foreach (GridDataTemp item in data)
+                    {
+                        insertCommand.Parameters.AddWithValue("@NumCol", item.NumCol);
+                        insertCommand.Parameters.AddWithValue("@Hex", item.Hex ? 1 : 0);
+
+                        if (tab_index == 0)
+                        {
+                            insertCommand.Parameters.AddWithValue("@AT指令", item.AT指令);
+                            insertCommand.Parameters.AddWithValue("@发送", item.发送);
+                        }
+                        else if (tab_index == 1)
+                        {
+                            insertCommand.Parameters.AddWithValue("@延时", item.延时);
+                            insertCommand.Parameters.AddWithValue("@AT指令", item.AT指令);
+                            insertCommand.Parameters.AddWithValue("@发送", item.发送);
+                        }
+                        else if (tab_index == 2)
+                        {
+                            insertCommand.Parameters.AddWithValue("@延时", item.延时);
+                            insertCommand.Parameters.AddWithValue("@应答", item.应答);
+                            insertCommand.Parameters.AddWithValue("@AT指令", item.AT指令);
+                            insertCommand.Parameters.AddWithValue("@发送", item.发送);
+                        }
+
+                        insertCommand.ExecuteNonQuery();
+
+                        insertCommand.Parameters.Clear();
+                    }
+                }
+            }
+        }
+
+        public static List<GridDataTemp> ReadDataFromSQLite(string databasePath, string tableName, int tab_index)
+        {
+            List<GridDataTemp> data = new List<GridDataTemp>();
+
+            string connectionString = $"Data Source={databasePath};Version=3;";
             try
             {
-                using (FileStream fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read))
+                using (SQLiteConnection connection = new SQLiteConnection(connectionString))
                 {
-                    if (Path.GetExtension(filePath) == ".xls")
-                        workbook = new HSSFWorkbook(fileStream);
-                    else if (Path.GetExtension(filePath) == ".xlsx")
-                        workbook = new XSSFWorkbook(fileStream);
-                    else
-                        throw new Exception("不支持的文件格式");
+                    connection.Open();
+                    string selectQuery = $"SELECT * FROM {tableName}";
 
-                    //判断文件是sheet是否存在
-                    if (!IsSheetNameExists(workbook, sheetName))
+                    using (SQLiteCommand selectCommand = new SQLiteCommand(selectQuery, connection))
                     {
-                        ISheet sheets = workbook.CreateSheet(sheetName);
-
-                        MessageBox.Show($"配置表格中不存在,{sheetName},创建新的表格!");
-                        return DataTemp;//没有这个sheet就设置为空
-                    }
-
-                    ISheet sheet = workbook.GetSheetAt(IsSheetNameItemNum(workbook,sheetName));
-                    if (sheet.LastRowNum <=0)
-                    {
-                        DataTemp.Clear();
-                        for (int i = 1; i <= 60; i++)
+                        using (SQLiteDataReader reader = selectCommand.ExecuteReader())
                         {
-                            DataTemp.Add(new GridDataTemp { Index = i, Hex = false, 应答 = "OK", 延时 = "1000", AT指令 = "AT", 发送 = $"发送按钮{i}" });
-                        }
-                    }
-                    for (int i = 0; i <= sheet.LastRowNum; i++)
-                    {
-                        IRow row = sheet.GetRow(i);
-                        if (row != null)
-                        {
-                            switch (tab_index)
+                            while (reader.Read())
                             {
-                                case 0:
-                                    DataTemp.Add(new GridDataTemp
-                                    {
-                                        Index = Convert.ToInt32(row.GetCell(0).ToString()),
-                                        Hex = Convert.ToBoolean(row.GetCell(1).ToString()),
-                                        AT指令 = row.GetCell(2).ToString(),
-                                        发送 = row.GetCell(3).ToString()
-                                    });
-                                    break;
-                                case 1:
-                                    DataTemp.Add(new GridDataTemp
-                                    {
-                                        Index = Convert.ToInt32(row.GetCell(0).ToString()),
-                                        Hex = Convert.ToBoolean(row.GetCell(1).ToString()),
-                                        延时 = row.GetCell(2).ToString(),
-                                        AT指令 = row.GetCell(3).ToString(),
-                                        发送 = row.GetCell(4).ToString()
-                                    });
-                                    break;
+                                GridDataTemp item = new GridDataTemp();
+                                item.NumCol = reader.GetInt32(0);
+                                item.Hex = reader.GetInt32(1) == 1;
 
-                                case 2:
-                                    DataTemp.Add(new GridDataTemp
-                                    {
-                                        Index = Convert.ToInt32(row.GetCell(0).ToString()),
-                                        Hex = Convert.ToBoolean(row.GetCell(1).ToString()),
-                                        应答 = row.GetCell(2).ToString(),
-                                        延时 = row.GetCell(3).ToString(),
-                                        AT指令 = row.GetCell(4).ToString(),
-                                        发送 = row.GetCell(5).ToString()
-                                    });
-
-                                    break;
-                                default:
-                                    DataTemp.Add(new GridDataTemp
-                                    {
-                                        Index = Convert.ToInt32(row.GetCell(0).ToString()),
-                                        Hex = Convert.ToBoolean(row.GetCell(1).ToString()),
-                                        AT指令 = row.GetCell(2).ToString(),
-                                        发送 = row.GetCell(3).ToString()
-                                    });
-                                    break;
+                                if (tab_index == 0)
+                                {
+                                    item.AT指令 = reader.GetString(2);
+                                    item.发送 = reader.GetString(3);
+                                }
+                                else if (tab_index == 1)
+                                {
+                                    item.延时 = reader.GetString(2);
+                                    item.AT指令 = reader.GetString(3);
+                                    item.发送 = reader.GetString(4);
+                                }
+                                else if (tab_index == 2)
+                                {
+                                    item.延时 = reader.GetString(2);
+                                    item.应答 = reader.GetString(3);
+                                    item.AT指令 = reader.GetString(4);
+                                    item.发送 = reader.GetString(5);
+                                }
+                                data.Add(item);
                             }
                         }
-                      
                     }
-                  
                 }
-                workbook.Close();
-                return DataTemp;
+
+                return data;
             }
-            catch (Exception ex)
+            catch(SQLiteException)
             {
-                MessageBox.Show($"{ex.Message}");
-                return DataTemp;
-
+                return data;
             }
-           
+          
         }
+
     }
-
-    // 读取Excel文件
-
-
-   
 }
