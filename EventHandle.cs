@@ -387,13 +387,13 @@ namespace WIoTa_Serial_Tool
                     string timestamp = now.ToString("yyyy-MM-dd_HH_mm_ss_fff");
                     string exePath = System.Reflection.Assembly.GetExecutingAssembly().Location;
                     string exeFolderPath = Path.GetDirectoryName(exePath);
-                    logFileName = $"{exeFolderPath}\\log\\{portNumber}_{timestamp}.log";
-                    mySerial[port_num].logFileName = logFileName;
+                    logFileName[portNum] = $"{exeFolderPath}\\log\\{portNumber}_{timestamp}.log";
+                    mySerial[port_num].logFileName = logFileName[portNum];
                 }
                 else
                 {
-                    logFileName = null;//为空时不保存
-                    mySerial[port_num].logFileName = logFileName;
+                    logFileName[port_num] = null;//为空时不保存
+                    mySerial[port_num].logFileName = logFileName[portNum];
                 }
                 TabItem tabItem = PortTab.SelectedItem as TabItem;
                 tabItem.Header = portNumber;
@@ -625,33 +625,37 @@ namespace WIoTa_Serial_Tool
             CheckBox[] stampCheckBox = { stampCheckBox1, stampCheckBox2, stampCheckBox3, stampCheckBox4, stampCheckBox5, stampCheckBox6, stampCheckBox7, stampCheckBox8 };
             DateTime now = DateTime.Now;
             string timestamp = now.ToString("yyyy-MM-dd HH:mm:ss.fff");
+            
             //是否加时间戳
             if (stampCheckBox[portNum].IsChecked ?? false)
             {
                 recvDataRichTextBox[portNum].AppendText($"[{timestamp}] 发送->:{AtCmd}█\r");
                 recvDataRichTextBox[portNum].ScrollToEnd();
-                if (logFileName != null)
+                if (logFileName[portNum] != null)
                 {
                     // 打开日志文件，追加接收到的数据
-                    using (StreamWriter writer = new StreamWriter(logFileName, true))
-                    {
-                        writer.WriteLine($"[{timestamp}] 发送->:{AtCmd}█");
-                    }
+                    //lock (lockObject)
+                    //{
+                        using (StreamWriter writer = new StreamWriter(logFileName[portNum], true))
+                        {
+                            writer.WriteLine($"[{timestamp}] 发送->:{AtCmd}█");
+                        }
+                   // }
                 }
             }
             else
             {
-                //recvDataRichTextBox.AppendText(AtCmd+"\r");
                 if (logFileName != null)
                 {
-                    // 打开日志文件，追加接收到的数据
-                    using (StreamWriter writer = new StreamWriter(logFileName, true))
-                    {
-                        writer.WriteLine(AtCmd);
-                    }
+                    //lock (lockObject)
+                    //{
+                        using (StreamWriter writer = new StreamWriter(logFileName[portNum], true))
+                        {
+                            writer.WriteLine(AtCmd);
+                        }
+                    //}
                 }
             }
-            //mySerialWrite(AtCmd);
         }
 
         private void Button_Clear_RecvEdit_Click(object sender, RoutedEventArgs e)
@@ -1112,7 +1116,7 @@ namespace WIoTa_Serial_Tool
             TextBox[] Send_At_Edit = { Send_At_Edit1, Send_At_Edit2, Send_At_Edit3, Send_At_Edit4, Send_At_Edit5, Send_At_Edit6, Send_At_Edit7, Send_At_Edit8 };
             CheckBox[] enterCheckBox = { enterCheckBox1, enterCheckBox2, enterCheckBox3, enterCheckBox4, enterCheckBox5, enterCheckBox6, enterCheckBox7, enterCheckBox8 };
             CheckBox[] loopSendCheck = { loopSendCheck1, loopSendCheck2, loopSendCheck3, loopSendCheck4, loopSendCheck5, loopSendCheck6, loopSendCheck7, loopSendCheck8 };
-
+            
             // 在UI线程上下文中访问和获取UI控件的值
             
             this.Dispatcher.Invoke(new Action(() =>
@@ -1135,6 +1139,13 @@ namespace WIoTa_Serial_Tool
                     {
                         recvDataTextBox[portNum].AppendText($"=====开始第{i + 1}次发送=====\n\r");
                         recvDataTextBox[portNum].ScrollToEnd();
+                        if (logFileName[portNum] != null)
+                        {
+                            using (StreamWriter writer = new StreamWriter(logFileName[portNum], true))
+                            {
+                                writer.WriteLine($" ===== 开始第{ i + 1}次发送 =====\n\r");
+                            }
+                        }
                     }));
 
                     string AtCmd = string.Empty;
@@ -1152,7 +1163,7 @@ namespace WIoTa_Serial_Tool
                         Add_TimeStamp(AtCmd, portNum);
                     }));
                     mySerialWrite(portNum, AtCmd);
-                    //这里需要传参进来，否则放在委托事件中会导致界面假死
+
                     if (mySerial.isBlockSend)
                     {
                         mySerial.block_falg = true;
@@ -1172,21 +1183,25 @@ namespace WIoTa_Serial_Tool
                     }
                     Thread.Sleep(sleep_time);
                 }
+                //在UI线程上下文中更新UI控件
+          
             }
             catch (OverflowException)
             {
                 MessageBox.Show("输出数值超过最大值：2147483647", "警告");
             }
-            
-
-            //在UI线程上下文中更新UI控件
-            this.Dispatcher.Invoke(new Action(() =>
+            try
             {
-               // recvDataTextBox[portNum].AppendText($"=====循环发送结束=====\n\r");
-                loopSendCheck[portNum].IsChecked = false;
-                recvDataTextBox[portNum].ScrollToEnd();
-            }));
-
+                this.Dispatcher.Invoke(new Action(() =>
+                {
+                    loopSendCheck[portNum].IsChecked = false;
+                    recvDataTextBox[portNum].ScrollToEnd();
+                }));
+            }
+            catch(System.Threading.Tasks.TaskCanceledException)
+            {
+                return;
+            }
         }
 
         private void TimerSendCheckBox_Check(object sender, RoutedEventArgs e)

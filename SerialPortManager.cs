@@ -14,7 +14,7 @@ namespace SerialPortExample
         private const string DllName = "MFCLibrarySerial.dll"; // 替换为实际的DLL名称
 
         [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
- public static extern IntPtr readData(int index);
+        public static extern IntPtr readData(int index);
         [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
         public static extern void freeData(IntPtr pData);
         [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
@@ -51,7 +51,7 @@ namespace SerialPortExample
         private int lenCount = 0;
         public long recvCount = 0;
         public int portNum = 0;
-        
+        //private object lockObject = new object();
 
         public bool OpenPort(int index,string portName,int baud)
         {
@@ -151,7 +151,6 @@ namespace SerialPortExample
         private void ReceiveData()
         {
             string receivedData;
-          
             while (isReceiving)
             {
                 try
@@ -176,13 +175,13 @@ namespace SerialPortExample
                         {
                             if (isBlockSend)//期望值判断
                             {
-                                
                                 if (receivedData.Contains(expect_str) || receivedData.Contains("ERROR"))
                                 {
                                     block_falg = false;
                                 }
                                 else
                                 {
+                                    
                                     block_falg = true;
                                 }
                             }
@@ -210,55 +209,6 @@ namespace SerialPortExample
             }
         }
 
-        //private void PrintLog(string strRecv)
-        //{
-        //    lenCount += strRecv.Length;
-        //    recvCount += strRecv.Length;
-
-        //    DateTime now = DateTime.Now;
-        //    string timestamp = now.ToString("yyyy-MM-dd HH:mm:ss.fff");
-
-        //    StringBuilder stringBuilder = new StringBuilder();
-
-        //    if (isStamp)
-        //    {
-        //        stringBuilder.Append($"[{timestamp}] 接收<-" + strRecv + "\r");
-        //    }
-        //    else
-        //    {
-        //        stringBuilder.Append(strRecv);
-        //    }
-
-        //    SaveLogFile(logFileName, stringBuilder.ToString(), timestamp);
-
-        //    const int maxCacheSize = 200 * 1024; // 200KB
-        //    const int maxTotalCacheSize = 10 * 1024 * 1024; // 10MB
-
-        //    if (lenCount > maxCacheSize)
-        //    {
-        //        RecvEidt.Dispatcher.Invoke(new Action(() =>
-        //        {
-        //            RecvEidt.Clear();
-        //            RecvEidt.Text = "";
-        //            lenCount = 0;
-        //            stringBuilder.Clear(); // 清空stringBuilder的内容
-        //        }));
-        //    }
-
-        //    if (recvCount > maxTotalCacheSize)
-        //    {
-        //        recvCount = 0;
-        //    }
-
-        //    // 在循环内部进行UI更新
-        //    RecvEidt.Dispatcher.BeginInvoke(new Action(() =>
-        //    {
-        //        RecvEidt.AppendText(stringBuilder.ToString());
-        //        RecvEidt.ScrollToEnd();
-        //        stringBuilder.Clear(); // 清空stringBuilder的内容
-        //    }));
-        //}
-
         private void PrintLog(string strRecv)
         {
             lenCount += strRecv.Length;
@@ -271,14 +221,14 @@ namespace SerialPortExample
 
             if (isStamp)
             {
-                logMessage = $"[{timestamp}] 接收<-" + strRecv + "\r";
+                logMessage = $"[{timestamp}] 接收<-:" + strRecv + "\r\r\n";
             }
             else
             {
                 logMessage = strRecv;
             }
 
-            SaveLogFile(logFileName, logMessage, timestamp);
+            SaveLogFile(logFileName, logMessage);
 
             const int maxCacheSize = 200 * 1024; // 200KB
             const int maxTotalCacheSize = 10 * 1024 * 1024; // 10MB
@@ -315,24 +265,27 @@ namespace SerialPortExample
             }));
         }
 
-        private void SaveLogFile(string logFileName, string strLog, string timestamp)
+        private void SaveLogFile(string logFileName, string strLog)
         {
             if (logFileName != null)
             {
-               
-                // Open log file and append received data
-                using (StreamWriter writer = new StreamWriter(logFileName, true))
-                {
-                    writer.WriteLine($"[{timestamp}] 接收<- {strLog}");
-                }
 
-                FileInfo fileInfo = new FileInfo(logFileName);
-                if (fileInfo.Exists && fileInfo.Length > 10 * 1024 * 1024)
-                {
-                    // Backup log file with timestamp in filename
-                    string backupFileName = $".\\log\\{Path.GetFileNameWithoutExtension(logFileName)}_bak_{DateTime.Now:yyyyMMdd_HHmmss}{Path.GetExtension(logFileName)}";
-                    File.Move(logFileName, backupFileName);
-                }
+                // Open log file and append received data
+                //lock (lockObject)
+                //{
+                    using (StreamWriter writer = new StreamWriter(logFileName, true))
+                    {
+                        writer.WriteLine($"{strLog}");
+                    }
+
+                    FileInfo fileInfo = new FileInfo(logFileName);
+                    if (fileInfo.Exists && fileInfo.Length > 10 * 1024 * 1024)
+                    {
+                        // Backup log file with timestamp in filename
+                        string backupFileName = $".\\log\\{Path.GetFileNameWithoutExtension(logFileName)}_bak_{DateTime.Now:yyyyMMdd_HHmmss}{Path.GetExtension(logFileName)}";
+                        File.Move(logFileName, backupFileName);
+                    }
+               // }
             }
         }
     }

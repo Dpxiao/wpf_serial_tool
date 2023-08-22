@@ -9,7 +9,7 @@ using NoteWindow;
 using System.Windows.Controls;
 using System.IO;
 using System.Text.RegularExpressions;
-using System.Windows.Threading;
+using System.Linq;
 
 namespace WIoTa_Serial_Tool
 {
@@ -23,7 +23,12 @@ namespace WIoTa_Serial_Tool
         bool isChecked_at_grid_flag = false;
         double gridWidth;
         private Start_Type_Window Start_Window; // 声明窗口实例变量
-        private string logFileName;
+        private List<string> logFileName = new List<string> { "log1", "log2", "log3", "log4", "log5", "log6", "log7", "log8" };
+        private List<string> selectedPorts = new List<string> { "Port1", "Port2", "Port3", "Port4", "Port5", "Port6", "Port7", "Port8" };
+        private List<bool> isRunning_start = Enumerable.Repeat(false, 8).ToList();
+        private List<bool> isRunning_loopsend = Enumerable.Repeat(true, 8).ToList();
+        private List<bool> isRunning_looptimer = Enumerable.Repeat(true, 8).ToList();
+
         private List<GridDataTemp> DataTemp;
         private SerialPortManager[] mySerial = new SerialPortManager[8];
         private Thread loopSendThread;
@@ -33,35 +38,20 @@ namespace WIoTa_Serial_Tool
         private Thread startSendThread;
         private Thread autoAckSendThread;
         private Thread mulitSendThread;
-        private List<string> selectedPorts = new List<string>()
-{
-    "Port1",
-    "Port2",
-    "Port3",
-    "Port4",
-    "Port5",
-    "Port6",
-    "Port7",
-    "Port8"
-};
         private int portNum = 0;
         string NowTabName;
         int NextIndex;
         int NextIndexChild;
-        private List<bool> isRunning_start = new List<bool> { false, false, false, false, false, false, false, false };
         private bool isRunning_ack = true; //自动应答标志位
         private bool isRunning_mulit = true; //批量发送标志位
-        private List<bool> isRunning_loopsend = new List<bool> { true, true, true, true, true, true, true, true };
-        private List<bool> isRunning_looptimer = new List<bool> { true, true, true, true, true, true, true, true };
-
         public MainWindow()
         {
             InitializeComponent();
           
             TextBox[] recvDataTextBox = { recvDataRichTextBox1, recvDataRichTextBox2, recvDataRichTextBox3, recvDataRichTextBox4, recvDataRichTextBox5, recvDataRichTextBox6, recvDataRichTextBox7, recvDataRichTextBox8 };
-            for (int k = 0; k < 8; k++)
+            foreach (var textBox in recvDataTextBox)
             {
-                recvDataTextBox[k].UndoLimit = 0;
+                textBox.UndoLimit = 0;
             }
             DisplayPort();
 
@@ -184,7 +174,9 @@ namespace WIoTa_Serial_Tool
 
         private void Button_Clear_SendEdit_Click(object sender, RoutedEventArgs e)
         {
-            Send_At_Edit1.Clear();
+            TextBox[] Send_At_Edit = { Send_At_Edit1, Send_At_Edit2, Send_At_Edit3, Send_At_Edit4, Send_At_Edit5, Send_At_Edit6, Send_At_Edit7, Send_At_Edit8 };
+
+            Send_At_Edit[portNum].Clear();
         }
 
         private void Button_Display_Start_Windows_Click(object sender, RoutedEventArgs e)
@@ -262,11 +254,15 @@ namespace WIoTa_Serial_Tool
                     mySerial[i].block_falg = false;
                 }
             }
-            if (loopSendThread !=null)
+            if (loopSendThread != null)
             {
                 loopSendThread.Abort();
             }
-            if (autoAckSendThread!=null)//自动应答线程
+            if (loopTimeSendThread != null)
+            {
+                loopTimeSendThread.Abort();
+            }
+            if (autoAckSendThread != null)//自动应答线程
             {
                 isRunning_ack = false;
                 autoAckSendThread.Abort();
@@ -291,14 +287,14 @@ namespace WIoTa_Serial_Tool
                 string exePath = System.Reflection.Assembly.GetExecutingAssembly().Location;
                 string exeFolderPath = Path.GetDirectoryName(exePath);
 
-                logFileName = $"{exeFolderPath}\\log\\{portNumber}_{timestamp}.log";
+                logFileName[port_num] = $"{exeFolderPath}\\log\\{portNumber}_{timestamp}.log";
                 if (mySerial[port_num] == null)
                 {
                     return;
                 }
                 else
                 {
-                    mySerial[port_num].logFileName = logFileName;
+                    mySerial[port_num].logFileName = logFileName[port_num];
                 }
                
             }
@@ -311,7 +307,7 @@ namespace WIoTa_Serial_Tool
                 }
                 else
                 {
-                    mySerial[port_num].logFileName = logFileName;
+                    mySerial[port_num].logFileName = logFileName[port_num];
                 }
             }
            
@@ -347,47 +343,90 @@ namespace WIoTa_Serial_Tool
         {
             string readValue;
             //串口名称
-            readValue = ConfigurationManager.AppSettings["Serial_Name"];
-            portsComboBox1.SelectedItem = readValue;
+            ComboBox[] portsComboBox = { portsComboBox1, portsComboBox2, portsComboBox3, portsComboBox4, portsComboBox5, portsComboBox6, portsComboBox7, portsComboBox8 };
+            for (int num = 0; num < 8; num++)
+            {
+                readValue = ConfigurationManager.AppSettings[$"Serial_Name{num}"];
+                portsComboBox[num].SelectedItem = readValue;
+            }
+          
 
             //波特率
-            readValue = ConfigurationManager.AppSettings["Serial_Rate"];
-            baudRateComboBox1.Text = readValue;
+            ComboBox[] baudRateComboBox = { baudRateComboBox1, baudRateComboBox2, baudRateComboBox3, baudRateComboBox4, baudRateComboBox5, baudRateComboBox6, baudRateComboBox7, baudRateComboBox8 };
+            for (int num = 0; num < 8; num++)
+            {
+                readValue = ConfigurationManager.AppSettings[$"Serial_Rate{num}"];
+                baudRateComboBox[num].Text = readValue;
+            }
 
             //AT指令
-            readValue = ConfigurationManager.AppSettings["Serial_AtCmd"];
-            Send_At_Edit1.Text = readValue;
+            TextBox[] Send_At_Edit = { Send_At_Edit1, Send_At_Edit2, Send_At_Edit3, Send_At_Edit4, Send_At_Edit5, Send_At_Edit6, Send_At_Edit7, Send_At_Edit8 };
+            for (int num = 0; num < 8; num++)
+            {
+                readValue = ConfigurationManager.AppSettings[$"Serial_AtCmd{num}"];
+                Send_At_Edit[num].Text = readValue;
+            }
 
             //阻塞发送
-            readValue = ConfigurationManager.AppSettings["block_Checked"];
-            blockSendCheck1.IsChecked = RetCheckStatus(readValue);
-
+            CheckBox[] blockSendCheck = { blockSendCheck1, blockSendCheck2, blockSendCheck3, blockSendCheck4, blockSendCheck5, blockSendCheck6, blockSendCheck7, blockSendCheck8 };
+            for (int num = 0; num < 8; num++)
+            {
+                readValue = ConfigurationManager.AppSettings[$"block_Checked{num}"];
+                blockSendCheck[num].IsChecked = RetCheckStatus(readValue);
+            }
 
             //保存接收
-            readValue = ConfigurationManager.AppSettings["savefile_Checked"];
-            savefileCheckBox1.IsChecked = RetCheckStatus(readValue);
-            
+            CheckBox[] savefileCheckBox = { savefileCheckBox1, savefileCheckBox2, savefileCheckBox3, savefileCheckBox4, savefileCheckBox5, savefileCheckBox6, savefileCheckBox7, savefileCheckBox8 };
+            for (int num = 0; num < 8; num++)
+            {
+                readValue = ConfigurationManager.AppSettings[$"savefile_Checked{num}"];
+                savefileCheckBox[num].IsChecked = RetCheckStatus(readValue);
+            }
+
             //时间戳
-            readValue = ConfigurationManager.AppSettings["stamp_Checked"];
-            stampCheckBox1.IsChecked = RetCheckStatus(readValue);
+            CheckBox[] stampCheckBox = { stampCheckBox1, stampCheckBox2, stampCheckBox3, stampCheckBox4, stampCheckBox5, stampCheckBox6, stampCheckBox7, stampCheckBox8 };
+            for (int num = 0; num < 8; num++)
+            {
+                readValue = ConfigurationManager.AppSettings[$"stamp_Checked{num}"];
+                stampCheckBox[num].IsChecked = RetCheckStatus(readValue);
+            }
 
             //回车换行
-            readValue = ConfigurationManager.AppSettings["enter_Checked"];
-            enterCheckBox1.IsChecked = RetCheckStatus(readValue);
+            CheckBox[] enterCheckBox = { enterCheckBox1, enterCheckBox2, enterCheckBox3, enterCheckBox4, enterCheckBox5, enterCheckBox6, enterCheckBox7, enterCheckBox8 };
+            for (int num = 0; num < 8; num++)
+            {
+                readValue = ConfigurationManager.AppSettings[$"enter_Checked{num}"];
+                enterCheckBox[num].IsChecked = RetCheckStatus(readValue);
+            }
 
             //定时发送时间
-            readValue = ConfigurationManager.AppSettings["send_Timer"];
-            timerSendTextBox1.Text = readValue;
+            TextBox[] timerSendTextBox = { timerSendTextBox1, timerSendTextBox2, timerSendTextBox3, timerSendTextBox4,
+                timerSendTextBox5, timerSendTextBox6, timerSendTextBox7, timerSendTextBox8 };
+            for (int num = 0; num < 8; num++)
+            {
+                readValue = ConfigurationManager.AppSettings[$"send_Timer{num}"];
+                timerSendTextBox[num].Text = readValue;
+            }
+
 
             //循环发送次数
-            readValue = ConfigurationManager.AppSettings["loopSend_Num"];
-            loopSendNumTextBox1.Text = readValue;
+            TextBox[] loopSendNumTextBox = { loopSendNumTextBox1, loopSendNumTextBox2, loopSendNumTextBox3, loopSendNumTextBox4,
+                loopSendNumTextBox5, loopSendNumTextBox6, loopSendNumTextBox7, loopSendNumTextBox8 };
+            for (int num = 0; num < 8; num++)
+            {
+                readValue = ConfigurationManager.AppSettings[$"loopSend_Num{num}"];
+                loopSendNumTextBox[num].Text = readValue;
+            }
 
             //循环发送时间
-            readValue = ConfigurationManager.AppSettings["loopSend_Timer"];
-            loopSendTimeTextBox1.Text = readValue;
+            TextBox[] loopSendTimeTextBox = { loopSendTimeTextBox1, loopSendTimeTextBox2, loopSendTimeTextBox3, loopSendTimeTextBox4,
+                loopSendTimeTextBox5, loopSendTimeTextBox6, loopSendTimeTextBox7, loopSendTimeTextBox8 };
+            for (int num = 0; num < 8; num++)
+            {
+                readValue = ConfigurationManager.AppSettings[$"loopSend_Timer{num}"];
+                loopSendTimeTextBox[num].Text = readValue;
+            }
 
-            //指令隐藏按键
             readValue = ConfigurationManager.AppSettings["listButton_Status"];
             isChecked_at_grid_flag = RetCheckStatus(readValue);
 
@@ -456,46 +495,89 @@ namespace WIoTa_Serial_Tool
             Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
 
             //串口名称
-            selectedValue = portsComboBox1.SelectedValue.ToString();
-            config.AppSettings.Settings["Serial_Name"].Value = selectedValue;
+            ComboBox[] portsComboBox = { portsComboBox1, portsComboBox2, portsComboBox3, portsComboBox4, portsComboBox5, portsComboBox6, portsComboBox7, portsComboBox8 };
+            for (int num = 0; num < 8; num++)
+            {
+                selectedValue = portsComboBox[num].SelectedValue.ToString();
+                config.AppSettings.Settings[$"Serial_Name{num}"].Value = selectedValue;
+            }
 
             //波特率
-            //var selectedItem = baudRateComboBox.SelectedItem as ComboBoxItem;
-            //var sheetName = selectedItem.Content;
-            selectedValue = baudRateComboBox1.Text;//由于可编辑所以要这样获取值
-            config.AppSettings.Settings["Serial_Rate"].Value = selectedValue;
+            ComboBox[] baudRateComboBox = { baudRateComboBox1, baudRateComboBox2, baudRateComboBox3, baudRateComboBox4, baudRateComboBox5, baudRateComboBox6, baudRateComboBox7, baudRateComboBox8 };
+            for (int num = 0; num < 8; num++)
+            {
+                selectedValue = baudRateComboBox[num].Text;//由于可编辑所以要这样获取值
+                config.AppSettings.Settings[$"Serial_Rate{num}"].Value = selectedValue;
+            }
 
             //发送AT编辑框
-            selectedValue = Send_At_Edit1.Text;
-            config.AppSettings.Settings["Serial_AtCmd"].Value = selectedValue;
+            TextBox[] Send_At_Edit = { Send_At_Edit1, Send_At_Edit2, Send_At_Edit3, Send_At_Edit4, Send_At_Edit5, Send_At_Edit6, Send_At_Edit7, Send_At_Edit8 };
+            for (int num = 0; num < 8; num++)
+            {
+                selectedValue = Send_At_Edit[num].Text;
+                config.AppSettings.Settings[$"Serial_AtCmd{num}"].Value = selectedValue;
+            }
 
             //阻塞发送
-            bselectedValue = blockSendCheck1.IsChecked ?? false;
-            config.AppSettings.Settings["block_Checked"].Value = bselectedValue.ToString();
+            CheckBox[] blockSendCheck = { blockSendCheck1, blockSendCheck2, blockSendCheck3, blockSendCheck4, blockSendCheck5, blockSendCheck6, blockSendCheck7, blockSendCheck8 };
+            for (int num = 0; num < 8; num++)
+            {
+                bselectedValue = blockSendCheck[num].IsChecked ?? false;
+                config.AppSettings.Settings[$"block_Checked{num}"].Value = bselectedValue.ToString();
+            }
 
             //保存接收
-            bselectedValue = savefileCheckBox1.IsChecked ?? false;
-            config.AppSettings.Settings["savefile_Checked"].Value = bselectedValue.ToString();
+            CheckBox[] savefileCheckBox = { savefileCheckBox1, savefileCheckBox2, savefileCheckBox3, savefileCheckBox4, savefileCheckBox5, savefileCheckBox6, savefileCheckBox7, savefileCheckBox8 };
+            for (int num = 0; num < 8; num++)
+            {
+                bselectedValue = savefileCheckBox[num].IsChecked ?? false;
+                config.AppSettings.Settings[$"savefile_Checked{num}"].Value = bselectedValue.ToString();
+            }
 
-            //保存接收
-            bselectedValue = stampCheckBox1.IsChecked ?? false;
-            config.AppSettings.Settings["stamp_Checked"].Value = bselectedValue.ToString();
+            //时间戳
+            CheckBox[] stampCheckBox = { stampCheckBox1, stampCheckBox2, stampCheckBox3, stampCheckBox4, stampCheckBox5, stampCheckBox6, stampCheckBox7, stampCheckBox8 };
+            for (int num = 0; num < 8; num++)
+            {
+                bselectedValue = stampCheckBox[num].IsChecked ?? false;
+                config.AppSettings.Settings[$"stamp_Checked{num}"].Value = bselectedValue.ToString();
+            }
+
 
             //回车换行
-            bselectedValue = enterCheckBox1.IsChecked ?? false;
-            config.AppSettings.Settings["enter_Checked"].Value = bselectedValue.ToString();
+            CheckBox[] enterCheckBox = { enterCheckBox1, enterCheckBox2, enterCheckBox3, enterCheckBox4, enterCheckBox5, enterCheckBox6, enterCheckBox7, enterCheckBox8 };
+            for (int num = 0; num < 8; num++)
+            {
+                bselectedValue = enterCheckBox[num].IsChecked ?? false;
+                config.AppSettings.Settings[$"enter_Checked{num}"].Value = bselectedValue.ToString();
+            }
 
             //定时发送时间
-            selectedValue = timerSendTextBox1.Text;
-            config.AppSettings.Settings["send_Timer"].Value = selectedValue;
+            TextBox[] timerSendTextBox = { timerSendTextBox1, timerSendTextBox2, timerSendTextBox3, timerSendTextBox4,
+                timerSendTextBox5, timerSendTextBox6, timerSendTextBox7, timerSendTextBox8 };
+            for (int num = 0; num < 8; num++)
+            {
+                selectedValue = timerSendTextBox[num].Text;
+                config.AppSettings.Settings[$"send_Timer{num}"].Value = selectedValue;
+            }
+
 
             //循环发送次数
-            selectedValue = loopSendNumTextBox1.Text;
-            config.AppSettings.Settings["loopSend_Num"].Value = selectedValue;
+            TextBox[] loopSendNumTextBox = { loopSendNumTextBox1, loopSendNumTextBox2, loopSendNumTextBox3, loopSendNumTextBox4,
+                loopSendNumTextBox5, loopSendNumTextBox6, loopSendNumTextBox7, loopSendNumTextBox8 };
+            for (int num = 0; num < 8; num++)
+            {
+                selectedValue = loopSendNumTextBox[num].Text;
+                config.AppSettings.Settings[$"loopSend_Num{num}"].Value = selectedValue;
+            }
 
             //循环发送时间
-            selectedValue = loopSendTimeTextBox1.Text;
-            config.AppSettings.Settings["loopSend_Timer"].Value = selectedValue;
+            TextBox[] loopSendTimeTextBox = { loopSendTimeTextBox1, loopSendTimeTextBox2, loopSendTimeTextBox3, loopSendTimeTextBox4,
+                loopSendTimeTextBox5, loopSendTimeTextBox6, loopSendTimeTextBox7, loopSendTimeTextBox8 };
+            for (int num = 0; num < 8; num++)
+            {
+                selectedValue = loopSendTimeTextBox[num].Text;
+                config.AppSettings.Settings[$"loopSend_Timer{num}"].Value = selectedValue;
+            }
 
             //指令隐藏按键
             config.AppSettings.Settings["listButton_Status"].Value = isChecked_at_grid_flag.ToString();

@@ -549,11 +549,18 @@ namespace WIoTa_Serial_Tool
             ComboBox[] spectrumComboBox = { spectrumComboBox1, spectrumComboBox2, spectrumComboBox3 };
             for (int i = 0; i < 3; i++)
             {
-                readValue = ReadXml(xmlDoc, root, "spectrum_WIoTa3");
+                readValue = ReadXml(xmlDoc, root, $"spectrum_WIoTa{i + 1}");
                 if (readValue == null)
                     readValue = "3";
                 index = Convert.ToInt32(readValue);
-                spectrumComboBox3.SelectedIndex = index;
+                spectrumComboBox[i].SelectedIndex = index;
+            }
+
+            TextBox[] subSystemidTextBox = { subSystemidTextBox1, subSystemidTextBox2, subSystemidTextBox3 };
+            for (int i = 0; i < 3; i++)
+            {
+                readValue = ReadXml(xmlDoc, root, $"subSystemid{i + 1}");
+                subSystemidTextBox[i].Text = readValue;
             }
 
             //bit加扰
@@ -828,6 +835,13 @@ namespace WIoTa_Serial_Tool
             {
                 selectedValue = spectrumComboBox[i].SelectedIndex.ToString();
                 writeXml(xmlDoc, root, selectedValue, $"spectrum_WIoTa{i + 1}");
+            }
+
+            TextBox[] subSystemidTextBox = { subSystemidTextBox1, subSystemidTextBox2, subSystemidTextBox3 };
+            for (int i = 0; i < 3; i++)
+            {
+                selectedValue = subSystemidTextBox[i].Text;
+                writeXml(xmlDoc, root, selectedValue, $"subSystemid{i + 1}");
             }
 
             //bit加扰
