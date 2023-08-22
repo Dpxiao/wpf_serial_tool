@@ -221,7 +221,7 @@ namespace SerialPortExample
 
             if (isStamp)
             {
-                logMessage = $"[{timestamp}] 接收<-:" + strRecv + "\r\r\n";
+                logMessage = $"[{timestamp}] 接收<-:" + strRecv + "\r";
             }
             else
             {

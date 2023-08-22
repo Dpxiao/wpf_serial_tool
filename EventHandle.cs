@@ -1137,13 +1137,13 @@ namespace WIoTa_Serial_Tool
                     // 在UI线程上下文中更新UI控件
                     this.Dispatcher.Invoke(new Action(() =>
                     {
-                        recvDataTextBox[portNum].AppendText($"=====开始第{i + 1}次发送=====\n\r");
+                        recvDataTextBox[portNum].AppendText($"=====开始第{i + 1}次发送=====\r\n");
                         recvDataTextBox[portNum].ScrollToEnd();
                         if (logFileName[portNum] != null)
                         {
                             using (StreamWriter writer = new StreamWriter(logFileName[portNum], true))
                             {
-                                writer.WriteLine($" ===== 开始第{ i + 1}次发送 =====\n\r");
+                                writer.WriteLine($" ===== 开始第{ i + 1}次发送 =====\r\n");
                             }
                         }
                     }));

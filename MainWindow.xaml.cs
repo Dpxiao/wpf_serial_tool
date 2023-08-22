@@ -708,7 +708,7 @@ namespace WIoTa_Serial_Tool
                     MulitPara = new StartSendPara();
                     MulitPara.mySerial = mySerial[port_num];
                     MulitPara.PortNum = port_num;
-                    MulitPara.DataTemp = DataTemp;
+                    MulitPara.DataTemp = new List<GridDataTemp>(DataTemp); // 创建副本; 
                     mySerial[port_num].ack_falg = true;
                     //开启自动批量发送
                     isRunning_mulit = true;
@@ -793,7 +793,7 @@ namespace WIoTa_Serial_Tool
                     AutoAckPara = new StartSendPara();
                     AutoAckPara.mySerial = mySerial[port_num];
                     AutoAckPara.PortNum = port_num;
-                    AutoAckPara.DataTemp = DataTemp;
+                    AutoAckPara.DataTemp = new List<GridDataTemp>(DataTemp); // 创建副本; ;
                     isRunning_ack = true;
                     mySerial[port_num].isAutokSend = true;
                     mySerial[port_num].ack_falg = true;
