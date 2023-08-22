@@ -385,9 +385,13 @@ namespace WIoTa_Serial_Tool
                 {
                     DateTime now = DateTime.Now;
                     string timestamp = now.ToString("yyyy-MM-dd_HH_mm_ss_fff");
+                    string timefloder = now.ToString("yyyy-MM-dd");
                     string exePath = System.Reflection.Assembly.GetExecutingAssembly().Location;
                     string exeFolderPath = Path.GetDirectoryName(exePath);
-                    logFileName[portNum] = $"{exeFolderPath}\\log\\{portNumber}_{timestamp}.log";
+                    string logpath = $"{exeFolderPath}\\log\\{timefloder}";
+                    CreateDirectory(logpath);
+                    logFileName[portNum] = $"{logpath}\\{portNumber}_{timestamp}.log";
+                    
                     mySerial[port_num].logFileName = logFileName[portNum];
                 }
                 else
@@ -401,8 +405,29 @@ namespace WIoTa_Serial_Tool
             }
             return false;
         }
-        //弹出注释窗口  这方法没法绑定数据，保存不了。
-        private void Button_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
+
+        public bool CreateDirectory(string path)
+            {
+                // 去除首位空格和尾部 \ 符号
+                path = path.Trim().TrimEnd('\\');
+
+                // 确保父目录存在
+                Directory.CreateDirectory(Path.GetDirectoryName(path));
+
+                // 如果目录不存在则创建，并返回True；否则返回False
+                if (!Directory.Exists(path))
+                {
+                    Directory.CreateDirectory(path);
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+
+    //弹出注释窗口  这方法没法绑定数据，保存不了。
+    private void Button_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
         {
             Button sendButton = sender as Button;
             string sendButton_Content = (string)sendButton.Content;

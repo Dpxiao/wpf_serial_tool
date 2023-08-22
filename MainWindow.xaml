@@ -37,15 +37,11 @@
         <!--是否应该调整其最后一个子元素的大小，以填充可用空间-->
         <Grid Grid.Column="0" Width="Auto" >
             <Menu Background="White">
-                <MenuItem Header="File">
+                <MenuItem Header="文件">
                     <!--菜单项为MenuItem，文字使用属性 Header-->
-                    <MenuItem Name="menuOpen" Header="Open" ></MenuItem>
-                    <MenuItem Header="Save"></MenuItem>
-                    <MenuItem Header="Delete"></MenuItem>
+                    <MenuItem Name="menuOpen" Header="打开文件" Click="OpenFileLocation"></MenuItem>
                 </MenuItem>
-                <MenuItem Header="Edit"></MenuItem>
-                <MenuItem Header="View"></MenuItem>
-                <MenuItem Header="About"></MenuItem>
+                <MenuItem Header="关于"></MenuItem>
             </Menu>
 
             <!--<ToolBar Grid.Row="0" DockPanel.Dock="Top">

@@ -10,6 +10,7 @@ using System.Windows.Controls;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Linq;
+using System.Diagnostics;
 
 namespace WIoTa_Serial_Tool
 {
@@ -284,10 +285,12 @@ namespace WIoTa_Serial_Tool
             {
                 DateTime now = DateTime.UtcNow;
                 string timestamp = now.ToString("yyyy-MM-dd_HH_mm_ss_fff");
+                string timefloder = now.ToString("yyyy-MM-dd");
                 string exePath = System.Reflection.Assembly.GetExecutingAssembly().Location;
                 string exeFolderPath = Path.GetDirectoryName(exePath);
-
-                logFileName[port_num] = $"{exeFolderPath}\\log\\{portNumber}_{timestamp}.log";
+                string logpath = $"{exeFolderPath}\\log\\{timefloder}";
+                CreateDirectory(logpath);
+                logFileName[portNum] = $"{logpath}\\{portNumber}_{timestamp}.log";
                 if (mySerial[port_num] == null)
                 {
                     return;
@@ -895,6 +898,17 @@ namespace WIoTa_Serial_Tool
             RetTextBoxObject(portNum).Text = $"{count}";
 
            
+        }
+
+        private void OpenFileLocation(object sender, RoutedEventArgs e)
+        {
+            string appFolderPath = AppDomain.CurrentDomain.BaseDirectory;
+            //Process.Start("explorer.exe", appFolderPath);
+            ProcessStartInfo startInfo = new ProcessStartInfo();
+            startInfo.FileName = appFolderPath;
+            startInfo.UseShellExecute = true;
+            startInfo.Verb = "open";
+            Process.Start(startInfo);
         }
     }
 
