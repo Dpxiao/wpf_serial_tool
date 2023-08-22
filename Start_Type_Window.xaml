@@ -90,7 +90,7 @@
                                     <ColumnDefinition Width="97"/>
                                 </Grid.ColumnDefinitions>
                                 <Label  Grid.Column="0" Content="id长度:" Margin="3,0,58,1"/>
-                                <ComboBox Name="idLenComboBox1" Grid.Column="1"  Height="19" VerticalAlignment="Bottom"  Margin="0,0,0,2">
+                                <ComboBox Name="idLenComboBox1" Grid.Column="1"  Height="19" VerticalAlignment="Bottom"  Margin="0,0,0,2" IsEnabled="False">
                                     <ComboBoxItem>2Byte</ComboBoxItem>
                                     <ComboBoxItem IsSelected="True">4Byte</ComboBoxItem>
                                     <ComboBoxItem>6Byte</ComboBoxItem>
@@ -169,7 +169,7 @@
                                     <ColumnDefinition Width="100"/>
                                 </Grid.ColumnDefinitions>
                                 <Label  Grid.Column="0" Content="systemid:" Margin="3,0,39,1"/>
-                                <TextBox Name="SystemidTextBox1" Grid.Column="1" Text="11223344" Margin="3,0,0,1" Height="20" VerticalContentAlignment="Center" VerticalAlignment="Center"/>
+                                <TextBox Name="SystemidTextBox1" Grid.Column="1" Text="11223344" Margin="3,0,0,1" Height="20" VerticalContentAlignment="Center" VerticalAlignment="Center" IsEnabled="False"/>
                             </Grid>
                             <Grid Grid.Row="11" Height="26" >
                                 <Grid.ColumnDefinitions>
@@ -181,7 +181,7 @@
                             </Grid>
                         </Grid>
                     </GroupBox>
-                    <CheckBox Name="runWIoTaCheckBox1" Grid.Row="4" IsChecked="True" Content="启动协议栈" Margin="10,0,0,1" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                    <CheckBox Name="runWIoTaCheckBox1" Grid.Row="4" IsChecked="True" Content="启动协议栈" Margin="10,10,0,1" HorizontalAlignment="Left" VerticalAlignment="Center"/>
                     <DockPanel Margin="9,10" Grid.Row="7" VerticalAlignment="Bottom">
                         <Button Name="start_Button1" Content="一键启动" Style="{StaticResource MyButtonStyle}" Height="30" Width="240" Click="start_Button_Click"/>
                     </DockPanel>
@@ -280,7 +280,7 @@
                                     <ColumnDefinition Width="97"/>
                                 </Grid.ColumnDefinitions>
                                 <Label  Grid.Column="0" Content="id长度:" Margin="3,0,58,1"/>
-                                <ComboBox Name="idLenComboBox2" Grid.Column="1"  Height="19" VerticalAlignment="Bottom"  Margin="0,0,0,2">
+                                <ComboBox Name="idLenComboBox2" Grid.Column="1"  Height="19" VerticalAlignment="Bottom"  Margin="0,0,0,2" IsEnabled="False">
                                     <ComboBoxItem>2Byte</ComboBoxItem>
                                     <ComboBoxItem IsSelected="True">4Byte</ComboBoxItem>
                                     <ComboBoxItem>6Byte</ComboBoxItem>
@@ -384,7 +384,7 @@
                                     <ColumnDefinition Width="100"/>
                                 </Grid.ColumnDefinitions>
                                 <Label  Grid.Column="0" Content="systemid:" Margin="3,0,39,1"/>
-                                <TextBox Name="SystemidTextBox2" Grid.Column="1" Text="11223344" Margin="3,0,0,1" Height="20" VerticalContentAlignment="Center" VerticalAlignment="Center"/>
+                                <TextBox Name="SystemidTextBox2" Grid.Column="1" Text="11223344" Margin="3,0,0,1" Height="20" VerticalContentAlignment="Center" VerticalAlignment="Center" IsEnabled="False"/>
                             </Grid>
                             <Grid Grid.Row="11" Height="26" >
                                 <Grid.ColumnDefinitions>
@@ -475,7 +475,7 @@
                             </Grid>
                         </Grid>
                     </GroupBox>
-                    <CheckBox Name="runWIoTaCheckBox2" Grid.Row="3" IsChecked="True" Content="启动协议栈" Margin="10,0,0,1" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                    <CheckBox Name="runWIoTaCheckBox2" Grid.Row="3" IsChecked="True" Content="启动协议栈" Margin="10,10,0,1" HorizontalAlignment="Left" VerticalAlignment="Center"/>
                     <Grid Name="connectGrid2" Grid.Row="4">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
@@ -483,8 +483,8 @@
                             <ColumnDefinition Width="100"/>
                         </Grid.ColumnDefinitions>
 
-                        <CheckBox Name="connectCheckBox2" IsChecked="True" Grid.Column="0" Content="同步连接" Margin="10,2,34,3" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.ColumnSpan="2"/>
-                        <TextBox Name="connectTextBox2" Grid.Column="2" Text="0" Margin="3,0,0,1" Height="20" VerticalContentAlignment="Center" VerticalAlignment="Center"/>
+                        <CheckBox Name="connectCheckBox2" IsChecked="True" Grid.Column="0" Content="同步连接" Margin="10,8,34,3" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.ColumnSpan="2"/>
+                        <TextBox Name="connectTextBox2" Grid.Column="2" Text="0" Margin="3,2,0,1" Height="20" VerticalContentAlignment="Center" VerticalAlignment="Center"/>
                     </Grid>
                     <DockPanel Margin="9,10" Grid.Row="6" VerticalAlignment="Bottom">
                         <Button Name="start_Button2" Content="一键启动" Style="{StaticResource MyButtonStyle}" Height="30" Width="240" Click="start_Button_Click"/>
@@ -575,7 +575,7 @@
                                     <ColumnDefinition Width="97"/>
                                 </Grid.ColumnDefinitions>
                                 <Label  Grid.Column="0" Content="id长度:" Margin="3,0,58,1"/>
-                                <ComboBox Name="idLenComboBox3" Grid.Column="1"  Height="19" VerticalAlignment="Bottom"  Margin="0,0,0,2">
+                                <ComboBox Name="idLenComboBox3" Grid.Column="1"  Height="19" VerticalAlignment="Bottom"  Margin="0,0,0,2" IsEnabled="False">
                                     <ComboBoxItem>2Byte</ComboBoxItem>
                                     <ComboBoxItem IsSelected="True">4Byte</ComboBoxItem>
                                     <ComboBoxItem>6Byte</ComboBoxItem>
@@ -654,7 +654,7 @@
                                     <ColumnDefinition Width="100"/>
                                 </Grid.ColumnDefinitions>
                                 <Label  Grid.Column="0" Content="systemid:" Margin="3,0,39,1"/>
-                                <TextBox Name="SystemidTextBox3" Grid.Column="1" Text="11223344" Margin="3,0,0,1" Height="20" VerticalContentAlignment="Center" VerticalAlignment="Center"/>
+                                <TextBox Name="SystemidTextBox3" Grid.Column="1" Text="11223344" Margin="3,0,0,1" Height="20" VerticalContentAlignment="Center" VerticalAlignment="Center" IsEnabled="False"/>
                             </Grid>
                             <Grid Grid.Row="11" Height="26" >
                                 <Grid.ColumnDefinitions>
@@ -745,7 +745,7 @@
                             </Grid>
                         </Grid>
                     </GroupBox>
-                    <CheckBox Name="runWIoTaCheckBox3" Grid.Row="3" IsChecked="True" Content="启动协议栈" Margin="10,0,0,1" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                    <CheckBox Name="runWIoTaCheckBox3" Grid.Row="3" IsChecked="True" Content="启动协议栈" Margin="10,10,0,1" HorizontalAlignment="Left" VerticalAlignment="Center"/>
 
                     <DockPanel Margin="9,10" Grid.Row="6" VerticalAlignment="Bottom">
                         <Button Name="start_Button3" Content="一键启动" Style="{StaticResource MyButtonStyle}" Height="30" Width="240" Click="start_Button_Click"/>

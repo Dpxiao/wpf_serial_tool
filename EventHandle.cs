@@ -12,6 +12,7 @@ using SerialPortExample;
 using System.Text;
 using System.Configuration;
 using System.Runtime.InteropServices;
+using System.Text.RegularExpressions;
 
 
 //保存log的路径有问题
@@ -967,6 +968,32 @@ namespace WIoTa_Serial_Tool
             }
         }
 
+        private string GetUsridToFile(int groupidx, int burstidx, int slotidx, int singleidx = 0)
+        {
+            if (groupidx >= TXT_5120_GROUP_NUM || burstidx >= TXT_5120_BURST_NUM ||
+                slotidx >= TXT_5120_SLOT_NUM || singleidx >= TXT_5120_SINGLEPOS_NUM)
+            {
+                MessageBox.Show("Invalid indices");
+                return null;
+            }
+            string fileScrambleIdTxt = "userid/scramble_id_set_5120.txt";
+            string text = File.ReadAllText(fileScrambleIdTxt);
+
+            MatchCollection matches = Regex.Matches(text, ", hex: 0x([\\w]{8}), scb id:");
+            int totalLen = TXT_5120_GROUP_NUM * TXT_5120_BURST_NUM * TXT_5120_SLOT_NUM * TXT_5120_SINGLEPOS_NUM;
+            if (totalLen != matches.Count)
+            {
+                MessageBox.Show("Mismatch in data length");
+                return null;
+            }
+
+            int pos = groupidx * TXT_5120_BURST_NUM * TXT_5120_SLOT_NUM * TXT_5120_SINGLEPOS_NUM +
+                      burstidx * TXT_5120_SLOT_NUM * TXT_5120_SINGLEPOS_NUM +
+                      slotidx * TXT_5120_SINGLEPOS_NUM + singleidx;
+            string usrid = matches[pos].Groups[1].Value;
+            return usrid;
+        }
+
         private void PortTab_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             int index = PortTab.SelectedIndex;
@@ -976,28 +1003,67 @@ namespace WIoTa_Serial_Tool
             {
                 case 0:
                     portNum = 0;
-                    //tabItem.Header = "测试1";
+                    if (Start_Window != null)
+                    {
+                        Start_Window.useridTextBox2.Text = GetUsridToFile(0, portNum, 0, 0);
+                        Start_Window.useridTextBox3.Text = GetUsridToFile(0, portNum, 0, 0);
+                    }
                     break;
                 case 1:
                     portNum = 1;
+                    if (Start_Window != null)
+                    {
+                        Start_Window.useridTextBox2.Text = GetUsridToFile(0, portNum, 0, 0);
+                        Start_Window.useridTextBox3.Text = GetUsridToFile(0, portNum, 0, 0);
+                    }
                     break;
                 case 2:
                     portNum = 2;
+                    if (Start_Window != null)
+                    {
+                        Start_Window.useridTextBox2.Text = GetUsridToFile(0, portNum, 0, 0);
+                        Start_Window.useridTextBox3.Text = GetUsridToFile(0, portNum, 0, 0);
+                    }
                     break;
                 case 3:
                     portNum = 3;
+                    if (Start_Window != null)
+                    {
+                        Start_Window.useridTextBox2.Text = GetUsridToFile(0, portNum, 0, 0);
+                        Start_Window.useridTextBox3.Text = GetUsridToFile(0, portNum, 0, 0);
+                    }
                     break;
                 case 4:
                     portNum = 4;
+                    if (Start_Window != null)
+                    {
+                        Start_Window.useridTextBox2.Text = GetUsridToFile(0, portNum, 0, 0);
+                        Start_Window.useridTextBox3.Text = GetUsridToFile(0, portNum, 0, 0);
+                    }
                     break;
                 case 5:
                     portNum = 5;
+                    if (Start_Window != null)
+                    {
+                        Start_Window.useridTextBox2.Text = GetUsridToFile(0, portNum, 0, 0);
+                        Start_Window.useridTextBox3.Text = GetUsridToFile(0, portNum, 0, 0);
+                    }
                     break;
                 case 6:
                     portNum = 6;
+                    if (Start_Window != null)
+                    {
+                        Start_Window.useridTextBox2.Text = GetUsridToFile(0, portNum, 0, 0);
+                        Start_Window.useridTextBox3.Text = GetUsridToFile(0, portNum, 0, 0);
+                    }
                     break;
                 case 7:
                     portNum = 7;
+                    if (Start_Window != null)
+                    {
+                        Start_Window.useridTextBox2.Text = GetUsridToFile(0, portNum, 0, 0);
+                        Start_Window.useridTextBox3.Text = GetUsridToFile(0, portNum, 0, 0);
+                    }
                     break;
                 default:
                     break;

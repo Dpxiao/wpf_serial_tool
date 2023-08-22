@@ -21,6 +21,10 @@ namespace WIoTa_Serial_Tool
  
     public partial class MainWindow : Window
     {
+        private const int TXT_5120_GROUP_NUM = 8;
+        private const int TXT_5120_BURST_NUM = 8;
+        private const int TXT_5120_SLOT_NUM = 8;
+        private const int TXT_5120_SINGLEPOS_NUM = 10;
         bool isChecked_at_grid_flag = false;
         double gridWidth;
         private Start_Type_Window Start_Window; // 声明窗口实例变量
