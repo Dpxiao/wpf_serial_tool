@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WIoTa_Serial_Tool"
         mc:Ignorable="d"
-        Title="WIoTa Serial Tool V1.00" Height="670" Width="1010"
+        Title="WIoTa Serial 8 Ports Tool V1.01" Height="670" Width="1010"
         Closing="MainWindow_Closing">
 
     <Window.Resources>

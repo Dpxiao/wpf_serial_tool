@@ -1094,7 +1094,6 @@ namespace WIoTa_Serial_Tool
             int sheet_index = ATCmdComBox[tabIndex].SelectedIndex;
             NowTabName = TabName;
             NextIndex = tabIndex;
- 
             string filePath = $".//config//{TabName}.db";
             if (!ReadSqlData(filePath, sheet_index, tabIndex))
             {

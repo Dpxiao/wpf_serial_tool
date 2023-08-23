@@ -293,7 +293,7 @@ namespace WIoTa_Serial_Tool
                 string exePath = System.Reflection.Assembly.GetExecutingAssembly().Location;
                 string exeFolderPath = Path.GetDirectoryName(exePath);
                 string logpath = $"{exeFolderPath}\\log\\{timefloder}";
-                CreateDirectory(logpath);
+                _ = CreateDirectory(logpath);
                 logFileName[portNum] = $"{logpath}\\{portNumber}_{timestamp}.log";
                 if (mySerial[port_num] == null)
                 {
@@ -307,7 +307,7 @@ namespace WIoTa_Serial_Tool
             }
             else
             {
-                logFileName = null;//为空时不保存
+                logFileName[port_num] = null;//为空时不保存
                 if (mySerial[port_num] == null)
                 {
                     return;

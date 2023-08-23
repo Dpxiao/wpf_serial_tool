@@ -111,7 +111,7 @@ namespace WIoTa_Serial_Tool
                 {
                     connection.Open();
                     string selectQuery = $"SELECT * FROM {tableName}";
-
+      
                     using (SQLiteCommand selectCommand = new SQLiteCommand(selectQuery, connection))
                     {
                         using (SQLiteDataReader reader = selectCommand.ExecuteReader())
@@ -141,7 +141,8 @@ namespace WIoTa_Serial_Tool
                                     item.发送 = reader.GetString(5);
                                 }
                                 data.Add(item);
-                            }
+                                   
+                             }
                         }
                     }
                 }
