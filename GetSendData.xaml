@@ -1,0 +1,194 @@
+﻿<Window x:Class="WIoTa_Serial_Tool.GetSendData"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WIoTa_Serial_Tool"
+        mc:Ignorable="d"
+        Title="WIoTa数据长度查看" Height="561.5" Width="466">
+    <Grid>
+        <TabControl Name="PortTab" Grid.Row="0" Height="Auto" Width="Auto" Background="White">
+            <TabItem Header="异步">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Grid Grid.Row="0" Margin="0,6,6,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid Grid.Column="0">
+                            <RadioButton Name="radioButton_sbc" Content="异步单播" GroupName="radioGroup" />
+                        </Grid>
+                        <Grid Grid.Column="1">
+                            <RadioButton Name="radioButton_bc" Content="异步广播" GroupName="radioGroup" />
+                        </Grid>
+                    </Grid>
+                    <Grid Grid.Row="1" Margin="0,6,6,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid Grid.Column="0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid Grid.Column="0">
+                                <Label Content="子帧数量:"/>
+                            </Grid>
+                            <Grid Grid.Column="1">
+                                <ComboBox Name="comboBox_sub_num">
+                                    <ComboBoxItem>3</ComboBoxItem>
+                                    <ComboBoxItem>4</ComboBoxItem>
+                                    <ComboBoxItem>5</ComboBoxItem>
+                                    <ComboBoxItem>6</ComboBoxItem>
+                                    <ComboBoxItem>7</ComboBoxItem>
+                                    <ComboBoxItem IsSelected="True">8</ComboBoxItem>
+                                    <ComboBoxItem>9</ComboBoxItem>
+                                    <ComboBoxItem>10</ComboBoxItem>
+                                </ComboBox>
+                            </Grid>
+                        </Grid>
+                        <Grid Grid.Column="1">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid Grid.Column="0">
+                                <Label Content=" Symbol:" />
+                            </Grid>
+                            <Grid Grid.Column="1">
+                                <ComboBox Name="comboBox_symbol" >
+                                    <ComboBoxItem>128</ComboBoxItem>
+                                    <ComboBoxItem IsSelected="True">256</ComboBoxItem>
+                                    <ComboBoxItem>512</ComboBoxItem>
+                                    <ComboBoxItem>1024</ComboBoxItem>
+                                </ComboBox>
+                            </Grid>
+                        </Grid>
+                        <Grid Grid.Column="2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid Grid.Column="0">
+                                <Label Content="Mcs:" />
+                            </Grid>
+                            <Grid Grid.Column="1">
+                                <ComboBox Name="comboBox_mcs">
+                                    <ComboBoxItem IsSelected="True">0</ComboBoxItem>
+                                    <ComboBoxItem>1</ComboBoxItem>
+                                    <ComboBoxItem>2</ComboBoxItem>
+                                    <ComboBoxItem>3</ComboBoxItem>
+                                    <ComboBoxItem>4</ComboBoxItem>
+                                    <ComboBoxItem>5</ComboBoxItem>
+                                    <ComboBoxItem>6</ComboBoxItem>
+                                    <ComboBoxItem>7</ComboBoxItem>
+                                </ComboBox>
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                    <Grid Grid.Row="2">
+                        <Label Content="当前配置，一个子帧可承载应用数据长度:0 Byte" />
+                    </Grid>
+                    <Grid Grid.Row="3">
+                        <Label Content="当前配置，一帧可承载的最大数据长度:0 Byte" />
+                    </Grid>
+                    <Grid Grid.Row="4">
+                        <Label Content="当前配置，一个子帧数据长度发送时间为:0 s" />
+                    </Grid>
+                    <Grid Grid.Row="5">
+                        <Label Content="当前配置，一帧数据长度发送时间为:0 s" />
+                    </Grid>
+                    <Grid Grid.Row="6">
+                        <Label Content="当前配置，生成字符串为:"></Label>
+                    </Grid>
+                    <Grid Grid.Row="7">
+                        <TextBox>
+
+                        </TextBox>
+                    </Grid>
+                    <Grid Grid.Row="8">
+                        <Label Content="当前文本编辑框种的字符串长度为:0 Byte" />
+                    </Grid>
+                    <Grid Grid.Row="9">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid Grid.Column="0">
+                            <CheckBox Content="特殊符号" Margin="5,0,0,0"></CheckBox>
+                        </Grid>
+                        <Grid Grid.Column="1">
+                            <CheckBox Content="数字"></CheckBox>
+                        </Grid>
+                        <Grid Grid.Column="2">
+                            <CheckBox Content="大写英文字母"></CheckBox>
+                        </Grid>
+                        <Grid Grid.Column="3">
+                            <CheckBox Content="小写英文字母"></CheckBox>
+                        </Grid>
+                    </Grid>
+
+                    <Grid Grid.Row="10" Margin="2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid Grid.Column="0">
+                            <Button Content="查询编辑框字符串长度" Margin="5,2,0,2"></Button>
+                        </Grid>
+                        <Grid Grid.Column="1">
+                            <Button Content="生成字符串" Margin="5,2,0,2"></Button>
+                        </Grid>
+                        <Grid Grid.Column="2">
+                            <Label Content="生成字符串长度:" />
+                        </Grid>
+                        <Grid Grid.Column="3">
+                            <TextBox Text="" Width="100" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Grid>
+                        <Grid Grid.Column="4">
+                            <Label Content="Byte" />
+                        </Grid>
+                    </Grid>
+                    <Grid Grid.Row="11">
+                        <Label Content="当前配置，生成的AT指令为:" />
+                    </Grid>
+                    <Grid Grid.Row="12">
+                        <TextBox>
+
+                        </TextBox>
+                    </Grid>
+                </Grid>
+
+            </TabItem>
+            <TabItem Header="同步">
+                <StackPanel Orientation="Horizontal">
+                    <RadioButton Name="radioButton_sync_bc" Content="同步广播" />
+                    <RadioButton Name="radioButton_sync_up" Content="同步上行" />
+                    <RadioButton Name="radioButton_sync_dl" Content="同步下行" />
+                </StackPanel>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</Window>

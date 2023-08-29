@@ -28,6 +28,7 @@ namespace WIoTa_Serial_Tool
         bool isChecked_at_grid_flag = false;
         double gridWidth;
         private Start_Type_Window Start_Window; // 声明窗口实例变量
+        private GetSendData GetSendData_Window;
         private List<string> logFileName = new List<string> { "log1", "log2", "log3", "log4", "log5", "log6", "log7", "log8" };
         private List<string> selectedPorts = new List<string> { "Port1", "Port2", "Port3", "Port4", "Port5", "Port6", "Port7", "Port8" };
         private List<bool> isRunning_start = Enumerable.Repeat(false, 8).ToList();
@@ -913,6 +914,19 @@ namespace WIoTa_Serial_Tool
             startInfo.UseShellExecute = true;
             startInfo.Verb = "open";
             Process.Start(startInfo);
+        }
+
+        private void Button_GetLen_Click(object sender, RoutedEventArgs e)
+        {
+            if (GetSendData_Window == null)
+            {
+                GetSendData_Window = new GetSendData();
+                GetSendData_Window.Show();
+            }
+            else
+            {
+                GetSendData_Window.Show();
+            }
         }
     }
 
