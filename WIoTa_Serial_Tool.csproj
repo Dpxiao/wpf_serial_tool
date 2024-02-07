@@ -131,18 +131,39 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="EventHandle.cs" />
-    <Compile Include="SaveExcel.cs" />
-    <Compile Include="SerialPortManager.cs" />
+    <Compile Include="CSerialPort\BaudRate.cs" />
+    <Compile Include="CSerialPort\CSerialPort.cs" />
+    <Compile Include="CSerialPort\CSerialPortClass.cs" />
+    <Compile Include="CSerialPort\cserialportCSharp.cs" />
+    <Compile Include="CSerialPort\cserialportCSharpPINVOKE.cs" />
+    <Compile Include="CSerialPort\CSerialPortInfo.cs" />
+    <Compile Include="CSerialPort\CSerialPortListener.cs" />
+    <Compile Include="CSerialPort\DataBits.cs" />
+    <Compile Include="CSerialPort\EventHandle.cs" />
+    <Compile Include="CSerialPort\FlowControl.cs" />
+    <Compile Include="GetSendData.xaml.cs">
+      <DependentUpon>GetSendData.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CSerialPort\OperateMode.cs" />
+    <Compile Include="CSerialPort\Parity.cs" />
+    <Compile Include="CSerialPort\SaveExcel.cs" />
+    <Compile Include="CSerialPort\SerialPortError.cs" />
+    <Compile Include="CSerialPort\SerialPortInfo.cs" />
+    <Compile Include="CSerialPort\SerialPortInfoVector.cs" />
     <Compile Include="Start_Type_Window.xaml.cs">
       <DependentUpon>Start_Type_Window.xaml</DependentUpon>
     </Compile>
     <Compile Include="Note_Window.xaml.cs">
       <DependentUpon>Note_Window.xaml</DependentUpon>
     </Compile>
+    <Compile Include="CSerialPort\StopBits.cs" />
     <Compile Include="UserID_Window1.xaml.cs">
       <DependentUpon>UserID_Window1.xaml</DependentUpon>
     </Compile>
+    <Page Include="GetSendData.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

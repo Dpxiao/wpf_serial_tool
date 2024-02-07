@@ -1,0 +1,41 @@
+<root>
+  <is_bc>True</is_bc>
+  <is_sbc>False</is_sbc>
+  <subframe_num>8</subframe_num>
+  <symbol_len>128</symbol_len>
+  <mcs>2</mcs>
+  <str_data>u2eQ17y7TJSxsG9V3bgfQDAW594k8ww9p06qpT9VpaN6MI88O6h9nIF04UENnYr5I9Ktf80Cbr60i18mF11vF58iaAEawOKNjNb304UQ9RC74S9iTKQExPmawVXlacltMlj5rJ6YF61U8yG01bgOD26j50vaGE2d704987t4r3B0bq659H7XO3XlPy52F5cH8WpA1Wu9V8o8P2tJUUleCDPhO9654i6DAaW4oes73sIE7Oz3LgVSF1X6glpviGJvf4N5Wg1m0Z0Ur3Hb4c03rKq5Ij6Jx3E03iEogDOfy6m08oR8kIhNkjYg9258joe0pxr40x2CVgh2Yy4G0s54884V2b9P2XYUU58Hfz60Mu</str_data>
+  <at_cmd>AT+WIOTASEND=60000,364,0\r\nu2eQ17y7TJSxsG9V3bgfQDAW594k8ww9p06qpT9VpaN6MI88O6h9nIF04UENnYr5I9Ktf80Cbr60i18mF11vF58iaAEawOKNjNb304UQ9RC74S9iTKQExPmawVXlacltMlj5rJ6YF61U8yG01bgOD26j50vaGE2d704987t4r3B0bq659H7XO3XlPy52F5cH8WpA1Wu9V8o8P2tJUUleCDPhO9654i6DAaW4oes73sIE7Oz3LgVSF1X6glpviGJvf4N5Wg1m0Z0Ur3Hb4c03rKq5Ij6Jx3E03iEogDOfy6m08oR8kIhNkjYg9258joe0pxr40x2CVgh2Yy4G0s54884V2b9P2XYUU58Hfz60Mu</at_cmd>
+  <is_punctuation>False</is_punctuation>
+  <is_number>True</is_number>
+  <is_upper>True</is_upper>
+  <is_lower>True</is_lower>
+  <cmd_len>362</cmd_len>
+  <label_data>当前配置，一个子帧可承载应用数据长度:52 Byte</label_data>
+  <label_send>当前配置，一帧可承载的最大数据长度:364 Byte</label_send>
+  <label_data_len>当前文本编辑框种的字符串长度为:362 Byte</label_data_len>
+  <label_subframe_t>当前配置，一个子帧数据长度发送时间为: 0.009 s</label_subframe_t>
+  <label_frame_t>当前配置，一帧数据长度发送时间为: 0.073 s</label_frame_t>
+  <is_norbc>False</is_norbc>
+  <is_otabc>False</is_otabc>
+  <is_unicast>False</is_unicast>
+  <is_mc>False</is_mc>
+  <is_iote>True</is_iote>
+  <is_blocked>False</is_blocked>
+  <is_noblocked>True</is_noblocked>
+  <data_id>123456</data_id>
+  <mc_id>12345678</mc_id>
+  <user_id>12345678</user_id>
+  <symbol_len_s>256</symbol_len_s>
+  <mcs_s>0</mcs_s>
+  <label_data_t_s>当前配置，数据长度发送时间为: 2.343 s</label_data_t_s>
+  <label_frame_num>当前配置，帧数为:8 包</label_frame_num>
+  <textBox_str_data_s>Aa9nGEx279xhM8q5lRwp583q06argKJ7oK1471mr027a0gWQDB5a</textBox_str_data_s>
+  <label_data_len_s>当前文本编辑框种的字符串长度为:52 Byte</label_data_len_s>
+  <is_punctuation_s>False</is_punctuation_s>
+  <is_number_s>False</is_number_s>
+  <is_upper_s>False</is_upper_s>
+  <is_lower_s>True</is_lower_s>
+  <text_len_s>52</text_len_s>
+  <at_cmd_s>AT+WIOTASEND=60000,54\r\nAa9nGEx279xhM8q5lRwp583q06argKJ7oK1471mr027a0gWQDB5a</at_cmd_s>
+</root>

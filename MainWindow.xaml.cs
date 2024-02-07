@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Windows;
 using System.Configuration;
-using SerialPortExample;
 using System.ComponentModel;
 using System.Threading;
 using NoteWindow;
@@ -11,6 +10,7 @@ using System.IO;
 using System.Text.RegularExpressions;
 using System.Linq;
 using System.Diagnostics;
+using SerialPort_itas109;
 
 namespace WIoTa_Serial_Tool
 {
@@ -34,9 +34,9 @@ namespace WIoTa_Serial_Tool
         private List<bool> isRunning_start = Enumerable.Repeat(false, 8).ToList();
         private List<bool> isRunning_loopsend = Enumerable.Repeat(true, 8).ToList();
         private List<bool> isRunning_looptimer = Enumerable.Repeat(true, 8).ToList();
-
+  
         private List<GridDataTemp> DataTemp;
-        private SerialPortManager[] mySerial = new SerialPortManager[8];
+        private SerialPortClass []mySerial = new SerialPortClass[8];
         private Thread loopSendThread;
         private LoopSendPara parameters;
         private MyWindow NoteWindow;
@@ -44,16 +44,18 @@ namespace WIoTa_Serial_Tool
         private Thread startSendThread;
         private Thread autoAckSendThread;
         private Thread mulitSendThread;
+
         private int portNum = 0;
         string NowTabName;
         int NextIndex;
         int NextIndexChild;
         private bool isRunning_ack = true; //自动应答标志位
         private bool isRunning_mulit = true; //批量发送标志位
+        private bool test_falg = false;
         public MainWindow()
         {
             InitializeComponent();
-          
+            test_falg = true;
             TextBox[] recvDataTextBox = { recvDataRichTextBox1, recvDataRichTextBox2, recvDataRichTextBox3, recvDataRichTextBox4, recvDataRichTextBox5, recvDataRichTextBox6, recvDataRichTextBox7, recvDataRichTextBox8 };
             foreach (var textBox in recvDataTextBox)
             {
@@ -199,13 +201,12 @@ namespace WIoTa_Serial_Tool
                 Start_Window = new Start_Type_Window();
 
                 Start_Window.ButtonClicked += ChildWindow_ButtonClicked;
-                Start_Window.serialPort = mySerial[port_num];
                 Start_Window.Closed += (s, args) => Start_Window = null; // 在窗口关闭时将实例变量重置为null
                                                                          //Start_Window.ReadAppConfig();
 
                 Start_Window.Owner = this;
                 Start_Window.Top = this.Top;
-                Start_Window.Left = this.Left + this.Width;
+                Start_Window.Left = this.Left + this.Width - 10;
 
                 // 订阅主窗口的 LocationChanged 事件
                 this.LocationChanged += MainWindow_LocationChanged;
@@ -228,7 +229,7 @@ namespace WIoTa_Serial_Tool
             if (Start_Window != null)
             {
                 Start_Window.Top = this.Top;
-                Start_Window.Left = this.Left + this.Width; // 改变左侧位置为主窗口的右侧
+                Start_Window.Left = this.Left + this.Width - 10; // 改变左侧位置为主窗口的右侧
             }
         }
 
@@ -662,7 +663,7 @@ namespace WIoTa_Serial_Tool
         {
             StartSendPara parameters = (StartSendPara)obj;
            
-            SerialPortManager mySerial = parameters.mySerial;
+            SerialPortClass mySerial = parameters.mySerial;
             List<string> AtCmdList = parameters.StringList;
             int port_num = parameters.PortNum;
             string At_cmd = "";
@@ -682,7 +683,7 @@ namespace WIoTa_Serial_Tool
                     At_cmd = AtCmd + "\r\n";
                     Add_TimeStamp(At_cmd,port_num);
                 }));
-                _ = mySerial.SendPortString(port_num, At_cmd);
+                _ = mySerial.SendPortString(At_cmd);
                 if (mySerial.isRunWiota)
                 {
                     
@@ -741,7 +742,7 @@ namespace WIoTa_Serial_Tool
         private void mulitSendThread_func(object obj)
         {
             StartSendPara parameters = (StartSendPara)obj;
-            SerialPortManager mySerial = parameters.mySerial;
+            SerialPortClass mySerial = parameters.mySerial;
             List<GridDataTemp> DataTemp = parameters.DataTemp;
 
             int port_num = parameters.PortNum;
@@ -781,7 +782,7 @@ namespace WIoTa_Serial_Tool
                            
                             Add_TimeStamp(At_cmd, port_num);
                         }));
-                        _ = mySerial.SendPortString(port_num, At_cmd);
+                        _ = mySerial.SendPortString(At_cmd);
                     }
                 }
             }
@@ -827,7 +828,7 @@ namespace WIoTa_Serial_Tool
         private void AutoAckSendThread_func(object obj)
         {
             StartSendPara parameters = (StartSendPara)obj;
-            SerialPortManager mySerial = parameters.mySerial;
+            SerialPortClass mySerial = parameters.mySerial;
             List<GridDataTemp> DataTemp = parameters.DataTemp;
             int port_num = parameters.PortNum;
             string At_cmd = "";
@@ -877,7 +878,7 @@ namespace WIoTa_Serial_Tool
                             Add_TimeStamp(At_cmd, port_num);
                         }));
                         
-                        _ = mySerial.SendPortString(port_num, At_cmd);
+                        _ = mySerial.SendPortString(At_cmd);
                     }
                 }
             }
@@ -943,13 +944,13 @@ namespace WIoTa_Serial_Tool
 
     public class LoopSendPara
     {
-        public SerialPortManager mySerial;
+        public SerialPortClass mySerial;
         public int PortNum { get; set; }
     }
 
     public class StartSendPara
     {
-        public SerialPortManager mySerial;
+        public SerialPortClass mySerial;
         public List<string> StringList { get; set; }
         public int PortNum { get; set; }
         public List<GridDataTemp> DataTemp;

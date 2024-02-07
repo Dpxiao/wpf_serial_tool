@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WIoTa_Serial_Tool"
         mc:Ignorable="d"
-        Title="WIoTa数据长度查看" Height="561.5" Width="466">
+        Title="WIoTa数据长度查看" Height="561.5" Width="466"
+        Closing="GetSendDate_Close">
     <Grid>
         <TabControl Name="PortTab" Grid.Row="0" Height="Auto" Width="Auto" Background="White">
             <TabItem Header="异步">
@@ -31,10 +32,10 @@
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
                         <Grid Grid.Column="0">
-                            <RadioButton Name="radioButton_sbc" Content="异步单播" GroupName="radioGroup" />
+                            <RadioButton Name="radioButton_sbc" Content="异步单播" GroupName="radioGroup" Click="RadioButton_click"/>
                         </Grid>
                         <Grid Grid.Column="1">
-                            <RadioButton Name="radioButton_bc" Content="异步广播" GroupName="radioGroup" />
+                            <RadioButton Name="radioButton_bc" Content="异步广播" GroupName="radioGroup" Click="RadioButton_click"/>
                         </Grid>
                     </Grid>
                     <Grid Grid.Row="1" Margin="0,6,6,0">
@@ -52,7 +53,7 @@
                                 <Label Content="子帧数量:"/>
                             </Grid>
                             <Grid Grid.Column="1">
-                                <ComboBox Name="comboBox_sub_num">
+                                <ComboBox Name="comboBox_sub_num" IsReadOnly="True" SelectionChanged="Button_Query_data_len">
                                     <ComboBoxItem>3</ComboBoxItem>
                                     <ComboBoxItem>4</ComboBoxItem>
                                     <ComboBoxItem>5</ComboBoxItem>
@@ -73,7 +74,7 @@
                                 <Label Content=" Symbol:" />
                             </Grid>
                             <Grid Grid.Column="1">
-                                <ComboBox Name="comboBox_symbol" >
+                                <ComboBox Name="comboBox_symbol" IsReadOnly="True" SelectionChanged="Button_Query_data_len">
                                     <ComboBoxItem>128</ComboBoxItem>
                                     <ComboBoxItem IsSelected="True">256</ComboBoxItem>
                                     <ComboBoxItem>512</ComboBoxItem>
@@ -90,7 +91,7 @@
                                 <Label Content="Mcs:" />
                             </Grid>
                             <Grid Grid.Column="1">
-                                <ComboBox Name="comboBox_mcs">
+                                <ComboBox Name="comboBox_mcs" IsReadOnly="True" SelectionChanged="Button_Query_data_len">
                                     <ComboBoxItem IsSelected="True">0</ComboBoxItem>
                                     <ComboBoxItem>1</ComboBoxItem>
                                     <ComboBoxItem>2</ComboBoxItem>
@@ -104,27 +105,36 @@
                         </Grid>
                     </Grid>
                     <Grid Grid.Row="2">
-                        <Label Content="当前配置，一个子帧可承载应用数据长度:0 Byte" />
+                        <Label Name="label_data" Content="当前配置，一个子帧可承载应用数据长度:0 Byte" />
                     </Grid>
                     <Grid Grid.Row="3">
-                        <Label Content="当前配置，一帧可承载的最大数据长度:0 Byte" />
+                        <Label Name="label_send" Content="当前配置，一帧可承载的最大数据长度:0 Byte" />
                     </Grid>
                     <Grid Grid.Row="4">
-                        <Label Content="当前配置，一个子帧数据长度发送时间为:0 s" />
+                        <Label Name="label_subframe_t" Content="当前配置，一个子帧数据长度发送时间为:0 s" />
                     </Grid>
                     <Grid Grid.Row="5">
-                        <Label Content="当前配置，一帧数据长度发送时间为:0 s" />
+                        <Label Name="label_frame_t" Content="当前配置，一帧数据长度发送时间为:0 s" />
                     </Grid>
                     <Grid Grid.Row="6">
                         <Label Content="当前配置，生成字符串为:"></Label>
                     </Grid>
                     <Grid Grid.Row="7">
-                        <TextBox>
+                        <TextBox Name="textBox_str_data" TextWrapping="Wrap" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
 
                         </TextBox>
                     </Grid>
                     <Grid Grid.Row="8">
-                        <Label Content="当前文本编辑框种的字符串长度为:0 Byte" />
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid Grid.Column="1">
+                            <Label Name="label_data_len" Content="当前文本编辑框种的字符串长度为:0 Byte" Margin="5,0,10,0" />
+                        </Grid>
+                        <Grid Grid.Column="0">
+                            <Button Content="查询编辑框字符串长度" Margin="5,2,0,2" Click="Count_str_len_s"/>
+                        </Grid>
                     </Grid>
                     <Grid Grid.Row="9">
                         <Grid.ColumnDefinitions>
@@ -134,16 +144,16 @@
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
                         <Grid Grid.Column="0">
-                            <CheckBox Content="特殊符号" Margin="5,0,0,0"></CheckBox>
+                            <CheckBox Name="checkbox_punctuation" Content="特殊符号" Margin="5,0,0,0"></CheckBox>
                         </Grid>
                         <Grid Grid.Column="1">
-                            <CheckBox Content="数字"></CheckBox>
+                            <CheckBox Name="checkbox_number" Content="数字"></CheckBox>
                         </Grid>
                         <Grid Grid.Column="2">
-                            <CheckBox Content="大写英文字母"></CheckBox>
+                            <CheckBox Name="checkbox_upper" Content="大写英文字母"></CheckBox>
                         </Grid>
                         <Grid Grid.Column="3">
-                            <CheckBox Content="小写英文字母"></CheckBox>
+                            <CheckBox Name="checkbox_lower" Content="小写英文字母"></CheckBox>
                         </Grid>
                     </Grid>
 
@@ -153,29 +163,29 @@
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
+
                         <Grid Grid.Column="0">
-                            <Button Content="查询编辑框字符串长度" Margin="5,2,0,2"></Button>
+                            <Button Content="生成当前长度字符串" Width="124" Margin="4,2,5,2" Click="Button_Create_At_Cmd"></Button>
                         </Grid>
+
                         <Grid Grid.Column="1">
-                            <Button Content="生成字符串" Margin="5,2,0,2"></Button>
-                        </Grid>
-                        <Grid Grid.Column="2">
                             <Label Content="生成字符串长度:" />
                         </Grid>
+                        <Grid Grid.Column="2">
+                            <TextBox Name="text_len" Text="" Width="100" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Grid>
                         <Grid Grid.Column="3">
-                            <TextBox Text="" Width="100" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            <Label Content="Byte " />
                         </Grid>
-                        <Grid Grid.Column="4">
-                            <Label Content="Byte" />
-                        </Grid>
+                     
+
                     </Grid>
                     <Grid Grid.Row="11">
                         <Label Content="当前配置，生成的AT指令为:" />
                     </Grid>
                     <Grid Grid.Row="12">
-                        <TextBox>
+                        <TextBox Name="textBox_at_cmd" TextWrapping="Wrap" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
 
                         </TextBox>
                     </Grid>
@@ -183,11 +193,187 @@
 
             </TabItem>
             <TabItem Header="同步">
-                <StackPanel Orientation="Horizontal">
-                    <RadioButton Name="radioButton_sync_bc" Content="同步广播" />
-                    <RadioButton Name="radioButton_sync_up" Content="同步上行" />
-                    <RadioButton Name="radioButton_sync_dl" Content="同步下行" />
-                </StackPanel>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Grid Grid.Row="0" Margin="0, 2, 0, 2">
+                        <StackPanel Orientation="Horizontal">
+                            <RadioButton Name="radioButton_sync_norbc" Click="Button_Create_At_Cmd_Sync" Content="同步普通广播" />
+                            <RadioButton Name="radioButton_sync_otabc" Click="Button_Create_At_Cmd_Sync" Content="同步OTA广播" Margin="5, 0, 0, 0"/>
+                            <RadioButton Name="radioButton_sync_unicast" Click="Button_Create_At_Cmd_Sync" Content="同步单播" Margin="5, 0, 0, 0"/>
+                            <RadioButton Name="radioButton_sync_mc" Click="Button_Create_At_Cmd_Sync" Content="同步组播" Margin="5, 0, 0, 0"/>
+                            <RadioButton Name="radioButton_sync_iote" Click="Button_Create_At_Cmd_Sync" Content="同步iote发送" Margin="5, 0, 0, 0"/>
+                        </StackPanel>
+                    </Grid>
+                    <Grid Grid.Row="1" Margin="0, 2, 0, 2">
+                        <StackPanel Orientation="Horizontal">
+                            <RadioButton Name="radioButton_blocked" Click="Button_Create_At_Cmd_Sync" Content="阻塞发送"/>
+                            <RadioButton Name="radioButton_noblocked" Click="Button_Create_At_Cmd_Sync" Content="非阻塞发送" Margin="10, 0, 0, 0"/>
+                        </StackPanel>
+                    </Grid>
+                    <Grid Grid.Row="2" Margin="0, 2, 0, 2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid Grid.Column="0">
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content=" data_id:" Width="60"/>
+                                <TextBox Name="textBox_dataid" Width="84" Text="123456" HorizontalContentAlignment="Left" VerticalContentAlignment="Center"/>
+                            </StackPanel>
+                        </Grid>
+                        <Grid Grid.Column="1">
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="mc_id:"/>
+                                <TextBox Name="textBox_mcid" Width="84" Text="12345678" HorizontalContentAlignment="Left" VerticalContentAlignment="Center"/>
+                            </StackPanel>
+                        </Grid>
+                        <Grid Grid.Column="2">
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="user_id:"/>
+                                <TextBox Name="textBox_userid" Width="84" Text="12345678" HorizontalContentAlignment="Left" VerticalContentAlignment="Center"/>
+                            </StackPanel>
+                        </Grid>
+                    </Grid>
+                    <Grid Grid.Row="3" Margin="0,2,0,2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid Grid.Column="0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="84"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid Grid.Column="0">
+                                <Label Content=" Symbol:" HorizontalContentAlignment="Left" VerticalContentAlignment="Center"/>
+                            </Grid>
+                            <Grid Grid.Column="1">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+                                <ComboBox Name="comboBox_sync_symbol" IsReadOnly="True" SelectionChanged="Button_Query_data_len" Grid.RowSpan="2">
+                                    <ComboBoxItem>128</ComboBoxItem>
+                                    <ComboBoxItem IsSelected="True">256</ComboBoxItem>
+                                    <ComboBoxItem>512</ComboBoxItem>
+                                    <ComboBoxItem>1024</ComboBoxItem>
+                                </ComboBox>
+                            </Grid>
+                        </Grid>
+                        <Grid Grid.Column="1">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="84"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid Grid.Column="0">
+                                <Label Content="Mcs:" Margin="0,0,6,0"  />
+                            </Grid>
+                            <Grid Grid.Column="1">
+                                <ComboBox Name="comboBox_sync__mcs" IsReadOnly="True" SelectionChanged="Button_Query_data_len">
+                                    <ComboBoxItem IsSelected="True">0</ComboBoxItem>
+                                    <ComboBoxItem>1</ComboBoxItem>
+                                    <ComboBoxItem>2</ComboBoxItem>
+                                    <ComboBoxItem>3</ComboBoxItem>
+                                    <ComboBoxItem>4</ComboBoxItem>
+                                    <ComboBoxItem>5</ComboBoxItem>
+                                    <ComboBoxItem>6</ComboBoxItem>
+                                    <ComboBoxItem>7</ComboBoxItem>
+                                </ComboBox>
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                    <Grid Grid.Row="4" Margin="0, 2, 0, 2">
+                        <Label Name="label_data_t_s" Content="当前配置，数据长度发送时间为:0 s" />
+                    </Grid>
+                    <Grid Grid.Row="5" Margin="0, 2, 0, 2">
+                        <Label Name="label_frame_num" Content="当前配置，帧数为:0 包"/>
+                    </Grid>
+                    <Grid Grid.Row="6">
+                        <Label Content="当前配置，生成字符串为:"></Label>
+                    </Grid>
+                    <Grid Grid.Row="7">
+                        <TextBox Name="textBox_str_data_s" TextWrapping="Wrap" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+
+                        </TextBox>
+                    </Grid>
+                    <Grid Grid.Row="8">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="214"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid Grid.Column="1">
+                            <Label Name="label_data_len_s" Content="当前文本编辑框种的字符串长度为:0 Byte" Margin="5,0,10,0" />
+                        </Grid>
+                        <Grid Grid.Column="0">
+                            <Button Content="查询编辑框字符串长度" Margin="5,2,0,2" Click="Count_str_len_s"/>
+                        </Grid>
+                    </Grid>
+                    <Grid Grid.Row="9">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid Grid.Column="0">
+                            <CheckBox Name="checkbox_punctuation_s" Content="特殊符号" Margin="5,0,0,0"></CheckBox>
+                        </Grid>
+                        <Grid Grid.Column="1">
+                            <CheckBox Name="checkbox_number_s" Content="数字"></CheckBox>
+                        </Grid>
+                        <Grid Grid.Column="2">
+                            <CheckBox Name="checkbox_upper_s" Content="大写英文字母"></CheckBox>
+                        </Grid>
+                        <Grid Grid.Column="3">
+                            <CheckBox Name="checkbox_lower_s" Content="小写英文字母"></CheckBox>
+                        </Grid>
+                    </Grid>
+
+                    <Grid Grid.Row="10" Margin="2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Grid Grid.Column="0">
+                            <Button Content="生成当前长度字符串" Width="124" Margin="5,2,5,2" Click="Button_Create_At_Cmd_Sync"></Button>
+                        </Grid>
+
+                        <Grid Grid.Column="1">
+                            <Label Content="生成字符串长度:" />
+                        </Grid>
+                        <Grid Grid.Column="2">
+                            <TextBox Name="text_len_s" Text="" Width="100" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Grid>
+                        <Grid Grid.Column="3">
+                            <Label Content="Byte " />
+                        </Grid>
+           
+                    </Grid>
+                    <Grid Grid.Row="11">
+                        <Label Content="当前配置，生成的AT指令为:" />
+                    </Grid>
+                    <Grid Grid.Row="12">
+                        <TextBox Name="textBox_at_cmd_s" TextWrapping="Wrap" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"/>
+                    </Grid>
+                </Grid>
             </TabItem>
         </TabControl>
     </Grid>

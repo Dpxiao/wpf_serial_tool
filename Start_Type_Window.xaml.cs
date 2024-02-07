@@ -1,4 +1,4 @@
-﻿using SerialPortExample;
+﻿
 using System;
 using System.Collections.Generic;
 using System.Windows;
@@ -14,7 +14,6 @@ namespace WIoTa_Serial_Tool
     /// 
     public partial class Start_Type_Window : Window
     {
-        public SerialPortManager serialPort;
         public event EventHandler<ButtonClickedEventArgs> ButtonClicked;
         private UserID_Window1 MyUserIDSet;
 

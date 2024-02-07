@@ -131,7 +131,7 @@
 
                                         <Button Style="{StaticResource MyButtonStyle}" Grid.Column="0" Content="更多串口设置" Height="23" Margin="0,0,5,0"></Button>
                                         <Button Style="{StaticResource MyButtonStyle}" Grid.Column="1" Content="接收期望字符" Height="23" Margin="0,0,5,0" Click="Button_Opinion_Click" ></Button>
-                                        <Button Style="{StaticResource MyButtonStyle}" Grid.Column="2" Content="保存接收数据" Height="23" Margin="0,0,5,0" Click="Button_SaveLog_Click" ></Button>
+                                        <Button Style="{StaticResource MyButtonStyle}" Grid.Column="2" Content="保存接收数据" Height="23" Margin="0,4,5,0" Click="Button_SaveLog_Click" VerticalAlignment="Top" ></Button>
                                         <Button Style="{StaticResource MyButtonStyle}" Grid.Column="3" Content="清空发送区" Height="23" Margin="0,0,5,0" Click="Button_Clear_SendEdit_Click"></Button>
                                         <Button Style="{StaticResource MyButtonStyle}" Grid.Column="4" Content="清空接收区" Height="23" Margin="0,0,5,0" Click="Button_Clear_RecvEdit_Click" ></Button>
 
