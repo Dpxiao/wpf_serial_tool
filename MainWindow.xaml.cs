@@ -919,15 +919,8 @@ namespace WIoTa_Serial_Tool
 
         private void Button_GetLen_Click(object sender, RoutedEventArgs e)
         {
-            if (GetSendData_Window == null)
-            {
-                GetSendData_Window = new GetSendData();
-                GetSendData_Window.Show();
-            }
-            else
-            {
-                GetSendData_Window.Show();
-            }
+            GetSendData_Window = new GetSendData();
+            GetSendData_Window.Show();
         }
     }
 

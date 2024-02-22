@@ -1663,9 +1663,6 @@
                                             </DataTemplate>
                                         </DataGridTemplateColumn.CellTemplate>
                                     </DataGridTemplateColumn>
-
-
-
                                 </DataGrid.Columns>
                             </DataGrid>
 
@@ -1680,7 +1677,6 @@
                     <!--<TextBlock Name="timeDateTextBlock" Foreground="White"></TextBlock>-->
                     <TextBlock Name ="recvStatus"></TextBlock>
                 </StatusBarItem>
-
                 <StatusBarItem HorizontalAlignment="Right">
                     <TextBlock Name="timeDateTextBlock" Foreground="Black"></TextBlock>
                 </StatusBarItem>

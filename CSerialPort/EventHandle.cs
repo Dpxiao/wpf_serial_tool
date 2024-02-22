@@ -332,7 +332,8 @@ namespace WIoTa_Serial_Tool
             Button[] openButton = { openButton1, openButton2, openButton3, openButton4, openButton5, openButton6, openButton7, openButton8 };
             if (openButton[port_num].Content.ToString() == "打开串口")
             {
-               // mySerial[port_num] = new mySerialManager();
+                // mySerial[port_num] = new mySerialManager();
+               
                 if (OpenComPort())
                 {
                     OpenSerialThread(port_num);
@@ -344,6 +345,13 @@ namespace WIoTa_Serial_Tool
                     openButton[port_num].Content = "打开串口";
                     return false;
                 }
+              
+            }
+          
+            if (mySerial[port_num].getErroridx() == 17)
+            {
+                openButton[port_num].Content = "打开串口";
+                return false;
             }
             return true;
 
@@ -371,8 +379,6 @@ namespace WIoTa_Serial_Tool
             {
                 
                 mySerial[port_num] = new SerialPortClass();
-               
-
                 //mySerial[port_num].portNum = port_num;
                 //读取配置文件，然后将该值传入。
                 ConfigurationManager.RefreshSection("appSettings");
@@ -466,31 +472,33 @@ namespace WIoTa_Serial_Tool
                     }
                 }
             }
-
-           
         }
 
         private void GridSendButton_Click(object sender, RoutedEventArgs e)
         {
             Button sendButton = sender as Button;
             int port_num = PortTab.SelectedIndex;
+           
             if (sendButton != null)
             {
-              
-
+                foreach (GridDataTemp item in DataTemp)
+                {
+                    ;
+                }
                 // Get the parent DataGridRow
                 DataGridRow row = FindVisualParent<DataGridRow>(sendButton);
 
                 // Get the AT指令 TextBox
                 var dataItem = row.Item;
-
+                
                 // Cast the data item to the appropriate type
                 if (dataItem is GridDataTemp)
                 {
-                    GridDataTemp rowData = (GridDataTemp)dataItem;
 
+                    GridDataTemp rowData = (GridDataTemp)dataItem;
                     // Access the value of the "AT指令" property
                     string AtCmd = rowData.AT指令;
+                    
                     //替换字符中的回车换行符
                     string output = AtCmd.Replace("\\r", "\r");
                     AtCmd = output.Replace("\\n", "\n");
@@ -506,8 +514,6 @@ namespace WIoTa_Serial_Tool
                         mySerialWrite(port_num,AtCmd);
                     }
                 }
-
-               
             }
         }
 
@@ -575,9 +581,9 @@ namespace WIoTa_Serial_Tool
                         }
                     }
                 }
-
-              
             }
+
+
         }
 
         private static T FindVisualParentROW<T>(DependencyObject child) where T : DependencyObject

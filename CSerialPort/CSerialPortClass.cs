@@ -71,6 +71,11 @@ namespace SerialPort_itas109
             return null;
         }
 
+        public int getErroridx()
+        {
+            return sp.getLastError();
+        }
+
         public void OpenThread()
         {
             recvCount = 0;
@@ -104,8 +109,8 @@ namespace SerialPort_itas109
             {
                 try
                 {
-                    
                     receivedData = ReadPortBuff();
+                   
                     if (receivedData != null)
                     {
                         PrintLog(receivedData);
