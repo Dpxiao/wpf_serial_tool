@@ -102,24 +102,24 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="WIoTa_Serial_Tool.exe" size="181680">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="WIoTa_Serial_Tool.exe" size="232880">
       <assemblyIdentity name="WIoTa_Serial_Tool" version="1.0.0.0" language="neutral" processorArchitecture="amd64" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>67997LUPpQ2uzXCHsFmjSkfJeOnAWmFe+5GJMspsON8=</dsig:DigestValue>
+        <dsig:DigestValue>tYIQUOkGAf8myBT2Ct5ycuj7jtAocL8dOZ9CB492nL8=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
-  <file name="WIoTa_Serial_Tool.exe.config" size="5996">
+  <file name="WIoTa_Serial_Tool.exe.config" size="9739">
     <hash>
       <dsig:Transforms>
         <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
       </dsig:Transforms>
       <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-      <dsig:DigestValue>xgiIZS4QuWMdt9WJiYsKWlSfUkhmM26RQEpcA4dHMrU=</dsig:DigestValue>
+      <dsig:DigestValue>tbR47aAx9pqhzs8liPb7ewvdOdSoPYcCWMd2Zwa2l38=</dsig:DigestValue>
     </hash>
   </file>
 </asmv1:assembly>

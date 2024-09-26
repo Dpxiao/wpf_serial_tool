@@ -28,14 +28,14 @@
   <user_id>12345678</user_id>
   <symbol_len_s>256</symbol_len_s>
   <mcs_s>0</mcs_s>
-  <label_data_t_s>当前配置，数据长度发送时间为: 2.343 s</label_data_t_s>
-  <label_frame_num>当前配置，帧数为:8 包</label_frame_num>
-  <textBox_str_data_s>Aa9nGEx279xhM8q5lRwp583q06argKJ7oK1471mr027a0gWQDB5a</textBox_str_data_s>
-  <label_data_len_s>当前文本编辑框种的字符串长度为:52 Byte</label_data_len_s>
+  <label_data_t_s>当前配置，数据长度发送时间为: 2.196 s</label_data_t_s>
+  <label_frame_num>当前配置，帧数为:15 包</label_frame_num>
+  <textBox_str_data_s>HYum3R2fXFkjx671zIz8UH3lyM9U29H6Ty4cQXY765r79S9Uz38L61Y95xT99im4huDd5B11oKo1R7QscQT2C5X6d17p3IZCkTT</textBox_str_data_s>
+  <label_data_len_s>当前文本编辑框种的字符串长度为:99 Byte</label_data_len_s>
   <is_punctuation_s>False</is_punctuation_s>
   <is_number_s>False</is_number_s>
   <is_upper_s>False</is_upper_s>
   <is_lower_s>True</is_lower_s>
-  <text_len_s>52</text_len_s>
-  <at_cmd_s>AT+WIOTASEND=60000,54\r\nAa9nGEx279xhM8q5lRwp583q06argKJ7oK1471mr027a0gWQDB5a</at_cmd_s>
+  <text_len_s>99</text_len_s>
+  <at_cmd_s>AT+WIOTASEND=60000,101\r\nHYum3R2fXFkjx671zIz8UH3lyM9U29H6Ty4cQXY765r79S9Uz38L61Y95xT99im4huDd5B11oKo1R7QscQT2C5X6d17p3IZCkTT</at_cmd_s>
 </root>

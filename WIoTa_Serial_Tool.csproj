@@ -78,7 +78,7 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestCertificateThumbprint>2CF61061C39946C8CAF120BE3853C8D10A609D86</ManifestCertificateThumbprint>
+    <ManifestCertificateThumbprint>A0E15ACD4E0B02357A1DC4CC08FEB7DE4E5D4455</ManifestCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup>
     <ManifestKeyFile>WIoTa_Serial_Tool_TemporaryKey.pfx</ManifestKeyFile>
@@ -216,6 +216,7 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+    <None Include="WIoTa_Serial_Tool_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

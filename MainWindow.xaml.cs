@@ -29,21 +29,29 @@ namespace WIoTa_Serial_Tool
         double gridWidth;
         private Start_Type_Window Start_Window; // 声明窗口实例变量
         private GetSendData GetSendData_Window;
-        private List<string> logFileName = new List<string> { "log1", "log2", "log3", "log4", "log5", "log6", "log7", "log8" };
-        private List<string> selectedPorts = new List<string> { "Port1", "Port2", "Port3", "Port4", "Port5", "Port6", "Port7", "Port8" };
-        private List<bool> isRunning_start = Enumerable.Repeat(false, 8).ToList();
-        private List<bool> isRunning_loopsend = Enumerable.Repeat(true, 8).ToList();
-        private List<bool> isRunning_looptimer = Enumerable.Repeat(true, 8).ToList();
+        private List<string> logFileName = new List<string> { "log1", "log2", "log3", "log4", "log5", "log6", "log7", "log8",
+                                                              "log9", "log10", "log11", "log12", "log13", "log14", "log15", "log16"            };
+        private List<string> selectedPorts = new List<string> { "Port1", "Port2", "Port3", "Port4", "Port5", "Port6", "Port7", "Port8" ,
+                                                                "Port9", "Port10", "Port11", "Port12", "Port13", "Port14", "Port15", "Port16"
+                                                                };
+        private List<bool> isRunning_start = Enumerable.Repeat(false, 16).ToList();
+        private List<bool> isRunning_loopsend = Enumerable.Repeat(true, 16).ToList();
+        private List<bool> isRunning_looptimer = Enumerable.Repeat(true, 16).ToList();
   
         private List<GridDataTemp> DataTemp;
-        private SerialPortClass []mySerial = new SerialPortClass[8];
+        private SerialPortClass []mySerial = new SerialPortClass[16];
         private Thread loopSendThread;
+        private Thread MulitSendThread;
+        private Thread StopMulitWIoTaThread;
         private LoopSendPara parameters;
+        private MulitSendPara Mulitpara;
         private MyWindow NoteWindow;
         private Thread loopTimeSendThread;
         private Thread startSendThread;
         private Thread autoAckSendThread;
         private Thread mulitSendThread;
+        public List<string> StringAtCmdList;
+        public List<SerialPortClass> SerialList;
 
         private int portNum = 0;
         string NowTabName;
@@ -51,12 +59,13 @@ namespace WIoTa_Serial_Tool
         int NextIndexChild;
         private bool isRunning_ack = true; //自动应答标志位
         private bool isRunning_mulit = true; //批量发送标志位
-        private bool test_falg = false;
+        private bool isTemptest_flag = false;
+
         public MainWindow()
         {
             InitializeComponent();
-            test_falg = true;
-            TextBox[] recvDataTextBox = { recvDataRichTextBox1, recvDataRichTextBox2, recvDataRichTextBox3, recvDataRichTextBox4, recvDataRichTextBox5, recvDataRichTextBox6, recvDataRichTextBox7, recvDataRichTextBox8 };
+            SerialList = new List<SerialPortClass>(); // 初始化列表
+            TextBox[] recvDataTextBox = Enumerable.Range(1, 16).Select(i => (TextBox)FindName($"recvDataRichTextBox{i}")).ToArray();
             foreach (var textBox in recvDataTextBox)
             {
                 textBox.UndoLimit = 0;
@@ -69,7 +78,7 @@ namespace WIoTa_Serial_Tool
                 for (int i = 1; i <= 60; i++)
                 {
                     DataTemp.Add(new GridDataTemp { NumCol = i, Hex = false, 应答 = "OK", 延时 = "1000", AT指令 = "AT", 发送 = $"发送按钮{i}" });
-                }            
+                }
             }
             DataContext = DataTemp;
             ReadAppConfig();
@@ -182,16 +191,19 @@ namespace WIoTa_Serial_Tool
 
         private void Button_Clear_SendEdit_Click(object sender, RoutedEventArgs e)
         {
-            TextBox[] Send_At_Edit = { Send_At_Edit1, Send_At_Edit2, Send_At_Edit3, Send_At_Edit4, Send_At_Edit5, Send_At_Edit6, Send_At_Edit7, Send_At_Edit8 };
+            TextBox[] Send_At_Edit = Enumerable.Range(1, 16).Select(i => (TextBox)FindName($"Send_At_Edit{i}")).ToArray();
 
+            Console.WriteLine(portNum);
             Send_At_Edit[portNum].Clear();
         }
 
         private void Button_Display_Start_Windows_Click(object sender, RoutedEventArgs e)
         {
             int port_num = PortTab.SelectedIndex;
-            Button[] Start_Button = { Start_Button1, Start_Button2, Start_Button3, Start_Button4,
-            Start_Button5,Start_Button6,Start_Button7,Start_Button8};
+
+            Button[] Start_Button = Enumerable.Range(1, 16).Select(i => (Button)FindName($"Start_Button{i}")).ToArray();
+
+
             if (Start_Window == null)
             {
                 for (int i = 0; i < 8; i++)
@@ -206,7 +218,7 @@ namespace WIoTa_Serial_Tool
 
                 Start_Window.Owner = this;
                 Start_Window.Top = this.Top;
-                Start_Window.Left = this.Left + this.Width - 10;
+                Start_Window.Left = this.Left + this.Width;
 
                 // 订阅主窗口的 LocationChanged 事件
                 this.LocationChanged += MainWindow_LocationChanged;
@@ -229,7 +241,7 @@ namespace WIoTa_Serial_Tool
             if (Start_Window != null)
             {
                 Start_Window.Top = this.Top;
-                Start_Window.Left = this.Left + this.Width - 10; // 改变左侧位置为主窗口的右侧
+                Start_Window.Left = this.Left + this.Width; // 改变左侧位置为主窗口的右侧
             }
         }
 
@@ -246,7 +258,7 @@ namespace WIoTa_Serial_Tool
             int tabIndex = GridTab.SelectedIndex;
           
            saveDataGrid(TabName, tabIndex);
-            for (int i = 0; i < 8; i++)
+            for (int i = 0; i < 16; i++)
             {
                 isRunning_start[i] = false;
                 isRunning_ack = false;
@@ -284,9 +296,7 @@ namespace WIoTa_Serial_Tool
         {
             string portNumber = SelectComPort();
             int port_num = PortTab.SelectedIndex;
-            CheckBox[] savefileCheckBox = { savefileCheckBox1 , savefileCheckBox2 , savefileCheckBox3 , savefileCheckBox4 , savefileCheckBox5
-            , savefileCheckBox6 , savefileCheckBox7 , savefileCheckBox8 };
-
+            CheckBox[] savefileCheckBox = Enumerable.Range(1, 16).Select(i => (CheckBox)FindName($"savefileCheckBox{i}")).ToArray();
             if (savefileCheckBox[port_num].IsChecked ?? false)
             {
                 DateTime now = DateTime.UtcNow;
@@ -325,14 +335,14 @@ namespace WIoTa_Serial_Tool
         private void StampCheckBox_Checked(object sender, RoutedEventArgs e)
         {
             int port_num = PortTab.SelectedIndex;
-            mySerial[port_num].isStamp = stampCheckBox1.IsChecked ?? false;
+            CheckBox[] stampCheckBox = Enumerable.Range(1, 16).Select(i => (CheckBox)FindName($"stampCheckBox{i}")).ToArray();
+            mySerial[port_num].isStamp = stampCheckBox[port_num].IsChecked ?? false;
         }
 
         private void BlockSendCheck_Click(object sender, RoutedEventArgs e)
         {
             int port_num = PortTab.SelectedIndex;
-            CheckBox[] blockSendCheck = { blockSendCheck1 , blockSendCheck2 , blockSendCheck3 , blockSendCheck4 , blockSendCheck5 ,
-                blockSendCheck6 , blockSendCheck7 , blockSendCheck8 };
+            CheckBox[] blockSendCheck = Enumerable.Range(1, 16).Select(i => (CheckBox)FindName($"blockSendCheck{i}")).ToArray();
             if (mySerial[port_num] == null)
             {
                 return;
@@ -352,86 +362,46 @@ namespace WIoTa_Serial_Tool
         {
             string readValue;
             //串口名称
-            ComboBox[] portsComboBox = { portsComboBox1, portsComboBox2, portsComboBox3, portsComboBox4, portsComboBox5, portsComboBox6, portsComboBox7, portsComboBox8 };
-            for (int num = 0; num < 8; num++)
+            ComboBox[] portsComboBox = Enumerable.Range(1, 16).Select(i => (ComboBox)FindName($"portsComboBox{i}")).ToArray();
+            //波特率
+            ComboBox[] baudRateComboBox = Enumerable.Range(1, 16).Select(i => (ComboBox)FindName($"baudRateComboBox{i}")).ToArray();
+            //AT指令
+            TextBox[] Send_At_Edit = Enumerable.Range(1, 16).Select(i => (TextBox)FindName($"Send_At_Edit{i}")).ToArray();
+            //阻塞发送
+            CheckBox[] blockSendCheck = Enumerable.Range(1, 16).Select(i => (CheckBox)FindName($"blockSendCheck{i}")).ToArray();
+            //保存接收
+            CheckBox[] savefileCheckBox = Enumerable.Range(1, 16).Select(i => (CheckBox)FindName($"savefileCheckBox{i}")).ToArray();
+            //时间戳
+            CheckBox[] stampCheckBox = Enumerable.Range(1, 16).Select(i => (CheckBox)FindName($"stampCheckBox{i}")).ToArray();
+            //回车换行
+            CheckBox[] enterCheckBox = Enumerable.Range(1, 16).Select(i => (CheckBox)FindName($"enterCheckBox{i}")).ToArray();
+            //定时发送时间
+            TextBox[] timerSendTextBox = Enumerable.Range(1, 16).Select(i => (TextBox)FindName($"timerSendTextBox{i}")).ToArray();
+            //循环发送次数
+
+            TextBox[] loopSendNumTextBox = Enumerable.Range(1, 16).Select(i => (TextBox)FindName($"loopSendNumTextBox{i}")).ToArray();
+            //循环发送时间
+            TextBox[] loopSendTimeTextBox = Enumerable.Range(1, 16).Select(i => (TextBox)FindName($"loopSendTimeTextBox{i}")).ToArray();
+            for (int num = 0; num < 16; num++)
             {
                 readValue = ConfigurationManager.AppSettings[$"Serial_Name{num}"];
                 portsComboBox[num].SelectedItem = readValue;
-            }
-          
-
-            //波特率
-            ComboBox[] baudRateComboBox = { baudRateComboBox1, baudRateComboBox2, baudRateComboBox3, baudRateComboBox4, baudRateComboBox5, baudRateComboBox6, baudRateComboBox7, baudRateComboBox8 };
-            for (int num = 0; num < 8; num++)
-            {
                 readValue = ConfigurationManager.AppSettings[$"Serial_Rate{num}"];
                 baudRateComboBox[num].Text = readValue;
-            }
-
-            //AT指令
-            TextBox[] Send_At_Edit = { Send_At_Edit1, Send_At_Edit2, Send_At_Edit3, Send_At_Edit4, Send_At_Edit5, Send_At_Edit6, Send_At_Edit7, Send_At_Edit8 };
-            for (int num = 0; num < 8; num++)
-            {
                 readValue = ConfigurationManager.AppSettings[$"Serial_AtCmd{num}"];
                 Send_At_Edit[num].Text = readValue;
-            }
-
-            //阻塞发送
-            CheckBox[] blockSendCheck = { blockSendCheck1, blockSendCheck2, blockSendCheck3, blockSendCheck4, blockSendCheck5, blockSendCheck6, blockSendCheck7, blockSendCheck8 };
-            for (int num = 0; num < 8; num++)
-            {
                 readValue = ConfigurationManager.AppSettings[$"block_Checked{num}"];
                 blockSendCheck[num].IsChecked = RetCheckStatus(readValue);
-            }
-
-            //保存接收
-            CheckBox[] savefileCheckBox = { savefileCheckBox1, savefileCheckBox2, savefileCheckBox3, savefileCheckBox4, savefileCheckBox5, savefileCheckBox6, savefileCheckBox7, savefileCheckBox8 };
-            for (int num = 0; num < 8; num++)
-            {
                 readValue = ConfigurationManager.AppSettings[$"savefile_Checked{num}"];
                 savefileCheckBox[num].IsChecked = RetCheckStatus(readValue);
-            }
-
-            //时间戳
-            CheckBox[] stampCheckBox = { stampCheckBox1, stampCheckBox2, stampCheckBox3, stampCheckBox4, stampCheckBox5, stampCheckBox6, stampCheckBox7, stampCheckBox8 };
-            for (int num = 0; num < 8; num++)
-            {
                 readValue = ConfigurationManager.AppSettings[$"stamp_Checked{num}"];
                 stampCheckBox[num].IsChecked = RetCheckStatus(readValue);
-            }
-
-            //回车换行
-            CheckBox[] enterCheckBox = { enterCheckBox1, enterCheckBox2, enterCheckBox3, enterCheckBox4, enterCheckBox5, enterCheckBox6, enterCheckBox7, enterCheckBox8 };
-            for (int num = 0; num < 8; num++)
-            {
                 readValue = ConfigurationManager.AppSettings[$"enter_Checked{num}"];
                 enterCheckBox[num].IsChecked = RetCheckStatus(readValue);
-            }
-
-            //定时发送时间
-            TextBox[] timerSendTextBox = { timerSendTextBox1, timerSendTextBox2, timerSendTextBox3, timerSendTextBox4,
-                timerSendTextBox5, timerSendTextBox6, timerSendTextBox7, timerSendTextBox8 };
-            for (int num = 0; num < 8; num++)
-            {
                 readValue = ConfigurationManager.AppSettings[$"send_Timer{num}"];
                 timerSendTextBox[num].Text = readValue;
-            }
-
-
-            //循环发送次数
-            TextBox[] loopSendNumTextBox = { loopSendNumTextBox1, loopSendNumTextBox2, loopSendNumTextBox3, loopSendNumTextBox4,
-                loopSendNumTextBox5, loopSendNumTextBox6, loopSendNumTextBox7, loopSendNumTextBox8 };
-            for (int num = 0; num < 8; num++)
-            {
                 readValue = ConfigurationManager.AppSettings[$"loopSend_Num{num}"];
                 loopSendNumTextBox[num].Text = readValue;
-            }
-
-            //循环发送时间
-            TextBox[] loopSendTimeTextBox = { loopSendTimeTextBox1, loopSendTimeTextBox2, loopSendTimeTextBox3, loopSendTimeTextBox4,
-                loopSendTimeTextBox5, loopSendTimeTextBox6, loopSendTimeTextBox7, loopSendTimeTextBox8 };
-            for (int num = 0; num < 8; num++)
-            {
                 readValue = ConfigurationManager.AppSettings[$"loopSend_Timer{num}"];
                 loopSendTimeTextBox[num].Text = readValue;
             }
@@ -476,11 +446,10 @@ namespace WIoTa_Serial_Tool
 
         private void Gridhide()
         {
-            Button[] AtCmdList_Button = { AtCmdList_Button1, AtCmdList_Button2 , AtCmdList_Button3 , AtCmdList_Button4 , AtCmdList_Button5 ,
-                AtCmdList_Button6 , AtCmdList_Button7 , AtCmdList_Button8 };
+            Button[] AtCmdList_Button = Enumerable.Range(1, 16).Select(i => (Button)FindName($"AtCmdList_Button{i}")).ToArray();
             if (isChecked_at_grid_flag)
             {
-                for (int i = 0; i < 8; i++)
+                for (int i = 0; i < 16; i++)
                 {
                     AtCmdList_Button[i].Content = "指令列表扩展>>";
                 }
@@ -489,7 +458,7 @@ namespace WIoTa_Serial_Tool
             }
             else
             {
-                for (int i = 0; i < 8; i++)
+                for (int i = 0; i < 16; i++)
                 {
                     AtCmdList_Button[i].Content = "指令列表隐藏<<";
                 }
@@ -504,86 +473,45 @@ namespace WIoTa_Serial_Tool
             Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
 
             //串口名称
-            ComboBox[] portsComboBox = { portsComboBox1, portsComboBox2, portsComboBox3, portsComboBox4, portsComboBox5, portsComboBox6, portsComboBox7, portsComboBox8 };
-            for (int num = 0; num < 8; num++)
+           ComboBox[] portsComboBox = Enumerable.Range(1, 16).Select(i => (ComboBox)FindName($"portsComboBox{i}")).ToArray();
+            //波特率
+            ComboBox[] baudRateComboBox = Enumerable.Range(1, 16).Select(i => (ComboBox)FindName($"baudRateComboBox{i}")).ToArray();
+            //发送AT编辑框
+            TextBox[] Send_At_Edit = Enumerable.Range(1, 16).Select(i => (TextBox)FindName($"Send_At_Edit{i}")).ToArray();
+            //阻塞发送
+            CheckBox[] blockSendCheck = Enumerable.Range(1, 16).Select(i => (CheckBox)FindName($"blockSendCheck{i}")).ToArray();
+            //保存接收
+            CheckBox[] savefileCheckBox = Enumerable.Range(1, 16).Select(i => (CheckBox)FindName($"savefileCheckBox{i}")).ToArray();
+            //时间戳
+            CheckBox[] stampCheckBox = Enumerable.Range(1, 16).Select(i => (CheckBox)FindName($"stampCheckBox{i}")).ToArray();
+            //回车换行
+            CheckBox[] enterCheckBox = Enumerable.Range(1, 16).Select(i => (CheckBox)FindName($"enterCheckBox{i}")).ToArray();
+            //定时发送时间
+            TextBox[] timerSendTextBox = Enumerable.Range(1, 16).Select(i => (TextBox)FindName($"timerSendTextBox{i}")).ToArray();
+            ////循环发送次数
+            TextBox[] loopSendNumTextBox = Enumerable.Range(1, 16).Select(i => (TextBox)FindName($"loopSendNumTextBox{i}")).ToArray();
+            //循环发送时间
+            TextBox[] loopSendTimeTextBox = Enumerable.Range(1, 16).Select(i => (TextBox)FindName($"loopSendTimeTextBox{i}")).ToArray();
+            for (int num = 0; num < 16; num++)
             {
                 selectedValue = portsComboBox[num].SelectedValue.ToString();
                 config.AppSettings.Settings[$"Serial_Name{num}"].Value = selectedValue;
-            }
-
-            //波特率
-            ComboBox[] baudRateComboBox = { baudRateComboBox1, baudRateComboBox2, baudRateComboBox3, baudRateComboBox4, baudRateComboBox5, baudRateComboBox6, baudRateComboBox7, baudRateComboBox8 };
-            for (int num = 0; num < 8; num++)
-            {
                 selectedValue = baudRateComboBox[num].Text;//由于可编辑所以要这样获取值
                 config.AppSettings.Settings[$"Serial_Rate{num}"].Value = selectedValue;
-            }
-
-            //发送AT编辑框
-            TextBox[] Send_At_Edit = { Send_At_Edit1, Send_At_Edit2, Send_At_Edit3, Send_At_Edit4, Send_At_Edit5, Send_At_Edit6, Send_At_Edit7, Send_At_Edit8 };
-            for (int num = 0; num < 8; num++)
-            {
                 selectedValue = Send_At_Edit[num].Text;
                 config.AppSettings.Settings[$"Serial_AtCmd{num}"].Value = selectedValue;
-            }
-
-            //阻塞发送
-            CheckBox[] blockSendCheck = { blockSendCheck1, blockSendCheck2, blockSendCheck3, blockSendCheck4, blockSendCheck5, blockSendCheck6, blockSendCheck7, blockSendCheck8 };
-            for (int num = 0; num < 8; num++)
-            {
                 bselectedValue = blockSendCheck[num].IsChecked ?? false;
                 config.AppSettings.Settings[$"block_Checked{num}"].Value = bselectedValue.ToString();
-            }
-
-            //保存接收
-            CheckBox[] savefileCheckBox = { savefileCheckBox1, savefileCheckBox2, savefileCheckBox3, savefileCheckBox4, savefileCheckBox5, savefileCheckBox6, savefileCheckBox7, savefileCheckBox8 };
-            for (int num = 0; num < 8; num++)
-            {
                 bselectedValue = savefileCheckBox[num].IsChecked ?? false;
                 config.AppSettings.Settings[$"savefile_Checked{num}"].Value = bselectedValue.ToString();
-            }
-
-            //时间戳
-            CheckBox[] stampCheckBox = { stampCheckBox1, stampCheckBox2, stampCheckBox3, stampCheckBox4, stampCheckBox5, stampCheckBox6, stampCheckBox7, stampCheckBox8 };
-            for (int num = 0; num < 8; num++)
-            {
                 bselectedValue = stampCheckBox[num].IsChecked ?? false;
                 config.AppSettings.Settings[$"stamp_Checked{num}"].Value = bselectedValue.ToString();
-            }
-
-
-            //回车换行
-            CheckBox[] enterCheckBox = { enterCheckBox1, enterCheckBox2, enterCheckBox3, enterCheckBox4, enterCheckBox5, enterCheckBox6, enterCheckBox7, enterCheckBox8 };
-            for (int num = 0; num < 8; num++)
-            {
                 bselectedValue = enterCheckBox[num].IsChecked ?? false;
                 config.AppSettings.Settings[$"enter_Checked{num}"].Value = bselectedValue.ToString();
-            }
-
-            //定时发送时间
-            TextBox[] timerSendTextBox = { timerSendTextBox1, timerSendTextBox2, timerSendTextBox3, timerSendTextBox4,
-                timerSendTextBox5, timerSendTextBox6, timerSendTextBox7, timerSendTextBox8 };
-            for (int num = 0; num < 8; num++)
-            {
                 selectedValue = timerSendTextBox[num].Text;
                 config.AppSettings.Settings[$"send_Timer{num}"].Value = selectedValue;
-            }
-
-
-            //循环发送次数
-            TextBox[] loopSendNumTextBox = { loopSendNumTextBox1, loopSendNumTextBox2, loopSendNumTextBox3, loopSendNumTextBox4,
-                loopSendNumTextBox5, loopSendNumTextBox6, loopSendNumTextBox7, loopSendNumTextBox8 };
-            for (int num = 0; num < 8; num++)
-            {
                 selectedValue = loopSendNumTextBox[num].Text;
                 config.AppSettings.Settings[$"loopSend_Num{num}"].Value = selectedValue;
-            }
-
-            //循环发送时间
-            TextBox[] loopSendTimeTextBox = { loopSendTimeTextBox1, loopSendTimeTextBox2, loopSendTimeTextBox3, loopSendTimeTextBox4,
-                loopSendTimeTextBox5, loopSendTimeTextBox6, loopSendTimeTextBox7, loopSendTimeTextBox8 };
-            for (int num = 0; num < 8; num++)
-            {
                 selectedValue = loopSendTimeTextBox[num].Text;
                 config.AppSettings.Settings[$"loopSend_Timer{num}"].Value = selectedValue;
             }
@@ -600,17 +528,17 @@ namespace WIoTa_Serial_Tool
             config.AppSettings.Settings["tab_Name"].Value = (string)title;
 
             //tab combobox
-           ComboBox[] ATCmdComBox = { ATCmdComBox1, ATCmdComBox2, ATCmdComBox3 };
+            ComboBox[] ATCmdComBox = { ATCmdComBox1, ATCmdComBox2, ATCmdComBox3 };
             for (int i = 0; i < 3; i++)
             {
                 index = ATCmdComBox[i].SelectedIndex;
-                config.AppSettings.Settings[$"tabComboBox_Index{i+1}"].Value = index.ToString();
+                config.AppSettings.Settings[$"tabComboBox_Index{i + 1}"].Value = index.ToString();
 
                 var selectedItem = ATCmdComBox[i].SelectedItem as ComboBoxItem;
                 var sheetName = selectedItem.Content;
-                config.AppSettings.Settings[$"tabComboBox_Name{i+1}"].Value = (string)sheetName;
+                config.AppSettings.Settings[$"tabComboBox_Name{i + 1}"].Value = (string)sheetName;
             }
-           
+
 
             selectedValue = isChecked_at_grid_flag.ToString();
             config.AppSettings.Settings["at_grid_flag"].Value = selectedValue;
@@ -630,6 +558,15 @@ namespace WIoTa_Serial_Tool
             // port_num
             int port_num = PortTab.SelectedIndex;
             StartSendPara startPara;
+            if (startSendThread != null)
+            {
+                isRunning_start[port_num] = false;
+                if (startSendThread != null)
+                {
+                    startSendThread.Abort();
+                }
+            }
+
             if (OpenSerial_Clicked_Send())
             {
                 if (!isRunning_start[port_num])
@@ -640,6 +577,7 @@ namespace WIoTa_Serial_Tool
                     startPara.mySerial = mySerial[port_num];
 
                     startPara.StringList = e.StringList;
+                    StringAtCmdList = e.StringList;
                     isRunning_start[port_num] = true;
                     mySerial[port_num].isRunWiota = true;
 
@@ -654,8 +592,7 @@ namespace WIoTa_Serial_Tool
                 if(startSendThread!=null)
                 {
                    startSendThread.Abort();
-                }
-               
+                }        
             }
         }
 
@@ -670,7 +607,6 @@ namespace WIoTa_Serial_Tool
             foreach (string AtCmd in AtCmdList)
             {
                 //Console.WriteLine(AtCmd);
-               
                 if (!isRunning_start[port_num])
                 {
                     break;
@@ -683,10 +619,9 @@ namespace WIoTa_Serial_Tool
                     At_cmd = AtCmd + "\r\n";
                     Add_TimeStamp(At_cmd,port_num);
                 }));
-                _ = mySerial.SendPortString(At_cmd);
+                mySerial.SendPortString(port_num, At_cmd);
                 if (mySerial.isRunWiota)
-                {
-                    
+                {               
                     while (mySerial.block_falg)
                     {
                        
@@ -782,7 +717,7 @@ namespace WIoTa_Serial_Tool
                            
                             Add_TimeStamp(At_cmd, port_num);
                         }));
-                        _ = mySerial.SendPortString(At_cmd);
+                        mySerial.SendPortString(port_num, At_cmd);
                     }
                 }
             }
@@ -808,7 +743,6 @@ namespace WIoTa_Serial_Tool
                     mySerial[port_num].ack_falg = true;
                     //开启自动应答的线程
                     autoAckSendThread.Start(AutoAckPara);
-                    
                 }
                 else
                 {
@@ -878,7 +812,7 @@ namespace WIoTa_Serial_Tool
                             Add_TimeStamp(At_cmd, port_num);
                         }));
                         
-                        _ = mySerial.SendPortString(At_cmd);
+                        mySerial.SendPortString(port_num, At_cmd);
                     }
                 }
             }
@@ -902,8 +836,7 @@ namespace WIoTa_Serial_Tool
            string result = data.Replace("\r", "").Replace("\n", "");
            int count = StringHelper.CountKeywords(result, "WIOTARECV");
             RetTextBoxObject(portNum).Text = $"{count}";
-
-           
+            mySerial[portNum].lenCount = 0;
         }
 
         private void OpenFileLocation(object sender, RoutedEventArgs e)
@@ -922,6 +855,390 @@ namespace WIoTa_Serial_Tool
             GetSendData_Window = new GetSendData();
             GetSendData_Window.Show();
         }
+
+        private void Button_Auto_Test_Click(object sender, RoutedEventArgs e)
+        {
+            if (MulitSendThread != null)
+            {
+
+                if (MulitSendThread.IsAlive)
+                {
+                    // 线程已经结束
+                    TextBox[] recvDataRichTextBox = Enumerable.Range(1, 16).Select(i => (TextBox)FindName($"recvDataRichTextBox{i}")).ToArray();
+                    DateTime now = DateTime.Now;
+                    string timestamp = now.ToString("yyyy-MM-dd HH:mm:ss.fff");
+                    recvDataRichTextBox[portNum].AppendText($"[{timestamp}] 测试线程已经开启，请勿重复点击\r");
+                    recvDataRichTextBox[portNum].ScrollToEnd();
+                    return;
+                }
+            }
+
+            //第一步，获取一键启动的指令,需要进行一次一键启动
+            if (StringAtCmdList == null)
+            {
+                TextBox[] recvDataRichTextBox = Enumerable.Range(1, 16).Select(i => (TextBox)FindName($"recvDataRichTextBox{i}")).ToArray();
+                DateTime now = DateTime.Now;
+                string timestamp = now.ToString("yyyy-MM-dd HH:mm:ss.fff");
+                recvDataRichTextBox[portNum].AppendText($"[{timestamp}] 指令列表为空，请先进行一次一键启动\r");
+                recvDataRichTextBox[portNum].ScrollToEnd();
+                return;
+            }
+            // 第二步判断所有已经打开的串口
+            if (SerialList != null)
+            {
+                SerialList.Clear();
+            }
+              
+            for (int i = 0; i < 16; i++)
+            {
+                SerialList.Add(mySerial[i]);
+                if (mySerial[i] == null)
+                    continue;
+                isRunning_start[i] = true;
+                mySerial[i].isRunWiota = true;
+            }
+            //第三步，遍历发送数据,在线程里开启这个测试，
+
+           RunMultSendThread();
+
+            //第三步，统计数据，然后又进行第二步，直至端口遍历完成
+        }
+
+        public void RunMultSendThread()
+        {
+            MulitSendThread = new Thread(new ParameterizedThreadStart(MulitSendThread_func));
+            Mulitpara = new MulitSendPara
+            {
+                mySerialList = SerialList,
+                StringList = StringAtCmdList,
+                isTemptest_flag = isTemptest_flag,
+            };
+            MulitSendThread.Start(Mulitpara);
+        }
+
+
+        public void startMulitSend(List<SerialPortClass> mySerialList, List<string> AtCmdList)
+        {
+            int portIndex = -1;
+            string At_cmd = "";
+            foreach (SerialPortClass mySerial in mySerialList)
+            {
+                portIndex += 1;
+                if (mySerial == null)
+                {
+                    continue;
+                }
+                foreach (string AtCmd in AtCmdList)
+                {
+                    //Console.WriteLine(AtCmd);
+                    if (!isRunning_start[portIndex])
+                    {
+                        break;
+                    }
+                    // 向串口写入指令并添加回车换行符
+                    // 可选：等待一段时间以确保设备处理完指令
+                    this.Dispatcher.Invoke(new Action(() =>
+                    {
+
+                        At_cmd = AtCmd + "\r\n";
+                        Add_TimeStamp(At_cmd, portIndex);
+                    }));
+                    mySerial.SendPortString(portIndex, At_cmd);
+                    if (mySerial.isRunWiota)
+                    {
+                        while (mySerial.block_falg)
+                        {
+
+                            if (!isRunning_start[portIndex])
+                            {
+                                break;
+                            }
+                            Thread.Sleep(100);
+                        }
+                        mySerial.block_falg = true;
+                    }
+                    Thread.Sleep(50);
+                }
+                mySerial.isRunWiota = false;
+                isRunning_start[portIndex] = false;
+
+                this.Dispatcher.Invoke(new Action(() =>
+                {
+                    TextBox[] recvDataTextBox = Enumerable.Range(1, 16).Select(k => (TextBox)this.FindName($"recvDataRichTextBox{k}")).ToArray();
+                    recvDataTextBox[0].AppendText($"=====端口{portIndex}结束一键启动=====\r\n");
+                    recvDataTextBox[0].ScrollToEnd();
+                }));
+            }
+
+        }
+
+        public void SendloopMulit(List<SerialPortClass> mySerialList)
+        {
+            int portIndex = -1;
+            string loopcount = string.Empty;
+            string sleep = string.Empty;
+            foreach (SerialPortClass mySerial in mySerialList)
+            {
+                portIndex += 1;
+                if (mySerial == null)
+                {
+                    continue;
+                }
+                this.Dispatcher.Invoke(new Action(() =>
+                {
+                    TextBox[] loopSendNumTextBox = Enumerable.Range(1, 16).Select(k => (TextBox)FindName($"loopSendNumTextBox{k}")).ToArray();
+                    TextBox[] loopSendTimeTextBox = Enumerable.Range(1, 16).Select(k => (TextBox)FindName($"loopSendTimeTextBox{k}")).ToArray();
+                    loopcount = loopSendNumTextBox[portIndex].Text;
+                    sleep = loopSendTimeTextBox[portIndex].Text;
+                }));
+                try
+                {
+                    int num = Convert.ToInt32(loopcount);
+                    int sleep_time = Convert.ToInt32(sleep);
+                    for (int i = 0; i < num; i++)
+                    {
+                        if (!isRunning_loopsend[portIndex])
+                        {
+                            break;
+                        }
+                        // 在UI线程上下文中更新UI控件
+                        this.Dispatcher.Invoke(new Action(() =>
+                        {
+                            TextBox[] recvDataTextBox = Enumerable.Range(1, 16).Select(k => (TextBox)this.FindName($"recvDataRichTextBox{k}")).ToArray();
+                            recvDataTextBox[portIndex].AppendText($"=====开始第{i + 1}次发送=====\r\n");
+                            recvDataTextBox[portIndex].ScrollToEnd();
+                            if (logFileName[portIndex] != null)
+                            {
+                                using (StreamWriter writer = new StreamWriter(logFileName[portIndex], true))
+                                {
+                                    writer.WriteLine($" ===== 开始第{ i + 1}次发送 =====\r\n");
+                                }
+                            }
+                        }));
+
+                        string AtCmd = string.Empty;
+
+                        // 在UI线程上下文中访问和获取UI控件的值
+                        this.Dispatcher.Invoke(new Action(() =>
+                        {
+                            TextBox[] Send_At_Edit = Enumerable.Range(1, 16).Select(k => (TextBox)FindName($"Send_At_Edit{k}")).ToArray();
+                            CheckBox[] enterCheckBox = Enumerable.Range(1, 16).Select(k => (CheckBox)FindName($"enterCheckBox{k}")).ToArray();
+                            CheckBox[] loopSendCheck = Enumerable.Range(1, 16).Select(k => (CheckBox)FindName($"loopSendCheck{k}")).ToArray();
+                            AtCmd = Send_At_Edit[portIndex].Text;
+                            string output = AtCmd.Replace("\\r", "\r");
+                            AtCmd = output.Replace("\\n", "\n");
+                            if (enterCheckBox[portIndex].IsChecked ?? false)
+                            {
+                                AtCmd += "\r\n";
+                            }
+                            Add_TimeStamp(AtCmd, portIndex);
+                        }));
+                        mySerialWrite(portIndex, AtCmd);
+
+                        if (mySerial.isBlockSend)
+                        {
+                            mySerial.block_falg = true;
+                            while (mySerial.block_falg)
+                            {
+
+                                if (!isRunning_loopsend[portIndex])
+                                {
+                                    break;
+                                }
+                                if (!mySerial.isBlockSend)
+                                {
+                                    break;
+                                }
+                                Thread.Sleep(100);
+                            }
+                        }
+                        Thread.Sleep(sleep_time);
+                    }
+                    //在UI线程上下文中更新UI控件
+
+                    //统计并且写入文件
+                    CountRecv_WriteCSV(mySerialList);
+
+                    this.Dispatcher.Invoke(new Action(() =>
+                    {
+                        TextBox[] recvDataTextBox = Enumerable.Range(1, 16).Select(k => (TextBox)this.FindName($"recvDataRichTextBox{k}")).ToArray();
+                        recvDataTextBox[0].AppendText($"=====端口{portIndex}结束循环发送=====\r\n");
+                        recvDataTextBox[0].ScrollToEnd();
+                    }));
+
+                }
+                catch (OverflowException)
+                {
+                    MessageBox.Show("输出数值超过最大值：2147483647", "警告");
+                }
+                try
+                {
+                    this.Dispatcher.Invoke(new Action(() =>
+                    {
+                        TextBox[] recvDataTextBox = Enumerable.Range(1, 16).Select(k => (TextBox)FindName($"recvDataRichTextBox{k}")).ToArray();
+                        CheckBox[] loopSendCheck = Enumerable.Range(1, 16).Select(k => (CheckBox)FindName($"loopSendCheck{k}")).ToArray();
+                        loopSendCheck[portIndex].IsChecked = false;
+                        recvDataTextBox[portIndex].ScrollToEnd();
+                    }));
+                }
+                catch (System.Threading.Tasks.TaskCanceledException)
+                {
+                    return;
+                }
+            }
+            this.Dispatcher.Invoke(new Action(() =>
+            {
+                TextBox[] recvDataTextBox = Enumerable.Range(1, 16).Select(k => (TextBox)this.FindName($"recvDataRichTextBox{k}")).ToArray();
+                recvDataTextBox[0].AppendText($"=====自动化测试结束=====\r\n");
+                recvDataTextBox[0].ScrollToEnd();
+            }));
+        }
+
+        public void CountRecv_WriteCSV(List<SerialPortClass> mySerialList)
+        {
+            int portIndex = -1;
+            List<string> recvCount = new List<string>();
+
+            foreach (SerialPortClass mySerial in mySerialList)
+            {
+                portIndex += 1;
+                if (mySerial == null)
+                {
+                    continue;
+                }
+                this.Dispatcher.Invoke(new Action(() =>
+                {
+                    var textBox = RetTextBoxObject(portIndex);
+                    if (textBox != null) // 确保 textBox 不为 null
+                    {
+                        string data = textBox.Text;
+                        string result = data.Replace("\r", "").Replace("\n", "");
+                        int count = StringHelper.CountKeywords(result, "WIOTARECV");
+                        recvCount.Add($"{count}");
+                        textBox.Text = $"{count}";
+                        mySerial.lenCount = 0; // 确保 mySerial 已初始化
+                    }
+                }));
+            }
+            // 确保 recvCount 不为空
+            if (recvCount.Count > 0)
+            {
+                WriteCsv(".\\自动测试报告.csv",recvCount);
+            }
+        }
+
+
+        private void MulitSendThread_func(object obj)//可以简化
+        {
+            MulitSendPara Mulitpara = (MulitSendPara)obj;
+            List <SerialPortClass> mySerialList = Mulitpara.mySerialList;
+            List<string> AtCmdList = Mulitpara.StringList;
+            bool isTemptest_flag = Mulitpara.isTemptest_flag;
+            //一键启动
+            startMulitSend(mySerialList, AtCmdList);
+            // 循环发送
+            if (!isTemptest_flag)
+            {
+                SendloopMulit(mySerialList);
+            }
+                
+        }
+
+        private void stopMulitWIoTattTread_fuc(object obj)
+        {
+            MulitSendPara Mulitpara = (MulitSendPara)obj;
+            List<SerialPortClass> mySerialList = Mulitpara.mySerialList;
+            //一键关闭协议栈
+            stopMulitWIoTa(mySerialList);
+        }
+
+        public void stopMulitWIoTa(List<SerialPortClass> mySerialList)
+        {
+            int portIndex = -1;
+            string At_cmd = "";
+            foreach (SerialPortClass mySerial in mySerialList)
+            {
+                portIndex += 1;
+                if (mySerial == null)
+                {
+                    continue;
+                }
+                //Console.WriteLine(AtCmd);
+                if (!isRunning_start[portIndex])
+                {
+                    break;
+                }
+                // 向串口写入指令并添加回车换行符
+                // 可选：等待一段时间以确保设备处理完指令
+                this.Dispatcher.Invoke(new Action(() =>
+                {
+                    At_cmd = "AT+WIOTARUN=0" + "\r\n";
+                    Add_TimeStamp(At_cmd, portIndex);
+                }));
+                mySerial.SendPortString(portIndex, At_cmd);
+                while (mySerial.block_falg)
+                {
+                    Thread.Sleep(100);
+                }
+                mySerial.block_falg = true;
+                Thread.Sleep(50);
+            }
+        }
+
+        //关闭协议栈
+        private void StopWiotaRun(object sender, RoutedEventArgs e)
+        {
+            StopMulitWIoTaThread = new Thread(new ParameterizedThreadStart(stopMulitWIoTattTread_fuc));
+            if (SerialList != null)
+            {
+                SerialList.Clear();
+            }
+
+            for (int i = 0; i < 16; i++)
+            {
+                SerialList.Add(mySerial[i]);
+                if (mySerial[i] == null)
+                    continue;
+                isRunning_start[i] = true;
+                mySerial[i].isRunWiota = true;
+            }
+            MulitSendPara stopMulitpara = new MulitSendPara
+            {
+                mySerialList = SerialList,
+            };
+            StopMulitWIoTaThread.Start(stopMulitpara);
+        }
+
+        private void WriteCsv(string filePath, List<string> data)
+        {
+            using (var writer = new StreamWriter(filePath, append: true)) // 设置 append 为 true
+            {
+                writer.WriteLine(string.Join(",", data)); // 使用逗号分隔
+            }
+        }
+
+        private void TemperatureCurveTest_Click(object sender, RoutedEventArgs e)
+        {
+            MenuItem menuItem = sender as MenuItem;
+            if (menuItem != null)
+            {
+                // 切换复选框状态
+                menuItem.IsChecked = !menuItem.IsChecked;
+
+                // 在这里添加你想要执行的操作
+                if (menuItem.IsChecked == true)
+                {
+                    // 选中状态的操作
+                    isTemptest_flag = true;             
+                }
+                else
+                {
+                    isTemptest_flag = false;
+                    // 取消选中状态的操作                  
+                }
+            }
+        }
+
     }
 
     public class GridDataTemp
@@ -932,13 +1249,24 @@ namespace WIoTa_Serial_Tool
         public string 应答 { get; set; }
         public string AT指令 { get; set; }
         public string 发送 { get; set; }
-
     }
 
     public class LoopSendPara
     {
         public SerialPortClass mySerial;
         public int PortNum { get; set; }
+    }
+
+    public class MulitSendPara
+    {
+        public List<SerialPortClass> mySerialList { get; set; }
+        public List<string> StringList { get; set; }
+        public bool isTemptest_flag { get; set; }
+        // 构造函数
+        public MulitSendPara()
+        {
+            mySerialList = new List<SerialPortClass>(); // 初始化列表
+        }
     }
 
     public class StartSendPara

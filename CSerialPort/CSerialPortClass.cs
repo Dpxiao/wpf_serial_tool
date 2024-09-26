@@ -1,11 +1,9 @@
-﻿using itas109;
+﻿
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
+using System.IO.Ports;
 using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Controls;
 
 namespace SerialPort_itas109
@@ -13,67 +11,64 @@ namespace SerialPort_itas109
     public class SerialPortClass
     {
         public TextBox RecvEidt;
+        public Button OpenButton;
         private Thread receiveThread;
-        CSerialPort sp;
+        public SerialPort sp;
         public bool isReceiving = true;
         public string logFileName;
         public bool isBlockSend = false;
         public bool block_falg = true;
         public bool isAutokSend = false;
         public bool ack_falg = true;
+        public bool readLine_flag = false;
         public string expect_str = "OK";
         public bool isRunWiota = false;
         public bool isStamp = false;
-        private int lenCount = 0;
+        public int lenCount = 0;
         public long recvCount = 0;
-        private byte[] data = new byte[1024]; // 将data定义为类的成员变量
-        public void  Display_Port()
-        {
-            SerialPortInfoVector spInfoVec = new SerialPortInfoVector();
-            spInfoVec = CSerialPortInfo.availablePortInfos();
-            for (int i = 1; i <= spInfoVec.Count; ++i)
-            {
-                Console.WriteLine("{0} - {1} {2}", i, spInfoVec[i - 1].portName, spInfoVec[i - 1].description);
-            }
-        }
 
         public bool OpenPort(string portName,int baudRate)
         {
-            sp = new CSerialPort();
-            sp.init(portName,             // windows:COM1 Linux:/dev/ttyS0
-                       baudRate,                 // baudrate
-                       Parity.ParityNone,    // parity
-                       DataBits.DataBits8,   // data bit
-                       StopBits.StopOne,     // stop bit
-                       FlowControl.FlowNone, // flow
-                       4096                  // read buffer size
-                       );
-            sp.setReadIntervalTimeout(0); // read interval timeout
-            sp.open();
-            if (sp.isOpen())
+            sp = new SerialPort();
+            sp.PortName = portName;
+            sp.BaudRate = baudRate;
+            try
             {
-                return true;
+                sp.Open();
             }
-            return false;
-        }
+            catch(Exception ex)
+            {
+                return false;
 
+            }
+            
+            if (sp.IsOpen)
+                return true;
+            else
+            {
+                return false;
+            }
+        }
 
         public string ReadPortBuff()
         {
-            uint readBufferLen = sp.getReadBufferUsedLen();
-            if (readBufferLen > 0)
+            try
             {
-                Array.Resize(ref data, (int)readBufferLen); // 调整字节数组的大小以适应读取的数据量
-                sp.readAllData(data);
-                string str = Encoding.Default.GetString(data);
-                return str;
-            }
-            return null;
-        }
+                int bytesRead = sp.BytesToRead;
+                if (bytesRead > 0)
+                {
 
-        public int getErroridx()
-        {
-            return sp.getLastError();
+                    byte[] buffer = new byte[bytesRead];
+                    sp.Read(buffer, 0, bytesRead);
+                    string receivedData = Encoding.ASCII.GetString(buffer);
+                    return receivedData;
+                }
+                return null;
+            }
+             catch (Exception ex)
+            {
+                return $"Error occurred while receiving data: {ex.Message}";
+            }
         }
 
         public void OpenThread()
@@ -92,14 +87,14 @@ namespace SerialPort_itas109
             }
         }
 
-        public void ClosePort()
+        public void ClosePort(int num)
         {
-            sp.close();
+            sp.Close();
         }
 
-        public void SetPortBaudrate(int buadRate)
+        public void SetPortBaudrate(int nup,int buadRate)
         {
-           sp.setBaudRate(buadRate);
+            sp.BaudRate = buadRate;
         }
 
         private void ReceiveData()
@@ -109,8 +104,25 @@ namespace SerialPort_itas109
             {
                 try
                 {
-                    receivedData = ReadPortBuff();
+                    if (!sp.IsOpen)
+                    {
+                        PrintLog("串口设备出现异常");
+                        CloseButtont();
+                        break;
+                    }
+                    if (readLine_flag)
+                    {
+                        Thread.Sleep(20);
+                        receivedData = sp.ReadLine();
+                        if (receivedData == null || receivedData.Length < 1)
+                            continue;
                    
+                    }
+                    else
+                    {
+                        Thread.Sleep(200);
+                        receivedData = ReadPortBuff();
+                    }
                     if (receivedData != null)
                     {
                         PrintLog(receivedData);
@@ -154,7 +166,7 @@ namespace SerialPort_itas109
                         }
 
                     }
-                    Thread.Sleep(200);
+             
                 }
                 catch (Exception ex)
                 {
@@ -175,7 +187,7 @@ namespace SerialPort_itas109
 
             if (isStamp)
             {
-                logMessage = $"[{timestamp}] 接收<-:" + strRecv + "\r";
+                logMessage = $"[{timestamp}] 接收<-:" + strRecv +"\r";
             }
             else
             {
@@ -209,6 +221,15 @@ namespace SerialPort_itas109
                 lenCount = 0;
             }));
         }
+
+        private void CloseButtont()
+        {
+            OpenButton.Dispatcher.Invoke(new Action(() =>
+            {
+                OpenButton.Content = "打开串口";
+            }));
+        }
+
 
         private void UpdateRecvEidt(string message)
         {
@@ -244,11 +265,9 @@ namespace SerialPort_itas109
         }
 
 
-        public int SendPortString(string command)
+        public void SendPortString(int port_num,string command)
         {
-            byte[] data = Encoding.ASCII.GetBytes(command); // 将命令转换为字节数组
-            int sentBytes = sp.writeData(data, data.Length); // 发送数据并获取发送的字节数
-            return sentBytes;
+            sp.Write(command);
         }
 
     }

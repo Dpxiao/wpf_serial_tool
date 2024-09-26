@@ -2,18 +2,16 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.IO;
-using System.IO.Ports;
 using System.Management;
 using System.Threading;
 using System.Windows.Media;
 using System.Windows.Input;
 using NoteWindow;
-using System.Text;
 using System.Configuration;
-using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
-using itas109;
 using SerialPort_itas109;
+using System.Linq;
+
 
 
 //保存log的路径有问题
@@ -41,8 +39,7 @@ namespace WIoTa_Serial_Tool
 
         private void DisplayPort()
         {
-            ComboBox[] portsComboBoxes = { portsComboBox1, portsComboBox2, portsComboBox3, portsComboBox4, portsComboBox5, portsComboBox6, portsComboBox7, portsComboBox8 };
-
+            ComboBox[] portsComboBoxes = Enumerable.Range(1, 16).Select(i => (ComboBox)FindName($"portsComboBox{i}")).ToArray();
             foreach (var device in new ManagementObjectSearcher("SELECT * FROM Win32_PnPEntity WHERE Caption LIKE '%(COM%)'").Get())
             {
                 string description = (string)device.GetPropertyValue("Caption");
@@ -67,7 +64,7 @@ namespace WIoTa_Serial_Tool
 
         private void DisplayPortNum(int num)
         {
-            ComboBox[] portsComboBoxes = { portsComboBox1, portsComboBox2, portsComboBox3, portsComboBox4, portsComboBox5, portsComboBox6, portsComboBox7, portsComboBox8 };
+            ComboBox[] portsComboBoxes = Enumerable.Range(1, 16).Select(i => (ComboBox)FindName($"portsComboBox{i}")).ToArray();
             foreach (var device in new ManagementObjectSearcher("SELECT * FROM Win32_PnPEntity WHERE Caption LIKE '%(COM%)'").Get())
             {
                 string description = (string)device.GetPropertyValue("Caption");
@@ -104,7 +101,8 @@ namespace WIoTa_Serial_Tool
 
         private string SelectComPort()
         {
-            ComboBox[] portsComboBoxes = { portsComboBox1, portsComboBox2, portsComboBox3, portsComboBox4, portsComboBox5, portsComboBox6, portsComboBox7, portsComboBox8 };
+           
+            ComboBox[] portsComboBoxes = Enumerable.Range(1, 16).Select(i => (ComboBox)FindName($"portsComboBox{i}")).ToArray();
             int index = portsComboBoxes[portNum].SelectedIndex;
             if (index == -1)
             {
@@ -117,8 +115,9 @@ namespace WIoTa_Serial_Tool
                 string portNumber = GetPortNumber(selectedPorts[portNum]);
                 return portNumber;
             }
-            
+
         }
+
 
         private void TabControlContainer_SizeChanged(object sender, SizeChangedEventArgs e)
         {
@@ -131,11 +130,11 @@ namespace WIoTa_Serial_Tool
             }
 
         }
-        
+
         private void Button_Grid_Click(object sender, RoutedEventArgs e)
         {
-            Button[] AtCmdList_Button = { AtCmdList_Button1, AtCmdList_Button2 , AtCmdList_Button3 , AtCmdList_Button4 , AtCmdList_Button5 ,
-                AtCmdList_Button6 , AtCmdList_Button7 , AtCmdList_Button8 };
+            Button[] AtCmdList_Button = Enumerable.Range(1, 16) .Select(i => (Button)FindName($"AtCmdList_Button{i}")).ToArray();
+
             isChecked_at_grid_flag = !isChecked_at_grid_flag;
             this.SizeChanged += MainWindow_LocationChanged;
             if (isChecked_at_grid_flag)
@@ -182,18 +181,28 @@ namespace WIoTa_Serial_Tool
 
         private TextBox RetTextBoxObject(int port_num)
         {
-            TextBox[] recvDataTextBox = { recvDataRichTextBox1, recvDataRichTextBox2,recvDataRichTextBox3, recvDataRichTextBox4, 
-                recvDataRichTextBox5, recvDataRichTextBox6, recvDataRichTextBox7, recvDataRichTextBox8 };
+            TextBox[] recvDataTextBox = Enumerable.Range(1, 16).Select(i => (TextBox)FindName($"recvDataRichTextBox{i}")).ToArray();
 
             return recvDataTextBox[port_num];
+        }
+
+        private Button OpenButtonObject(int port_num)
+        {
+            //Button[] OpenButton = { openButton1, openButton2,openButton3, openButton4,
+            //    openButton5, openButton6, openButton7, openButton8 };
+
+            Button[] OpenButton = Enumerable.Range(1, 16).Select(i => (Button)FindName($"openButton1{i}")).ToArray();
+
+            return OpenButton[port_num];
         }
 
         private void OpenSerialThread(int port_num)
         {
             //这里开八个线程
-            CheckBox[] stampCheckBox = { stampCheckBox1, stampCheckBox2, stampCheckBox3, stampCheckBox4, stampCheckBox5, stampCheckBox6, stampCheckBox7, stampCheckBox8 };
-
+            //CheckBox[] stampCheckBox = { stampCheckBox1, stampCheckBox2, stampCheckBox3, stampCheckBox4, stampCheckBox5, stampCheckBox6, stampCheckBox7, stampCheckBox8 };
+            CheckBox[] stampCheckBox = Enumerable.Range(1, 16).Select(i => (CheckBox)FindName($"stampCheckBox{i}")).ToArray();
             mySerial[port_num].RecvEidt = RetTextBoxObject(port_num);
+            mySerial[port_num].OpenButton = OpenButtonObject(port_num);
             mySerial[port_num].isReceiving = true;
             mySerial[port_num].isStamp = stampCheckBox[port_num].IsChecked ?? false;
             mySerial[port_num].OpenThread();
@@ -204,7 +213,8 @@ namespace WIoTa_Serial_Tool
         {
             // 添加 PortsComboBox_SelectionChanged 事件处理程序
             int port_num = PortTab.SelectedIndex;
-            ComboBox[] portsComboBoxes = { portsComboBox1, portsComboBox2, portsComboBox3, portsComboBox4, portsComboBox5, portsComboBox6, portsComboBox7, portsComboBox8 };
+            //ComboBox[] portsComboBoxes = { portsComboBox1, portsComboBox2, portsComboBox3, portsComboBox4, portsComboBox5, portsComboBox6, portsComboBox7, portsComboBox8 };
+            ComboBox[] portsComboBoxes = Enumerable.Range(1, 16).Select(i => (ComboBox)FindName($"portsComboBox{i}")).ToArray();
             portsComboBoxes[port_num].Items.Clear();
             DisplayPortNum(port_num);
             Selection_index = 0;
@@ -215,9 +225,9 @@ namespace WIoTa_Serial_Tool
             int port_num = PortTab.SelectedIndex;
             if (port_num == -1)
                 return;
-            ComboBox[] portsComboBoxes = { portsComboBox1, portsComboBox2, portsComboBox3, portsComboBox4, portsComboBox5, portsComboBox6, portsComboBox7, portsComboBox8 };
-            Button[] openButton = { openButton1, openButton2, openButton3, openButton4,
-                openButton5, openButton6, openButton7, openButton8 };
+            ComboBox[] portsComboBoxes = Enumerable.Range(1, 16).Select(i => (ComboBox)FindName($"portsComboBox{i}")).ToArray();
+
+            Button[] openButton = Enumerable.Range(1, 16).Select(i => (Button)FindName($"openButton{i}")).ToArray();
             Selection_index++;
             if (Selection_index == 1) //为一的时候表示，选中了该端口
             {
@@ -226,18 +236,17 @@ namespace WIoTa_Serial_Tool
                 {
                     selectedPorts[portNum] = portsComboBoxes[port_num].Items[index].ToString();//保存当前选取的端口。
                 }
-               
+
                 if (openButton[portNum].Content.ToString() == "关闭串口")
                 {
                     if (mySerial[port_num] != null)
                     {
-                        mySerial[port_num].ClosePort();
+                        mySerial[port_num].ClosePort(port_num);
                     }
                     if (mySerial[port_num] != null)
                     {
                         mySerial[port_num].CloseThread();
                     }
-
                     if (OpenComPort())
                     {
                         OpenSerialThread(port_num);
@@ -248,7 +257,6 @@ namespace WIoTa_Serial_Tool
                         openButton[portNum].Content = "打开串口";
                     }
                 }
-               
             }
 
         }
@@ -256,7 +264,8 @@ namespace WIoTa_Serial_Tool
 
         private void BaudRateComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            TextBox[] Send_At_Edit = { Send_At_Edit1, Send_At_Edit2, Send_At_Edit3, Send_At_Edit4, Send_At_Edit5, Send_At_Edit6, Send_At_Edit7, Send_At_Edit8 };
+            //TextBox[] Send_At_Edit = { Send_At_Edit1, Send_At_Edit2, Send_At_Edit3, Send_At_Edit4, Send_At_Edit5, Send_At_Edit6, Send_At_Edit7, Send_At_Edit8 };
+            TextBox[] Send_At_Edit = Enumerable.Range(1, 16).Select(i => (TextBox)FindName($"Send_At_Edit{i}")).ToArray();
             if (mySerial[portNum] != null)
             {
                 ComboBox comboBox = (ComboBox)sender;
@@ -270,7 +279,7 @@ namespace WIoTa_Serial_Tool
                     {
                         string data = parts[1].Trim();
                         
-                        mySerial[portNum].SetPortBaudrate(Convert.ToInt32(data));
+                        mySerial[portNum].SetPortBaudrate(portNum, Convert.ToInt32(data));
                     }
                     
                 }
@@ -286,54 +295,72 @@ namespace WIoTa_Serial_Tool
         //打开串口点击事件
         private void Button_Open_Port_Click(object sender, RoutedEventArgs e)
         {
-            int port_num = PortTab.SelectedIndex;
-            Button[] openButton = { openButton1, openButton2, openButton3, openButton4, openButton5, openButton6, openButton7, openButton8 };
-            CheckBox[] loopSendCheck = { loopSendCheck1, loopSendCheck2, loopSendCheck3, loopSendCheck4, loopSendCheck5, loopSendCheck6, loopSendCheck7, loopSendCheck8 };
-            CheckBox[] timerSendCheckBox = { timerSendCheckBox1, timerSendCheckBox2, timerSendCheckBox3, timerSendCheckBox4, timerSendCheckBox5, timerSendCheckBox6, timerSendCheckBox7, timerSendCheckBox8 };
+           // Button[] openButton = { openButton1, openButton2, openButton3, openButton4, openButton5, openButton6, openButton7, openButton8 };
+           // CheckBox[] loopSendCheck = { loopSendCheck1, loopSendCheck2, loopSendCheck3, loopSendCheck4, loopSendCheck5, loopSendCheck6, loopSendCheck7, loopSendCheck8 };
+           // CheckBox[] timerSendCheckBox = { timerSendCheckBox1, timerSendCheckBox2, timerSendCheckBox3, timerSendCheckBox4, timerSendCheckBox5, timerSendCheckBox6, timerSendCheckBox7, timerSendCheckBox8 };
+  
+            Button[] openButton = Enumerable.Range(1, 16).Select(i => (Button)FindName($"openButton{i}")).ToArray();
+            CheckBox[] loopSendCheck = Enumerable.Range(1, 16).Select(i => (CheckBox)FindName($"loopSendCheck{i}")).ToArray();
+            CheckBox[] timerSendCheckBox = Enumerable.Range(1, 16).Select(i => (CheckBox)FindName($"timerSendCheckBox{i}")).ToArray();
 
             if (openButton[portNum].Content.ToString() == "打开串口")
             {
-                
                 if (OpenComPort())
                 {
-
-                    OpenSerialThread(port_num);
+                    OpenSerialThread(portNum);
                     openButton[portNum].Content = "关闭串口";
+
                 }
                 else
                 {
                     TabItem tabItem = PortTab.SelectedItem as TabItem;
-                    tabItem.Header = $"端口{ port_num + 1}";
+                    tabItem.Header = $"端口{ portNum + 1}";
                     openButton[portNum].Content = "打开串口";
                 }
             }
             else
             {
                 TabItem tabItem = PortTab.SelectedItem as TabItem;
-                tabItem.Header = $"端口{ port_num + 1}";
-                mySerial[port_num].CloseThread();
+                tabItem.Header = $"端口{ portNum + 1}";
+                mySerial[portNum].CloseThread();
 
 
-                isRunning_start[port_num] = false;
+                isRunning_start[portNum] = false;
                 isRunning_ack = false;
-                isRunning_loopsend[port_num] = false;
-                isRunning_looptimer[port_num] = false;
+                isRunning_loopsend[portNum] = false;
+                isRunning_looptimer[portNum] = false;
 
-                openButton[port_num].Content = "打开串口";
-                mySerial[port_num].ClosePort();
-                loopSendCheck[port_num].IsChecked = false;
-                timerSendCheckBox[port_num].IsChecked = false;
+                //关闭批量发送
+                isRunning_mulit = false;
+                if (mulitSendThread != null)
+                {
+                    mulitSendThread.Abort();
+                }
+
+                //关闭自动应答
+                mySerial[portNum].ack_falg = false;
+                isRunning_ack = false;
+                if (autoAckSendThread != null)
+                {
+                    autoAckSendThread.Abort();
+                }
+
+                openButton[portNum].Content = "打开串口";
+                mySerial[portNum].ClosePort(portNum);
+                loopSendCheck[portNum].IsChecked = false;
+                timerSendCheckBox[portNum].IsChecked = false;
             }
+
         }
 
         private bool OpenSerial_Clicked_Send()
         {
             int port_num = PortTab.SelectedIndex;
-            Button[] openButton = { openButton1, openButton2, openButton3, openButton4, openButton5, openButton6, openButton7, openButton8 };
+            // Button[] openButton = { openButton1, openButton2, openButton3, openButton4, openButton5, openButton6, openButton7, openButton8 };
+            Button[] openButton = Enumerable.Range(1, 16).Select(i => (Button)FindName($"openButton{i}")).ToArray();
             if (openButton[port_num].Content.ToString() == "打开串口")
             {
-                // mySerial[port_num] = new mySerialManager();
-               
+               // mySerial[port_num] = new mySerialManager();
                 if (OpenComPort())
                 {
                     OpenSerialThread(port_num);
@@ -345,13 +372,6 @@ namespace WIoTa_Serial_Tool
                     openButton[port_num].Content = "打开串口";
                     return false;
                 }
-              
-            }
-          
-            if (mySerial[port_num].getErroridx() == 17)
-            {
-                openButton[port_num].Content = "打开串口";
-                return false;
             }
             return true;
 
@@ -366,19 +386,23 @@ namespace WIoTa_Serial_Tool
 
         private bool OpenComPort()
         {
-            ComboBox[] baudRateComboBox = {baudRateComboBox1, baudRateComboBox2, baudRateComboBox3, baudRateComboBox4, baudRateComboBox5,
-            baudRateComboBox6,baudRateComboBox7,baudRateComboBox8};
-            CheckBox[] savefileCheckBox = { savefileCheckBox1 , savefileCheckBox2 , savefileCheckBox3 , savefileCheckBox4 , savefileCheckBox5
-            , savefileCheckBox6 , savefileCheckBox7 , savefileCheckBox8 };
+            //ComboBox[] baudRateComboBox = {baudRateComboBox1, baudRateComboBox2, baudRateComboBox3, baudRateComboBox4, baudRateComboBox5,
+            //baudRateComboBox6,baudRateComboBox7,baudRateComboBox8};
+            //CheckBox[] savefileCheckBox = { savefileCheckBox1 , savefileCheckBox2 , savefileCheckBox3 , savefileCheckBox4 , savefileCheckBox5
+            //, savefileCheckBox6 , savefileCheckBox7 , savefileCheckBox8 };
+            ComboBox[] baudRateComboBox = Enumerable.Range(1, 16).Select(i => (ComboBox)FindName($"baudRateComboBox{i}")).ToArray();
+            CheckBox[] savefileCheckBox = Enumerable.Range(1, 16).Select(i => (CheckBox)FindName($"savefileCheckBox{i}")).ToArray();
+
             string baudRate = baudRateComboBox[portNum].Text;//由于可编辑所以要这样获取值
             string portNumber = SelectComPort();
             int port_num = PortTab.SelectedIndex;
 
-           
             if (portNumber != null)
             {
                 
                 mySerial[port_num] = new SerialPortClass();
+               
+
                 //mySerial[port_num].portNum = port_num;
                 //读取配置文件，然后将该值传入。
                 ConfigurationManager.RefreshSection("appSettings");
@@ -389,6 +413,7 @@ namespace WIoTa_Serial_Tool
                     MessageBox.Show("端口打开失败，请检查端口是否占用或不存在", "警告");
                     return false;
                 }
+
                 if (savefileCheckBox[port_num].IsChecked ?? false)
                 {
                     DateTime now = DateTime.Now;
@@ -472,33 +497,31 @@ namespace WIoTa_Serial_Tool
                     }
                 }
             }
+
+           
         }
 
         private void GridSendButton_Click(object sender, RoutedEventArgs e)
         {
             Button sendButton = sender as Button;
             int port_num = PortTab.SelectedIndex;
-           
             if (sendButton != null)
             {
-                foreach (GridDataTemp item in DataTemp)
-                {
-                    ;
-                }
+              
+
                 // Get the parent DataGridRow
                 DataGridRow row = FindVisualParent<DataGridRow>(sendButton);
 
                 // Get the AT指令 TextBox
                 var dataItem = row.Item;
-                
+
                 // Cast the data item to the appropriate type
                 if (dataItem is GridDataTemp)
                 {
-
                     GridDataTemp rowData = (GridDataTemp)dataItem;
+
                     // Access the value of the "AT指令" property
                     string AtCmd = rowData.AT指令;
-                    
                     //替换字符中的回车换行符
                     string output = AtCmd.Replace("\\r", "\r");
                     AtCmd = output.Replace("\\n", "\n");
@@ -514,6 +537,8 @@ namespace WIoTa_Serial_Tool
                         mySerialWrite(port_num,AtCmd);
                     }
                 }
+
+               
             }
         }
 
@@ -581,9 +606,9 @@ namespace WIoTa_Serial_Tool
                         }
                     }
                 }
+
+              
             }
-
-
         }
 
         private static T FindVisualParentROW<T>(DependencyObject child) where T : DependencyObject
@@ -626,14 +651,23 @@ namespace WIoTa_Serial_Tool
         private void Button_Click_Send_AtCmd(object sender, RoutedEventArgs e)
         {
             int port_num = PortTab.SelectedIndex;
-            Button[] openButton = { openButton1, openButton2, openButton3, openButton4, openButton5, openButton6, openButton7, openButton8 };
-            CheckBox[] loopSendCheck = { loopSendCheck1, loopSendCheck2, loopSendCheck3, loopSendCheck4, loopSendCheck5, loopSendCheck6, loopSendCheck7, loopSendCheck8 };
-            CheckBox[] timerSendCheckBox = { timerSendCheckBox1, timerSendCheckBox2, timerSendCheckBox3, timerSendCheckBox4, timerSendCheckBox5, timerSendCheckBox6, timerSendCheckBox7, timerSendCheckBox8 };
+   
+            //Button[] openButton = { openButton1, openButton2, openButton3, openButton4, openButton5, openButton6, openButton7, openButton8 };
+            Button[] openButton = Enumerable.Range(1, 16).Select(i => (Button)FindName($"openButton{i}")).ToArray();
 
-            TextBox[] Send_At_Edit = { Send_At_Edit1, Send_At_Edit2, Send_At_Edit3, Send_At_Edit4, Send_At_Edit5, Send_At_Edit6, Send_At_Edit7, Send_At_Edit8 };
-            CheckBox[] enterCheckBox = { enterCheckBox1, enterCheckBox2, enterCheckBox3, enterCheckBox4, enterCheckBox5, enterCheckBox6, enterCheckBox7, enterCheckBox8 };
+            // CheckBox[] loopSendCheck = { loopSendCheck1, loopSendCheck2, loopSendCheck3, loopSendCheck4, loopSendCheck5, loopSendCheck6, loopSendCheck7, loopSendCheck8 };
+            CheckBox[] loopSendCheck = Enumerable.Range(1, 16).Select(i => (CheckBox)FindName($"loopSendCheck{i}")).ToArray();
+            // CheckBox[] timerSendCheckBox = { timerSendCheckBox1, timerSendCheckBox2, timerSendCheckBox3, timerSendCheckBox4, timerSendCheckBox5, timerSendCheckBox6, timerSendCheckBox7, timerSendCheckBox8 };
+            CheckBox[] timerSendCheckBox = Enumerable.Range(1, 16).Select(i => (CheckBox)FindName($"timerSendCheckBox{i}")).ToArray();
+            //TextBox[] Send_At_Edit = { Send_At_Edit1, Send_At_Edit2, Send_At_Edit3, Send_At_Edit4, Send_At_Edit5, Send_At_Edit6, Send_At_Edit7, Send_At_Edit8 };
+            TextBox[] Send_At_Edit = Enumerable.Range(1, 16).Select(i => (TextBox)FindName($"Send_At_Edit{i}")).ToArray();
+            //CheckBox[] enterCheckBox = { enterCheckBox1, enterCheckBox2, enterCheckBox3, enterCheckBox4, enterCheckBox5, enterCheckBox6, enterCheckBox7, enterCheckBox8 };
+            CheckBox[] enterCheckBox = Enumerable.Range(1, 16).Select(i => (CheckBox)FindName($"enterCheckBox{i}")).ToArray();
+
+
             if (OpenSerial_Clicked_Send())
             {
+
                 string AtCmd = Send_At_Edit[portNum].Text;
                 //是否加回车换行
                 if (enterCheckBox[portNum].IsChecked ?? false)
@@ -642,20 +676,22 @@ namespace WIoTa_Serial_Tool
                 }
                 string output = AtCmd.Replace("\\r", "\r");
                 AtCmd = output.Replace("\\n", "\n");
-                Add_TimeStamp(AtCmd,portNum);
-                mySerial[portNum].SendPortString(AtCmd);
-          
+                Add_TimeStamp(AtCmd, portNum);
+                mySerial[portNum].SendPortString(portNum, AtCmd);
+
             }
 
         }
         private void mySerialWrite(int port_num,string AtCmd)
         {
-            mySerial[port_num].SendPortString(AtCmd);
+            mySerial[port_num].SendPortString(port_num,AtCmd);
         }
         private void Add_TimeStamp(string AtCmd,int portNum)
         {
-            TextBox[] recvDataRichTextBox = { recvDataRichTextBox1, recvDataRichTextBox2, recvDataRichTextBox3, recvDataRichTextBox4,recvDataRichTextBox5, recvDataRichTextBox6, recvDataRichTextBox7, recvDataRichTextBox8 };
-            CheckBox[] stampCheckBox = { stampCheckBox1, stampCheckBox2, stampCheckBox3, stampCheckBox4, stampCheckBox5, stampCheckBox6, stampCheckBox7, stampCheckBox8 };
+            // TextBox[] recvDataRichTextBox = { recvDataRichTextBox1, recvDataRichTextBox2, recvDataRichTextBox3, recvDataRichTextBox4,recvDataRichTextBox5, recvDataRichTextBox6, recvDataRichTextBox7, recvDataRichTextBox8 };
+            TextBox[] recvDataRichTextBox = Enumerable.Range(1, 16).Select(i => (TextBox)FindName($"recvDataRichTextBox{i}")).ToArray();
+            //CheckBox[] stampCheckBox = { stampCheckBox1, stampCheckBox2, stampCheckBox3, stampCheckBox4, stampCheckBox5, stampCheckBox6, stampCheckBox7, stampCheckBox8 };
+            CheckBox[] stampCheckBox = Enumerable.Range(1, 16).Select(i => (CheckBox)FindName($"stampCheckBox{i}")).ToArray();
             DateTime now = DateTime.Now;
             string timestamp = now.ToString("yyyy-MM-dd HH:mm:ss.fff");
             
@@ -696,8 +732,9 @@ namespace WIoTa_Serial_Tool
             //mySerial[0].recvCount = 0;
             //recvStatus.Text = $"已接收字节数:{0}";
             // recvDataRichTextBox.Document.Blocks.Clear();
-            TextBox[] recvDataTextBox = { recvDataRichTextBox1, recvDataRichTextBox2, recvDataRichTextBox3, recvDataRichTextBox4, recvDataRichTextBox5, recvDataRichTextBox6, recvDataRichTextBox7, recvDataRichTextBox8 };
-
+            //  TextBox[] recvDataTextBox = { recvDataRichTextBox1, recvDataRichTextBox2, recvDataRichTextBox3, recvDataRichTextBox4, recvDataRichTextBox5, recvDataRichTextBox6, recvDataRichTextBox7, recvDataRichTextBox8 };
+            TextBox[] recvDataTextBox = Enumerable.Range(1, 16).Select(i => (TextBox)FindName($"recvDataRichTextBox{i}")).ToArray();
+            mySerial[portNum].lenCount = 0;
             recvDataTextBox[portNum].Clear();
             recvDataTextBox[portNum].Text = "";
         }
@@ -1001,81 +1038,35 @@ namespace WIoTa_Serial_Tool
             return usrid;
         }
 
-        private void PortTab_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void UpdateUserIdTextBoxes(int portNum_index)
         {
-            int index = PortTab.SelectedIndex;
-            TabItem tabItem = PortTab.SelectedItem as TabItem;
-
-            switch (index)
+            if (portNum_index > 7)
             {
-                case 0:
-                    portNum = 0;
-                    if (Start_Window != null)
-                    {
-                        Start_Window.useridTextBox2.Text = GetUsridToFile(0, portNum, 0, 0);
-                        Start_Window.useridTextBox3.Text = GetUsridToFile(0, portNum, 0, 0);
-                    }
-                    break;
-                case 1:
-                    portNum = 1;
-                    if (Start_Window != null)
-                    {
-                        Start_Window.useridTextBox2.Text = GetUsridToFile(0, portNum, 0, 0);
-                        Start_Window.useridTextBox3.Text = GetUsridToFile(0, portNum, 0, 0);
-                    }
-                    break;
-                case 2:
-                    portNum = 2;
-                    if (Start_Window != null)
-                    {
-                        Start_Window.useridTextBox2.Text = GetUsridToFile(0, portNum, 0, 0);
-                        Start_Window.useridTextBox3.Text = GetUsridToFile(0, portNum, 0, 0);
-                    }
-                    break;
-                case 3:
-                    portNum = 3;
-                    if (Start_Window != null)
-                    {
-                        Start_Window.useridTextBox2.Text = GetUsridToFile(0, portNum, 0, 0);
-                        Start_Window.useridTextBox3.Text = GetUsridToFile(0, portNum, 0, 0);
-                    }
-                    break;
-                case 4:
-                    portNum = 4;
-                    if (Start_Window != null)
-                    {
-                        Start_Window.useridTextBox2.Text = GetUsridToFile(0, portNum, 0, 0);
-                        Start_Window.useridTextBox3.Text = GetUsridToFile(0, portNum, 0, 0);
-                    }
-                    break;
-                case 5:
-                    portNum = 5;
-                    if (Start_Window != null)
-                    {
-                        Start_Window.useridTextBox2.Text = GetUsridToFile(0, portNum, 0, 0);
-                        Start_Window.useridTextBox3.Text = GetUsridToFile(0, portNum, 0, 0);
-                    }
-                    break;
-                case 6:
-                    portNum = 6;
-                    if (Start_Window != null)
-                    {
-                        Start_Window.useridTextBox2.Text = GetUsridToFile(0, portNum, 0, 0);
-                        Start_Window.useridTextBox3.Text = GetUsridToFile(0, portNum, 0, 0);
-                    }
-                    break;
-                case 7:
-                    portNum = 7;
-                    if (Start_Window != null)
-                    {
-                        Start_Window.useridTextBox2.Text = GetUsridToFile(0, portNum, 0, 0);
-                        Start_Window.useridTextBox3.Text = GetUsridToFile(0, portNum, 0, 0);
-                    }
-                    break;
-                default:
-                    break;
+                Start_Window.useridTextBox2.Text = GetUsridToFile(0, portNum_index - 8, 1, 0);
+                Start_Window.useridTextBox3.Text = GetUsridToFile(0, portNum_index - 8, 1, 0);
+            }
+            else
+            {
+                Start_Window.useridTextBox2.Text = GetUsridToFile(0, portNum_index, 0, 0);
+                Start_Window.useridTextBox3.Text = GetUsridToFile(0, portNum_index, 0, 0);
             }
 
+
+        }
+
+        private void PortTab_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+      
+            //TabItem tabItem = PortTab.SelectedItem as TabItem;
+            if (PortTab.SelectedIndex == -1)
+            {
+                return;
+            }
+            portNum = PortTab.SelectedIndex;
+            if (Start_Window != null)
+            {
+                UpdateUserIdTextBoxes(portNum);
+            }
         }
 
         private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -1167,11 +1158,16 @@ namespace WIoTa_Serial_Tool
 
         private void LoopSendCheck_Checked(object sender, RoutedEventArgs e)
         {
-            TextBox[] Send_At_Edit = { Send_At_Edit1, Send_At_Edit2, Send_At_Edit3, Send_At_Edit4, Send_At_Edit5, Send_At_Edit6, Send_At_Edit7, Send_At_Edit8 };
-            CheckBox[] loopSendCheck = { loopSendCheck1 , loopSendCheck2 , loopSendCheck3 , loopSendCheck4 , loopSendCheck5 ,
-                loopSendCheck6 , loopSendCheck7 , loopSendCheck8 };
-            CheckBox[] blockSendCheck = { blockSendCheck1 , blockSendCheck2 , blockSendCheck3 , blockSendCheck4 , blockSendCheck5 ,
-                blockSendCheck6 , blockSendCheck7 , blockSendCheck8 };
+            //TextBox[] Send_At_Edit = { Send_At_Edit1, Send_At_Edit2, Send_At_Edit3, Send_At_Edit4, Send_At_Edit5, Send_At_Edit6, Send_At_Edit7, Send_At_Edit8 };
+            //CheckBox[] loopSendCheck = { loopSendCheck1 , loopSendCheck2 , loopSendCheck3 , loopSendCheck4 , loopSendCheck5 ,
+            //    loopSendCheck6 , loopSendCheck7 , loopSendCheck8 };
+            //CheckBox[] blockSendCheck = { blockSendCheck1 , blockSendCheck2 , blockSendCheck3 , blockSendCheck4 , blockSendCheck5 ,
+            //    blockSendCheck6 , blockSendCheck7 , blockSendCheck8 };
+
+            TextBox[] Send_At_Edit = Enumerable.Range(1, 16).Select(i => (TextBox)FindName($"Send_At_Edit{i}")).ToArray();
+            CheckBox[] loopSendCheck = Enumerable.Range(1, 16).Select(i => (CheckBox)FindName($"loopSendCheck{i}")).ToArray();
+            CheckBox[] blockSendCheck = Enumerable.Range(1, 16).Select(i => (CheckBox)FindName($"blockSendCheck{i}")).ToArray();
+
             int port_num = PortTab.SelectedIndex;
             if (loopSendCheck[port_num].IsChecked ?? false)
             {
@@ -1207,17 +1203,19 @@ namespace WIoTa_Serial_Tool
             int portNum = parameters.PortNum;
             string loopcount = string.Empty;
             string sleep = string.Empty;
-            TextBox[] loopSendNumTextBox = { loopSendNumTextBox1, loopSendNumTextBox2, loopSendNumTextBox3, loopSendNumTextBox4, loopSendNumTextBox5, loopSendNumTextBox6, loopSendNumTextBox7, loopSendNumTextBox8 };
-            TextBox[] loopSendTimeTextBox = { loopSendTimeTextBox1, loopSendTimeTextBox2, loopSendTimeTextBox3, loopSendTimeTextBox4, loopSendTimeTextBox5, loopSendTimeTextBox6, loopSendTimeTextBox7, loopSendTimeTextBox8 };
-            TextBox[] recvDataTextBox = { recvDataRichTextBox1, recvDataRichTextBox2,recvDataRichTextBox3, recvDataRichTextBox4,recvDataRichTextBox5, recvDataRichTextBox6, recvDataRichTextBox7, recvDataRichTextBox8 };
-            TextBox[] Send_At_Edit = { Send_At_Edit1, Send_At_Edit2, Send_At_Edit3, Send_At_Edit4, Send_At_Edit5, Send_At_Edit6, Send_At_Edit7, Send_At_Edit8 };
-            CheckBox[] enterCheckBox = { enterCheckBox1, enterCheckBox2, enterCheckBox3, enterCheckBox4, enterCheckBox5, enterCheckBox6, enterCheckBox7, enterCheckBox8 };
-            CheckBox[] loopSendCheck = { loopSendCheck1, loopSendCheck2, loopSendCheck3, loopSendCheck4, loopSendCheck5, loopSendCheck6, loopSendCheck7, loopSendCheck8 };
-            
-            // 在UI线程上下文中访问和获取UI控件的值
-            
+            //TextBox[] loopSendNumTextBox = { loopSendNumTextBox1, loopSendNumTextBox2, loopSendNumTextBox3, loopSendNumTextBox4, loopSendNumTextBox5, loopSendNumTextBox6, loopSendNumTextBox7, loopSendNumTextBox8 };
+            //TextBox[] loopSendTimeTextBox = { loopSendTimeTextBox1, loopSendTimeTextBox2, loopSendTimeTextBox3, loopSendTimeTextBox4, loopSendTimeTextBox5, loopSendTimeTextBox6, loopSendTimeTextBox7, loopSendTimeTextBox8 };
+            //TextBox[] recvDataTextBox = { recvDataRichTextBox1, recvDataRichTextBox2,recvDataRichTextBox3, recvDataRichTextBox4,recvDataRichTextBox5, recvDataRichTextBox6, recvDataRichTextBox7, recvDataRichTextBox8 };
+            //TextBox[] Send_At_Edit = { Send_At_Edit1, Send_At_Edit2, Send_At_Edit3, Send_At_Edit4, Send_At_Edit5, Send_At_Edit6, Send_At_Edit7, Send_At_Edit8 };
+            //CheckBox[] enterCheckBox = { enterCheckBox1, enterCheckBox2, enterCheckBox3, enterCheckBox4, enterCheckBox5, enterCheckBox6, enterCheckBox7, enterCheckBox8 };
+            //CheckBox[] loopSendCheck = { loopSendCheck1, loopSendCheck2, loopSendCheck3, loopSendCheck4, loopSendCheck5, loopSendCheck6, loopSendCheck7, loopSendCheck8 };
+
+           // 在UI线程上下文中访问和获取UI控件的值
+
             this.Dispatcher.Invoke(new Action(() =>
             {
+                TextBox[] loopSendNumTextBox = Enumerable.Range(1, 16).Select(k => (TextBox)FindName($"loopSendNumTextBox{k}")).ToArray();
+                TextBox[] loopSendTimeTextBox = Enumerable.Range(1, 16).Select(k => (TextBox)FindName($"loopSendTimeTextBox{k}")).ToArray();
                 loopcount = loopSendNumTextBox[portNum].Text;
                 sleep = loopSendTimeTextBox[portNum].Text;
             }));
@@ -1234,6 +1232,7 @@ namespace WIoTa_Serial_Tool
                     // 在UI线程上下文中更新UI控件
                     this.Dispatcher.Invoke(new Action(() =>
                     {
+                        TextBox[] recvDataTextBox = Enumerable.Range(1, 16).Select(k => (TextBox)this.FindName($"recvDataRichTextBox{k}")).ToArray();
                         recvDataTextBox[portNum].AppendText($"=====开始第{i + 1}次发送=====\r\n");
                         recvDataTextBox[portNum].ScrollToEnd();
                         if (logFileName[portNum] != null)
@@ -1250,6 +1249,9 @@ namespace WIoTa_Serial_Tool
                     // 在UI线程上下文中访问和获取UI控件的值
                     this.Dispatcher.Invoke(new Action(() =>
                     {
+                        TextBox[] Send_At_Edit = Enumerable.Range(1, 16).Select(k => (TextBox)FindName($"Send_At_Edit{k}")).ToArray();
+                        CheckBox[] enterCheckBox = Enumerable.Range(1, 16).Select(k => (CheckBox)FindName($"enterCheckBox{k}")).ToArray();
+                        CheckBox[] loopSendCheck = Enumerable.Range(1, 16).Select(k => (CheckBox)FindName($"loopSendCheck{k}")).ToArray();
                         AtCmd = Send_At_Edit[portNum].Text;
                         string output = AtCmd.Replace("\\r", "\r");
                         AtCmd = output.Replace("\\n", "\n");
@@ -1266,7 +1268,7 @@ namespace WIoTa_Serial_Tool
                         mySerial.block_falg = true;
                         while (mySerial.block_falg)
                         {
-                            
+
                             if (!isRunning_loopsend[portNum])
                             {
                                 break;
@@ -1276,12 +1278,12 @@ namespace WIoTa_Serial_Tool
                                 break;
                             }
                             Thread.Sleep(100);
-                        }                
+                        }
                     }
                     Thread.Sleep(sleep_time);
                 }
                 //在UI线程上下文中更新UI控件
-          
+
             }
             catch (OverflowException)
             {
@@ -1291,11 +1293,13 @@ namespace WIoTa_Serial_Tool
             {
                 this.Dispatcher.Invoke(new Action(() =>
                 {
+                    TextBox[] recvDataTextBox = Enumerable.Range(1, 16).Select(k => (TextBox)FindName($"recvDataRichTextBox{k}")).ToArray();
+                    CheckBox[] loopSendCheck = Enumerable.Range(1, 16).Select(k => (CheckBox)FindName($"loopSendCheck{k}")).ToArray();
                     loopSendCheck[portNum].IsChecked = false;
                     recvDataTextBox[portNum].ScrollToEnd();
                 }));
             }
-            catch(System.Threading.Tasks.TaskCanceledException)
+            catch (System.Threading.Tasks.TaskCanceledException)
             {
                 return;
             }
@@ -1304,8 +1308,12 @@ namespace WIoTa_Serial_Tool
         private void TimerSendCheckBox_Check(object sender, RoutedEventArgs e)
         {
             int port_num = PortTab.SelectedIndex;
-            CheckBox[] blockSendCheck = { blockSendCheck1 , blockSendCheck2 , blockSendCheck3 , blockSendCheck4 , blockSendCheck5 ,blockSendCheck6 , blockSendCheck7 , blockSendCheck8 };
-            CheckBox[] timerSendCheckBox = { timerSendCheckBox1, timerSendCheckBox2, timerSendCheckBox3, timerSendCheckBox4, timerSendCheckBox5, timerSendCheckBox6, timerSendCheckBox7, timerSendCheckBox8 };
+            //CheckBox[] blockSendCheck = { blockSendCheck1 , blockSendCheck2 , blockSendCheck3 , blockSendCheck4 , blockSendCheck5 ,blockSendCheck6 , blockSendCheck7 , blockSendCheck8 };
+            //CheckBox[] timerSendCheckBox = { timerSendCheckBox1, timerSendCheckBox2, timerSendCheckBox3, timerSendCheckBox4, timerSendCheckBox5, timerSendCheckBox6, timerSendCheckBox7, timerSendCheckBox8 };
+
+            CheckBox[] blockSendCheck = Enumerable.Range(1, 16).Select(i => (CheckBox)FindName($"blockSendCheck{i}")).ToArray();
+            CheckBox[] timerSendCheckBox = Enumerable.Range(1, 16).Select(i => (CheckBox)FindName($"timerSendCheckBox{i}")).ToArray();
+     
             if (timerSendCheckBox[port_num].IsChecked ?? false)
             {
                 if (OpenSerial_Clicked_Send())
@@ -1340,12 +1348,16 @@ namespace WIoTa_Serial_Tool
             int port_num = parameters.PortNum;
             // 在UI线程上下文中访问和获取UI控件的值
   
-            TextBox[] timerSendTextBox = { timerSendTextBox1, timerSendTextBox2, timerSendTextBox3, timerSendTextBox4,timerSendTextBox5,timerSendTextBox6, timerSendTextBox7, timerSendTextBox8 };
-            TextBox[] Send_At_Edit = { Send_At_Edit1, Send_At_Edit2, Send_At_Edit3, Send_At_Edit4, Send_At_Edit5, Send_At_Edit6, Send_At_Edit7, Send_At_Edit8 };
-            CheckBox[] enterCheckBox = { enterCheckBox1, enterCheckBox2, enterCheckBox3, enterCheckBox4, enterCheckBox5, enterCheckBox6, enterCheckBox7, enterCheckBox8 };
-      
+            //TextBox[] timerSendTextBox = { timerSendTextBox1, timerSendTextBox2, timerSendTextBox3, timerSendTextBox4,timerSendTextBox5,timerSendTextBox6, timerSendTextBox7, timerSendTextBox8 };
+            //TextBox[] Send_At_Edit = { Send_At_Edit1, Send_At_Edit2, Send_At_Edit3, Send_At_Edit4, Send_At_Edit5, Send_At_Edit6, Send_At_Edit7, Send_At_Edit8 };
+            //CheckBox[] enterCheckBox = { enterCheckBox1, enterCheckBox2, enterCheckBox3, enterCheckBox4, enterCheckBox5, enterCheckBox6, enterCheckBox7, enterCheckBox8 };
+
+          
+
+
             this.Dispatcher.Invoke(new Action(() =>
             {
+                TextBox[] timerSendTextBox = Enumerable.Range(1, 16).Select(i => (TextBox)FindName($"timerSendTextBox{i}")).ToArray();
                 sleep = timerSendTextBox[port_num].Text;
             }));
 
@@ -1357,6 +1369,8 @@ namespace WIoTa_Serial_Tool
                 // 在UI线程上下文中访问和获取UI控件的值
                 this.Dispatcher.Invoke(new Action(() =>
                 {
+                    TextBox[] Send_At_Edit = Enumerable.Range(1, 16).Select(i => (TextBox)FindName($"Send_At_Edit{i}")).ToArray();
+                    CheckBox[] enterCheckBox = Enumerable.Range(1, 16).Select(i => (CheckBox)FindName($"enterCheckBox{i}")).ToArray();
                     AtCmd = Send_At_Edit[port_num].Text;
                     string output = AtCmd.Replace("\\r", "\r");
                     AtCmd = output.Replace("\\n", "\n");

@@ -205,62 +205,78 @@ namespace WIoTa_Serial_Tool
             int data_len = 0, time_c = 0, len = str_data.Length;
             int frame_num = 0;
 
-            time = time_bc[symbol_len, 0];
-            data_len = subframe_bc[symbol_len, mcs];
-            frame_num = (int)Math.Ceiling((double)len / data_len);
-            time = (time * frame_num) + 100;
-            time_c = 60000;
             if (is_norbc)
             {
-                
+                time = time_bc[symbol_len, 0];
+                data_len = subframe_bc[symbol_len, mcs];
+                frame_num = (int)Math.Ceiling((double)len / data_len);
+                time = (time * frame_num) + 100;
+                time_c = (int)time;
                 if (is_block)
                 {
-                    at_cmd = string.Format("AT+WIOTABC={0},{1},0,{2},1\\r\\n{3}", data_id, len + 2, time_c, str_data);
+                    at_cmd = string.Format("AT+WIOTABC={0},{1},0,{2},1\\r\n{3}", data_id, len, time_c, str_data);
                 }
                 else
                 {
-                    at_cmd = string.Format("AT+WIOTABC={0},{1},0,{2},0\\r\\n{3}", data_id, len + 2, time_c, str_data);
+                    at_cmd = string.Format("AT+WIOTABC={0},{1},0,{2},0\\r\n{3}", data_id, len, time_c, str_data);
                 }
             }
             if (is_otabc)
             {
-
+                time = time_bc[symbol_len, 0];
+                data_len = subframe_bc[symbol_len, mcs];
+                frame_num = (int)Math.Ceiling((double)len / data_len);
+                time = (time * frame_num) + 100;
+                time_c = (int)time;
                 if (is_block)
                 {
-                    at_cmd = string.Format("AT+WIOTABC={0},{1},1,{2},1\\r\\n{3}", data_id, len + 2, time_c, str_data);
+                    at_cmd = string.Format("AT+WIOTABC={0},{1},1,{2},1\\r\n{3}", data_id, len, time_c, str_data);
                 }
                 else
                 {
-                    at_cmd = string.Format("AT+WIOTABC={0},{1},1,{2},0\\r\\n{3}", data_id, len + 2, time_c, str_data);
+                    at_cmd = string.Format("AT+WIOTABC={0},{1},1,{2},0\\r\n{3}", data_id, len, time_c, str_data);
                 }
             }
             if (is_unicast)
             {
-             
+                time = time_sbc[symbol_len, 0];
+                data_len = subframe_sbc[symbol_len, mcs];
+                frame_num = (int)Math.Ceiling((double)len / data_len);
+                time = (time * frame_num) + 100;
+                time_c = (int)time;
                 if (is_block)
                 {
-                    at_cmd = string.Format("AT+WIOTASEND={0},{1},{2},{3},1\\r\\n{4}", data_id, len + 2, user_id, time_c, str_data);
+                    at_cmd = string.Format("AT+WIOTASEND={0},{1},{2},{3},1\\r\n{4}", data_id, len, user_id, time_c, str_data);
                 }
                 else
                 {
-                    at_cmd = string.Format("AT+WIOTASEND={0},{1},{2},{3},0\\r\\n{4}", data_id, len + 2, user_id, time_c, str_data);
+                    at_cmd = string.Format("AT+WIOTASEND={0},{1},{2},{3},0\\r\n{4}", data_id, len, user_id, time_c, str_data);
                 }
             }
             if (is_mc)
             {
-            
+                time = time_sbc[symbol_len, 0];
+                data_len = subframe_sbc[symbol_len, mcs];
+                frame_num = (int)Math.Ceiling((double)len / data_len);
+                time = (time * frame_num) + 100;
+                time_c = (int)time;
                 if (is_block)
                 {
-                    at_cmd = string.Format("AT+WIOTAMC={0},{1},{2},{3},1\\r\\n{4}", data_id, len + 2, mc_id, time_c, str_data);
+                    at_cmd = string.Format("AT+WIOTAMC={0},{1},{2},{3},1\\r\n{4}", data_id, len, mc_id, time_c, str_data);
                 }
                 else
                 {
-                    at_cmd = string.Format("AT+WIOTAMC={0},{1},{2},{3},0\\r\\n{4}", data_id, len + 2, mc_id, time_c, str_data);
+                    at_cmd = string.Format("AT+WIOTAMC={0},{1},{2},{3},0\\r\n{4}", data_id, len, mc_id, time_c, str_data);
                 }
             }
             if (is_iote)
             {
-                at_cmd = string.Format("AT+WIOTASEND={0},{1}\\r\\n{2}", time_c, len + 2, str_data);
+                time = time_sbc[symbol_len, 0];
+                data_len = subframe_sbc[symbol_len, mcs];
+                frame_num = (int)Math.Ceiling((double)len / data_len);
+                time = (time * frame_num) + 100;
+                time_c = (int)time;
+                at_cmd = string.Format("AT+WIOTASEND={0},{1}\\r\n{2}", time_c, len, str_data);
             }
             textBox_str_data_s.Text = str_data;
             textBox_at_cmd_s.Text = at_cmd;

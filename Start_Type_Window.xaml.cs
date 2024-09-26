@@ -81,23 +81,21 @@ namespace WIoTa_Serial_Tool
 
                     break;
             }
-
         }
 
         public List<string> Get_Sync_Ap_Cmd()
         {
             List<string> AtCmdList = new List<string>();
             if (exitWIoTaCheckBox1.IsChecked ?? false)
-            { AtCmdList.Add("AT+WIOTARUN=0"); }
+            { 
+                AtCmdList.Add("AT+WIOTARUN=0"); 
+            }
             if (InitWIoTaCheckBox1.IsChecked ?? false)
-            { AtCmdList.Add("AT+WIOTAINIT"); }
+            { 
+                AtCmdList.Add("AT+WIOTAINIT"); 
+            }
             //if (boost0_5CheckBox2.IsChecked ?? false)
             //{; }//这个指令暂时不知道
-            if (setFreqCheckBox1.IsChecked ?? false)
-            {
-                string freq_idx = FreqIdxTextBox1.Text;
-                AtCmdList.Add($"AT+WIOTAFREQ={freq_idx}");
-            }//这个指令暂时不知道
             if (systemConfigCheckBox1.IsChecked ?? false)
             {
                 string ap_power = apPowerTextBox1.Text;//+20
@@ -121,6 +119,13 @@ namespace WIoTa_Serial_Tool
                 AtCmdList.Add($"AT+WIOTACONFIG={power},{idlen},{symbol_len},{dlul},{bt},{groupnum},{spectrum},0,{bitbcs},{subSystemid}");
 
             }
+
+            if (setFreqCheckBox1.IsChecked ?? false)
+            {
+                string freq_idx = FreqIdxTextBox1.Text;
+                AtCmdList.Add($"AT+WIOTAFREQ={freq_idx}");
+            }
+
             if (runWIoTaCheckBox1.IsChecked ?? false)
             {
                 AtCmdList.Add($"AT+WIOTARUN=1");
@@ -136,24 +141,7 @@ namespace WIoTa_Serial_Tool
             { AtCmdList.Add("AT+WIOTAINIT"); }
             //if (boost0_5CheckBox2.IsChecked ?? false)
             //{; }//这个指令暂时不知道
-            if (setFreqCheckBox2.IsChecked ?? false)
-            {
-                string freq_idx = FreqIdxTextBox2.Text;
-                AtCmdList.Add($"AT+WIOTAFREQ={freq_idx}");
-            }
-            if (checkBox_dcxo2.IsChecked ?? false)
-            {
-                string dcxo = textBox_dcxo2.Text;
-                AtCmdList.Add($"AT+WIOTAOSC=0");
-                AtCmdList.Add($"AT+WIOTADCXO={dcxo}");
-            }
-            if (useridCheckBox2.IsChecked ?? false)
-            {
-                string userid = useridTextBox2.Text;
-                AtCmdList.Add($"AT+WIOTAUSERID={userid}");
-            }
-            if (oscCheckBox2.IsChecked ?? false)
-            { AtCmdList.Add($"AT+WIOTAOSC=1"); }
+
             if (systemConfigCheckBox2.IsChecked ?? false)
             {
                 string ap_power = apPowerTextBox2.Text;//+20
@@ -177,6 +165,26 @@ namespace WIoTa_Serial_Tool
                 AtCmdList.Add($"AT+WIOTACONFIG={power},{idlen},{symbol_len},{dlul},{bt},{groupnum},{spectrum},0,{bitbcs},{subSystemid}");
 
             }
+
+            if (setFreqCheckBox2.IsChecked ?? false)
+            {
+                string freq_idx = FreqIdxTextBox2.Text;
+                AtCmdList.Add($"AT+WIOTAFREQ={freq_idx}");
+            }
+            if (checkBox_dcxo2.IsChecked ?? false)
+            {
+                string dcxo = textBox_dcxo2.Text;
+                AtCmdList.Add($"AT+WIOTAOSC=0");
+                AtCmdList.Add($"AT+WIOTADCXO={dcxo}");
+            }
+            if (useridCheckBox2.IsChecked ?? false)
+            {
+                string userid = useridTextBox2.Text;
+                AtCmdList.Add($"AT+WIOTAUSERID={userid}");
+            }
+            if (oscCheckBox2.IsChecked ?? false)
+            { AtCmdList.Add($"AT+WIOTAOSC=1"); }
+            
             ////iote的配置
             //if (txmodeCheckBox2.IsChecked ?? false)
             //{
@@ -220,24 +228,7 @@ namespace WIoTa_Serial_Tool
             { AtCmdList.Add("AT+WIOTAINIT"); }
             //if (boost0_5CheckBox3.IsChecked ?? false)
             //{; }//这个指令暂时不知道
-            if (setFreqCheckBox3.IsChecked ?? false)
-            {
-                string freq_idx = FreqIdxTextBox3.Text;
-                AtCmdList.Add($"AT+WIOTAFREQ={freq_idx}");
-            }
-            if (checkBox_dcxo3.IsChecked ?? false)
-            {
-                string dcxo = textBox_dcxo3.Text;
-                AtCmdList.Add($"AT+WIOTAOSC=0");
-                AtCmdList.Add($"AT+WIOTADCXO={dcxo}");
-            }
-            if (useridCheckBox3.IsChecked ?? false)
-            {
-                string userid = useridTextBox3.Text;
-                AtCmdList.Add($"AT+WIOTAUSERID={userid}");
-            }
-            if (oscCheckBox3.IsChecked ?? false)
-            { AtCmdList.Add($"AT+WIOTAOSC=1"); }
+
             if (systemConfigCheckBox3.IsChecked ?? false)
             {
                 int pz = 8;
@@ -261,6 +252,26 @@ namespace WIoTa_Serial_Tool
                 AtCmdList.Add($"AT+WIOTACONFIG={idlen},{symbol_len},{bandWidth},{pz},{bt},{spectrum},{systemid},{subSystemid}");
 
             }
+
+            if (setFreqCheckBox3.IsChecked ?? false)
+            {
+                string freq_idx = FreqIdxTextBox3.Text;
+                AtCmdList.Add($"AT+WIOTAFREQ={freq_idx}");
+            }
+            if (checkBox_dcxo3.IsChecked ?? false)
+            {
+                string dcxo = textBox_dcxo3.Text;
+                AtCmdList.Add($"AT+WIOTAOSC=0");
+                AtCmdList.Add($"AT+WIOTADCXO={dcxo}");
+            }
+            if (useridCheckBox3.IsChecked ?? false)
+            {
+                string userid = useridTextBox3.Text;
+                AtCmdList.Add($"AT+WIOTAUSERID={userid}");
+            }
+            if (oscCheckBox3.IsChecked ?? false)
+            { AtCmdList.Add($"AT+WIOTAOSC=1"); }
+           
             //iote的配置
             if (txmodeCheckBox3.IsChecked ?? false)
             {
